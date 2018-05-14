@@ -4,8 +4,8 @@
 # NOTE: Log address provided relative to __nephos_dir__
 # NOTE: If this file is edited, Nephos needs to be restarted to show changes
 log:
- version: 1
- disable_existing_loggers: True
+  version: 1
+  disable_existing_loggers: True
   formatters:
     simple:
       format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
@@ -26,14 +26,14 @@ log:
       filename: logs/recordingmonitor.log
       level: DEBUG
     email:  # TODO: Use environment variables instead of hard coded values
-      class: logging.SMTPHandler
+      class: logging.handlers.SMTPHandler
       formatter: simple
       mailhost: !!python/tuple ["smtp.gmail.com", 587]
-      fromaddr: "no-reply@nephos.com"
-      toaddr: ["shivam.cs.iit.kgp@gmail.com"]
+      fromaddr: "no-reply@nephos"
+      toaddrs: ["shivam.cs.iit.kgp@gmail.com"]
       subject: "Nephos Critical Error"
       credentials: !!python/tuple ["codestashkgp@gmail.com", "pass"]
-      secure: None
+      secure: !!python/tuple []
       level: CRITICAL
   root:
     level: DEBUG
@@ -42,3 +42,4 @@ log:
     nephos:
       level: DEBUG
       handler: [console, file, email]
+...

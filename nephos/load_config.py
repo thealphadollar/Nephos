@@ -22,7 +22,7 @@ def load_config_data(path):
     -------
 
     """
-    with open(path, 'w+') as config_file:
+    with open(path, 'r') as config_file:
         yaml_data = config_file.read()
         return yaml.load(yaml_data)
 
@@ -33,7 +33,7 @@ def load_config():
     Loads configurations from /config/
 
     Environment variables used:
-        TODO: Add environment variables
+        TODO: Add environment variables for sensitive data
 
     Returns
     -------
@@ -63,7 +63,7 @@ def load_config():
                             },
                         'email':
                             {
-                                'credentials': ('codestashkgp@gmail.com', 'BroCodeKGP')
+                                'credentials': ('codestashkgp@gmail.com', 'pass')
                             }
                     }
             }
@@ -73,8 +73,5 @@ def load_config():
 
     # Initialise logger with default configuration
     logging.config.dictConfig(nephos_config['log'])
-    log.debug("debug")
-    log.info("information")
-    log.error("error")
-    log.warning("warning")
-    log.critical("critical")
+
+    log.info("* LOGGER READY")
