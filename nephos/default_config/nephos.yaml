@@ -1,0 +1,44 @@
+---
+# The file stores general configuration for Nephos
+# such as logger configuration.
+# NOTE: Log address provided relative to __nephos_dir__
+# NOTE: If this file is edited, Nephos needs to be restarted to show changes
+log:
+ version: 1
+ disable_existing_loggers: True
+  formatters:
+    simple:
+      format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
+      datefmt: '%m/%d/%Y %I:%M:%S %p'
+    colored:
+      "()": coloredlogs.ColoredFormatter
+      format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
+      datefmt: '%m/%d/%Y %I:%M:%S %p'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: colored
+      stream: ext://sys.stdout
+      level: INFO
+    file:
+      class: nephos.logger.EnsureFolderFileHandler
+      formatter: simple
+      filename: logs/recordingmonitor.log
+      level: DEBUG
+    email:  # TODO: Use environment variables instead of hard coded values
+      class: logging.SMTPHandler
+      formatter: simple
+      mailhost: !!python/tuple ["smtp.gmail.com", 587]
+      fromaddr: "no-reply@nephos.com"
+      toaddr: ["shivam.cs.iit.kgp@gmail.com"]
+      subject: "Nephos Critical Error"
+      credentials: !!python/tuple ["codestashkgp@gmail.com", "pass"]
+      secure: None
+      level: CRITICAL
+  root:
+    level: DEBUG
+    handlers: [console, file, email]
+  loggers:
+    nephos:
+      level: DEBUG
+      handler: [console, file, email]

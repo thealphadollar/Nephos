@@ -6,6 +6,7 @@ Used to store attributes which will be used throughout the program.
 import os
 from distutils.dir_util import copy_tree
 
+
 __home_dir__ = os.path.expanduser('~')
 __package_dir__ = os.path.dirname(os.path.realpath(__file__))  # path of the directory where __init__.py is
 

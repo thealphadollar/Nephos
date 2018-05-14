@@ -24,7 +24,7 @@ __release__ = RELEASE_STRING
 
 def update_version():
     """
-    Rewrites version information to `/src/ver_info.py` on every new deployment.
+    Rewrites version information to `/nephos/ver_info.py` on every new deployment.
 
     Returns
     -------
@@ -54,7 +54,7 @@ def update_version():
         version=__version__,
         release=__release__,
     )
-    outfile = path.join('src', 'ver_info.py')
+    outfile = path.join('nephos', 'ver_info.py')
 
     with open(outfile, 'w+', encoding='utf-8') as ver_file:
         ver_file.write(info)

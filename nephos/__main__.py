@@ -3,6 +3,7 @@ The file run when Nephos is called as a module
 """
 
 from . import first_time
+from .load_config import load_config
 
 
 def main():  # TODO: More work on this, temporary
@@ -13,6 +14,7 @@ def main():  # TODO: More work on this, temporary
 
     """
     first_time()
+    load_config()
 
 
 if __name__ == '__main__':
