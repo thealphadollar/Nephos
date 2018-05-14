@@ -1,0 +1,34 @@
+---
+# The file stores general configuration for Nephos
+# such as logger configuration.
+# NOTE: All address are provided relative to ~/Nephos
+# NOTE: If this file is edited, Nephos needs to be restarted to show changes
+
+log:
+ version: 1
+ disable_existing_loggers: True
+  formatters:
+    simple:
+      format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
+    colored:
+      "()": coloredlogs.ColoredFormatter
+      format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: colored
+      stream: ext://sys.stdout
+      level: NOTSET
+    file:
+      class: unav.recordingmonitor.logger.EnsureFolderFileHandler
+      formatter: simple
+      filename: logs/recordingmonitor.log
+      level: NOTSET
+  root:
+    level: NOTSET
+    handlers:
+    - console
+    - file
+  loggers:
+    unav.recordingmonitor:
+      level: NOTSET
