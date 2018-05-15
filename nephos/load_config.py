@@ -10,81 +10,156 @@ import pydash
 log = logging.getLogger(__name__)
 
 
-def load_config_data(path, default_path):
+class Config:
     """
-    Loads data from YAML configuration file
-    Parameters
-    ----------
-    path
-        type: str
-        Path to the configuration file
-    default_path
-        type: str
-        Path to the default configuration file
-
-    Returns
-    -------
-    dict
-        Dictionary containing configuration information provided by the path or default path
-
+    class managing all the configuration work
     """
-    try:
-        with open(path, 'r') as config_file:
-            yaml_data = config_file.read()
-            return yaml.load(yaml_data)
-    except yaml.error.__all__ as exception:
-        print("YAMLError in {file}:\n".format(file=path) + str(exception))
-        print("using default configuration for {file}".format(file=path))
-        with open(default_path) as config_file:
-            yaml_data = config_file.read()
-            return yaml.load(yaml_data)
+    nephos_config = None
+    recorder_config = None
+    preprocess_config = None
+    uploader_config = None
 
+    def load_config(self):
+        """
+        Loads configurations from /config/ (Path relative to __nephos_dir__)
 
-def load_config():
-    """
-    Handles all the general configuration related to Nephos and it's modules.
-    Loads configurations from /config/
+        Environment variables used:
+            TODO: Add environment variables for sensitive data
 
-    Environment variables used:
-        TODO: Add environment variables for sensitive data
+        Returns
+        -------
 
-    Returns
-    -------
+        """
 
-    """
+        nephos_config_path = os.path.join(__config_dir__, "nephos.yaml")
+        recorder_config_path = os.path.join(__config_dir__, "recorder.yaml")
+        preprocess_config_path = os.path.join(__config_dir__, "preprocess.yaml")
+        uploader_config_path = os.path.join(__config_dir__, "uploader.yaml")
 
-    nephos_config_path = os.path.join(__config_dir__, "nephos.yaml")
-    recorder_config_path = os.path.join(__config_dir__, "recorder.yaml")
-    preprocess_config_path = os.path.join(__config_dir__, "preprocess.yaml")
-    uploader_config_path = os.path.join(__config_dir__, "uploader.yaml")
+        # loading configuration
+        self.nephos_config = self._load_config_data(nephos_config_path,
+                                                    os.path.join(__default_config_dir__, "nephos.yaml"))
+        self.recorder_config = self._load_config_data(recorder_config_path,
+                                                      os.path.join(__default_config_dir__, "recorder.yaml"))
+        self.preprocess_config = self._load_config_data(preprocess_config_path,
+                                                        os.path.join(__default_config_dir__, "preprocess.yaml"))
+        self.uploader_config = self._load_config_data(uploader_config_path,
+                                                      os.path.join(__default_config_dir__, "uploader.yaml"))
 
-    nephos_config = load_config_data(nephos_config_path, os.path.join(__default_config_dir__, "nephos.yaml"))
-    recorder_config = load_config_data(recorder_config_path, os.path.join(__default_config_dir__, "recorder.yaml"))
-    preprocess_config = load_config_data(preprocess_config_path, os.path.join(__default_config_dir__, "preprocess.yaml"))
-    uploader_config = load_config_data(uploader_config_path, os.path.join(__default_config_dir__, "uploader.yaml"))
+        # updating configuration as needed with manual data / environment variables
+        config_update = list(self._config_update())
+        pydash.merge(self.nephos_config, config_update[0])
+        pydash.merge(self.recorder_config, config_update[1])
+        pydash.merge(self.preprocess_config, config_update[2])
+        pydash.merge(self.uploader_config, config_update[3])
 
-    # manual update of configuration data
-    log_file = os.path.join(__nephos_dir__, pydash.get(nephos_config, 'log.handlers.file.filename'))
-    nephos_config_update = {
-        'log':
-            {
-                'handlers':
-                    {
-                        'file':
-                            {
-                                'filename': log_file
-                            },
-                        'email':
-                            {
-                                'credentials': ('codestashkgp@gmail.com', 'pass')
-                            }
-                    }
-            }
-    }  # TODO: Find a better method than this nesting
+    def initialise(self):
+        """
+        Initialises logger, database etc. with loaded configuration
+        Returns
+        -------
 
-    pydash.merge(nephos_config, nephos_config_update)
+        """
+        # Initialise logger
+        logging.config.dictConfig(self.nephos_config['log'])
+        log.info("* LOGGER READY")
 
-    # Initialise logger with default configuration
-    logging.config.dictConfig(nephos_config['log'])
+    @staticmethod
+    def _load_config_data(path, default_path):
+        """
+        Loads data from YAML configuration file
+        Parameters
+        ----------
+        path
+            type: str
+            Path to the configuration file
+        default_path
+            type: str
+            Path to the default configuration file
 
-    log.info("* LOGGER READY")
+        Returns
+        -------
+        dict
+            Dictionary containing configuration information provided by the path or default path
+
+        """
+        try:
+            with open(path, 'r') as config_file:
+                yaml_data = config_file.read()
+                return yaml.load(yaml_data)
+        except yaml.error.YAMLError as exception:
+            print("YAMLError in {file}:\n".format(file=path) + str(exception))
+            print("using default configuration for {file}".format(file=path))
+            with open(default_path) as config_file:
+                yaml_data = config_file.read()
+                return yaml.load(yaml_data)
+
+    def _correct_log_file_path(self, handler_name):
+        """
+        Appends relative file path specified for the handler's file in filename to __nephos_dir__
+        Parameters
+        ----------
+        handler_name
+            type: str
+            name of the handler (eg. "nephos_file")
+
+        Returns
+        -------
+            type: str
+            absolute path to the log file for the handle
+
+        """
+        data_point = "log.handlers.{name}.filename".format(name=handler_name)
+        return os.path.join(__nephos_dir__, pydash.get(self.nephos_config, data_point))
+
+    def _config_update(self):
+        """
+        Overrides/Updates data present in the configuration files
+        Returns
+        -------
+            type: list
+            A list containing dictionaries with updated/new data
+
+        """
+        # manual update of configuration data
+        nephos_config_update = {
+            'log':
+                {
+                    'handlers':
+                        {
+                            'nephos_file':
+                                {
+                                    'filename': self._correct_log_file_path('nephos_file')
+                                },
+                            'recorder_file':
+                                {
+                                    'filename': self._correct_log_file_path('recorder_file')
+                                },
+                            'preprocess_file':
+                                {
+                                    'filename': self._correct_log_file_path('preprocess_file')
+                                },
+                            'uploader_file':
+                                {
+                                    'filename': self._correct_log_file_path('uploader_file')
+                                },
+                            'email':
+                                {
+                                    'credentials': ('codestashkgp@gmail.com', 'pass')
+                                }
+                        }
+                }
+        }
+        recorder_config_update = {
+
+        }
+        preprocess_config_update = {
+
+        }
+        uploader_config_update = {
+
+        }
+        # TODO: Find a better method than this nesting
+
+        config_list = [nephos_config_update, recorder_config_update, preprocess_config_update, uploader_config_update]
+        return config_list
