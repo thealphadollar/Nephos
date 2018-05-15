@@ -14,9 +14,9 @@ RELEASE_STRING = VERSION_STRING + VERSION_SUFFIX
 
 
 __title__ = "Nephos"
-__description__ = "Nephos - Capture stream, process them and upload to cloud storage"
+__description__ = "Nephos - Capture streams, process them and upload to cloud storage"
 __author__ = "thealphadollar @ CCExtractor"
-__author_mail__ = "shivam.cs.iit.kgp@gmail.com"  # TODO: Update author's mail address
+__author_mail__ = "shivam.cs.iit.kgp+Nephos@gmail.com"  # TODO: Update author's mail address
 __license__ = "GNU GPL v3"
 __version__ = VERSION_STRING
 __release__ = RELEASE_STRING
@@ -91,7 +91,19 @@ setup(
     author_email=__author_mail__,
     description=__description__,
     long_description=read('README.md'),
-    keywords='network stream closed_captions subtitles'
-    # TODO: Add package data
-    # TODO: Add missing parameters
+    keywords='network stream closed_captions subtitles',
+    install_requires=[
+        'pydash'  # TODO: Add more requirements when finished
+    ],
+    test_requires=[
+        'pytest',
+        'mock',
+        'unittest'
+    ],
+    test_suite="tests",
+    entry_points={
+        'console_scripts': ['nephos=nephos:main']
+    },
+    zip_safe=False,
+    include_package_data=True
 )
