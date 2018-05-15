@@ -1,3 +1,4 @@
 PyYAML
 pydash
 coloredlogs
+python-dotenv

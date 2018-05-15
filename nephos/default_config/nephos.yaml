@@ -40,15 +40,14 @@ log:
       formatter: simple
       filename: logs/uploader.log
       level: DEBUG
-    email:  # TODO: Use environment variables instead of hard coded values
+    email:
       class: logging.handlers.SMTPHandler
       formatter: simple
-      mailhost: !!python/tuple ["smtp.gmail.com", 587]
+      # mailhost: set using environment variables MAIL_HOST and MAIL_PORT
       fromaddr: "no-reply@nephos"
       toaddrs: ["shivam.cs.iit.kgp@gmail.com"]
       subject: "Nephos Critical Error"
-      credentials: !!python/tuple ["codestashkgp@gmail.com", "pass"]
-      secure: !!python/tuple []
+      # credentials: set using environment variables CRED_EMAIL and CRED_PASS
       level: CRITICAL
   root:
     level: DEBUG

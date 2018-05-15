@@ -23,9 +23,6 @@ class Config:
         """
         Loads configurations from /config/ (Path relative to __nephos_dir__)
 
-        Environment variables used:
-            TODO: Add environment variables for sensitive data
-
         Returns
         -------
 
@@ -67,7 +64,11 @@ class Config:
     @staticmethod
     def _load_config_data(path, default_path):
         """
-        Loads data from YAML configuration file
+        Loads data from YAML configuration
+
+        Using PyYAML's safe_load method
+        Read more at https://security.openstack.org/guidelines/dg_avoid-dangerous-input-parsing-libraries.html
+
         Parameters
         ----------
         path
@@ -86,13 +87,13 @@ class Config:
         try:
             with open(path, 'r') as config_file:
                 yaml_data = config_file.read()
-                return yaml.load(yaml_data)
+                return yaml.safe_load(yaml_data)
         except yaml.error.YAMLError as exception:
             print("YAMLError in {file}:\n".format(file=path) + str(exception))
             print("using default configuration for {file}".format(file=path))
             with open(default_path) as config_file:
                 yaml_data = config_file.read()
-                return yaml.load(yaml_data)
+                return yaml.safe_load(yaml_data)
 
     def _correct_log_file_path(self, handler_name):
         """
@@ -115,6 +116,20 @@ class Config:
     def _config_update(self):
         """
         Overrides/Updates data present in the configuration files
+        Environment variables used:
+            CRED_MAIL:
+                type: str
+                stores the mail address of the sender
+            CRED_PASS:
+                type: str
+                stores the password for the email address
+            MAIL_HOST:
+                type: str
+                stores the host address for the mail SMTP server
+            MAIL_PORT:
+                type: int
+                stores the port address for the mail SMTP server
+
         Returns
         -------
             type: list
@@ -145,7 +160,9 @@ class Config:
                                 },
                             'email':
                                 {
-                                    'credentials': ('codestashkgp@gmail.com', 'pass')
+                                    'credentials': (os.getenv('CRED_EMAIL'), os.getenv('CRED_PASS')),
+                                    'mailhost': (os.getenv('MAIL_HOST'), os.getenv('MAIL_PORT')),
+                                    'secure': ()
                                 }
                         }
                 }
