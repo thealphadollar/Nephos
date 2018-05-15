@@ -20,10 +20,25 @@ log:
       formatter: colored
       stream: ext://sys.stdout
       level: INFO
-    file:
+    nephos_file:
       class: nephos.logger.EnsureFolderFileHandler
       formatter: simple
-      filename: logs/recordingmonitor.log
+      filename: logs/nephos.log
+      level: DEBUG
+    recorder_file:
+      class: nephos.logger.EnsureFolderFileHandle
+      formatter: simple
+      filename: logs/recorder.log
+      level: DEBUG
+    preprocess_file:
+      class: nephos.logger.EnsureFolderFileHandle
+      formatter: simple
+      filename: logs/preprocess.log
+      level: DEBUG
+    uploader_file:
+      class: nephos.logger.EnsureFolderFileHandle
+      formatter: simple
+      filename: logs/uploader.log
       level: DEBUG
     email:  # TODO: Use environment variables instead of hard coded values
       class: logging.handlers.SMTPHandler
@@ -39,7 +54,16 @@ log:
     level: DEBUG
     handlers: [console, file, email]
   loggers:
-    nephos:
+    nephos_file:
       level: DEBUG
       handler: [console, file, email]
+    nephos.recoder:
+      level: DEBUG
+      handler: [console, recorder_file, email]
+    nephos.preprocessor:
+      level: DEBUG
+      handle: [console, preprocess_file, email]
+    nephos.uploader:
+      level: DEBUG
+      handle: [console, uploader_file, email]
 ...
