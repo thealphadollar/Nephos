@@ -116,6 +116,7 @@ class Config:
     def _config_update(self):
         """
         Overrides/Updates data present in the configuration files
+
         Environment variables used:
             CRED_MAIL:
                 type: str
@@ -160,8 +161,8 @@ class Config:
                                 },
                             'email':
                                 {
-                                    'credentials': (os.getenv('CRED_EMAIL'), os.getenv('CRED_PASS')),
-                                    'mailhost': (os.getenv('MAIL_HOST'), os.getenv('MAIL_PORT')),
+                                    'credentials': (get_env_var('CRED_EMAIL'), get_env_var('CRED_PASS')),
+                                    'mailhost': (get_env_var('MAIL_HOST'), get_env_var('MAIL_PORT')),
                                     'secure': ()
                                 }
                         }
@@ -180,3 +181,26 @@ class Config:
 
         config_list = [nephos_config_update, recorder_config_update, preprocess_config_update, uploader_config_update]
         return config_list
+
+
+def get_env_var(name):
+    """
+    Gets environment variable from the OS
+    Issues a warning if the environment variable is not fount.
+
+    Parameters
+    ----------
+    name
+        type:str
+        name of the environment variable
+
+    Returns
+    -------
+        type: depends on environment variable
+        data of the environment variable
+
+    """
+    env_value = os.getenv(name)
+    if len(name) == 0:
+        print("Warning: Environment variable {env_name} not set! Some functions might not work properly!")
+    return env_value
