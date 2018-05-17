@@ -29,20 +29,12 @@ class Config:
 
         """
 
-        logging_config_path = os.path.join(__config_dir__, "logging.yaml")
-        recorder_config_path = os.path.join(__config_dir__, "recorder.yaml")
-        preprocess_config_path = os.path.join(__config_dir__, "preprocess.yaml")
-        uploader_config_path = os.path.join(__config_dir__, "uploader.yaml")
-
         # loading configuration
-        self.logging_config = self._load_config_data(logging_config_path,
-                                                     os.path.join(__default_config_dir__, "logging.yaml"))
-        self.recorder_config = self._load_config_data(recorder_config_path,
-                                                      os.path.join(__default_config_dir__, "recorder.yaml"))
-        self.preprocess_config = self._load_config_data(preprocess_config_path,
-                                                        os.path.join(__default_config_dir__, "preprocess.yaml"))
-        self.uploader_config = self._load_config_data(uploader_config_path,
-                                                      os.path.join(__default_config_dir__, "uploader.yaml"))
+        self.logging_config = self._load_config_data("logging.yaml")
+        self.maintenance_config = self._load_config_data("maintenance.yaml")
+        self.recorder_config = self._load_config_data("recorder.yaml")
+        self.preprocess_config = self._load_config_data("preprocess.yaml")
+        self.uploader_config = self._load_config_data("uploader.yaml")
 
         # updating configuration as needed with manual data / environment variables
         config_update = list(self._config_update())
@@ -60,10 +52,10 @@ class Config:
         """
         # Initialise logger
         logging.config.dictConfig(self.logging_config)
-        log.info("* LOGGER READY")
+        log.info("** LOGGER CONFIGURED")
 
     @staticmethod
-    def _load_config_data(path, default_path):
+    def _load_config_data(file_name):
         """
         Loads data from YAML configuration
 
@@ -72,19 +64,18 @@ class Config:
 
         Parameters
         ----------
-        path
+        file_name
             type: str
-            Path to the configuration file
-        default_path
-            type: str
-            Path to the default configuration file
+            name of the config file
 
         Returns
         -------
-        dict
-            Dictionary containing configuration information provided by the path or default path
+        type: dict
+        Dictionary containing configuration information provided by the path or default path
 
         """
+        path = os.path.join(__config_dir__, file_name)
+        default_path = os.path.join(__default_config_dir__, file_name)
         try:
             with open(path, 'r') as config_file:
                 yaml_data = config_file.read()
@@ -199,6 +190,6 @@ def get_env_var(name):
 
     """
     env_value = os.getenv(name)
-    if len(name) == 0:
+    if name:
         print("Warning: Environment variable {env_name} not set! Some functions might not work properly!")
     return env_value

@@ -1,0 +1,26 @@
+---
+# The file stores maintenance configuration for nephos
+# NOTE: If this file is edited, Nephos needs to be restarted to reflect changes
+jobs:
+  disk_space_check:
+    enabled: True  # Bool
+    type: "disk_space_check"
+    min_space: 10  # GBs TODO: To be updated
+    min_percent: 10  # TODO: To be updated
+    interval: 30  # minutes
+
+  channel_check:
+    enabled: True  # Bool
+    type: "channel_check"
+    interval: 60  # minutes
+
+  uploader_auth_check:
+    enabled: True  # Bool
+    type: "uploader_auth_check"
+    interval: 120  # minutes
+
+  check_file_upload:
+    enabled: True  # Bool
+    type: "check_file_upload"
+    interval: 1440  # minutes, translates to everyday
+    at: '20:00'
