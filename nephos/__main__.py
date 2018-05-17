@@ -24,7 +24,7 @@ def main():  # TODO: More work on this, temporary
     LOG.info("Test passed")
     LOG.critical("mail check")
     maintenance = Maintenance(config.maintenance_config)
-    maintenance.run_disk_space_check()
+    maintenance.call_disk_space_check()
 
 
 if __name__ == '__main__':

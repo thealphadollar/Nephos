@@ -9,7 +9,7 @@ jobs:
     min_percent: 10  # TODO: To be updated
     interval: 30  # minutes
 
-  channel_check:
+  channel_online_check:
     enabled: True  # Bool
     type: "channel_check"
     interval: 60  # minutes
@@ -19,8 +19,8 @@ jobs:
     type: "uploader_auth_check"
     interval: 120  # minutes
 
-  check_file_upload:
+  file_upload_check:
     enabled: True  # Bool
-    type: "check_file_upload"
+    type: "file_upload_check"
     interval: 1440  # minutes, translates to everyday
     at: '20:00'
