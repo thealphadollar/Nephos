@@ -7,6 +7,7 @@ Defines maintenance class and it's functioning
 
 from logging import getLogger
 from .disk_space_check import DiskSpaceCheck
+from .channel_online_check import ChannelOnlineCheck
 
 
 LOG = getLogger(__name__)
@@ -33,6 +34,7 @@ class Maintenance:
 
         # add space check functions
         self.disk_checker = DiskSpaceCheck(self.config)
+        self.channel_checker = ChannelOnlineCheck(self.config)
 
     def call_disk_space_check(self):
         """
@@ -54,7 +56,7 @@ class Maintenance:
         -------
 
         """
-        pass
+        self.channel_checker.to_run("channel_online_check")
 
     def call_uploader_auth_check(self):
         """

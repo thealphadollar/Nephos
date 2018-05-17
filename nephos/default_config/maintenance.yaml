@@ -1,6 +1,7 @@
 ---
 # The file stores maintenance configuration for nephos
 # NOTE: If this file is edited, Nephos needs to be restarted to reflect changes
+# path in reference to __nephos_dir__
 jobs:
   disk_space_check:
     enabled: True  # Bool
@@ -11,8 +12,9 @@ jobs:
 
   channel_online_check:
     enabled: True  # Bool
-    type: "channel_check"
+    type: "channel_online_check"
     interval: 60  # minutes
+    path: "tmp"
 
   uploader_auth_check:
     enabled: True  # Bool
