@@ -1,3 +1,7 @@
+"""
+used to create pypi package to make the nephos module pip installable
+"""
+
 from os import path
 from setuptools import setup
 
@@ -7,7 +11,7 @@ from setuptools import setup
 VERSION = (0, 0, 1)
 VERSION_SUFFIX = 'under.dev'
 VERSION_STRING = ".".join(str(x) for x in VERSION)
-RELEASE_STRING = VERSION_STRING + VERSION_SUFFIX
+RELEASE_STRING = VERSION_STRING + " " + VERSION_SUFFIX
 
 # make changes above when deploying new version
 # =============================================
@@ -15,7 +19,7 @@ RELEASE_STRING = VERSION_STRING + VERSION_SUFFIX
 
 __title__ = "Nephos"
 __description__ = "Nephos - Capture streams, process them and upload to cloud storage"
-__author__ = "thealphadollar @ CCExtractor"
+__author__ = "Shivam Kumar Jha (github@thealphadollar)"
 __author_mail__ = "shivam.cs.iit.kgp+Nephos@gmail.com"  # TODO: Update author's mail address
 __license__ = "GNU GPL v3"
 __version__ = VERSION_STRING
@@ -32,20 +36,23 @@ def update_version():
     """
     info = '''# -*- coding: utf-8 -*-
 
-    # =====================================
-    # THIS FILE WAS GENERATED AUTOMATICALLY
-    # =====================================
-    #
+"""
+Stores basic version information about the project
+"""
 
-    __title__ = '{title}'
-    __description__ = '{description}'
-    __author__ = '{author}'
-    __author_mail = '{author_mail}'
-    __license__ = '{license}'
-    __version__ = '{version}'
-    __release__ = '{release}'
-    
-    '''.format(
+# =====================================
+# THIS FILE WAS GENERATED AUTOMATICALLY
+# =====================================
+#
+
+__title__ = '{title}'
+__description__ = '{description}'
+__author__ = '{author}'
+__author_mail__ = '{author_mail}'
+__license__ = '{license}'
+__version__ = '{version}'
+__release__ = '{release}'
+'''.format(
         title=__title__,
         description=__description__,
         author=__author__,

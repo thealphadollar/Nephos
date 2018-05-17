@@ -1,13 +1,17 @@
-from . import __nephos_dir__, __config_dir__, __default_config_dir__
+"""
+Contains class which facilitates loading configurations files and implementing them
+"""
+
 import os
 import logging
 import logging.config
 import yaml
 import yaml.error
 import pydash
+from . import __nephos_dir__, __config_dir__, __default_config_dir__
 
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 class Config:
@@ -52,15 +56,15 @@ class Config:
         """
         # Initialise logger
         logging.config.dictConfig(self.logging_config)
-        log.info("** LOGGER CONFIGURED")
+        LOG.info("** LOGGER CONFIGURED")
 
     @staticmethod
     def _load_config_data(file_name):
         """
         Loads data from YAML configuration
 
-        Using PyYAML's safe_load method
-        Read more at https://security.openstack.org/guidelines/dg_avoid-dangerous-input-parsing-libraries.html
+        Using PyYAML's safe_load method, read more at
+        https://security.openstack.org/guidelines/dg_avoid-dangerous-input-parsing-libraries.html
 
         Parameters
         ----------
@@ -168,7 +172,8 @@ class Config:
         }
         # TODO: Find a better method than this nesting
 
-        config_list = [logging_config_update, recorder_config_update, preprocess_config_update, uploader_config_update]
+        config_list = [logging_config_update, recorder_config_update,
+                       preprocess_config_update, uploader_config_update]
         return config_list
 
 
@@ -190,6 +195,8 @@ def get_env_var(name):
 
     """
     env_value = os.getenv(name)
-    if name:
-        print("Warning: Environment variable {env_name} not set! Some functions might not work properly!")
+
+    if not name:  # if no env variable set for the same
+        print("Warning: Environment variable {env_name} not set! "
+              "Some functions might not work properly!")
     return env_value

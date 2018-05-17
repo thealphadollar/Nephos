@@ -1,12 +1,19 @@
+"""
+Define DiskSpaceCheck class and it's required functions
+"""
+
 import shutil
-import pydash
 from logging import getLogger
+import pydash
 from .. import __nephos_dir__
 
-log = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class DiskSpaceCheck:
+    """
+    To check if the disk space is less than a minimum threshold defined in config file
+    """
 
     def __init__(self, config_maintain):
         """
@@ -40,14 +47,15 @@ class DiskSpaceCheck:
 
         """
 
-        total, used, free = shutil.disk_usage(__nephos_dir__)  # provides data in bytes
+        total, _, free = shutil.disk_usage(__nephos_dir__)  # provides data in bytes
         result_msg = [""]
         critical_flag = False  # flag is true if error is critical
 
         # evaluate for free space left
         if free < self.min_free_bytes:
-            result_msg.append("Low Disk Space: The free space on disk is less from minimum required space by"
-                              " {diff:0.2f} GBs".format(diff=self._bytes_to_gbs(self.min_free_bytes - free)))
+            result_msg.append("Low Disk Space: The free space on disk is less from "
+                              "minimum required space by {diff:0.2f} GBs".format(
+                                  diff=self._bytes_to_gbs(self.min_free_bytes - free)))
             critical_flag = True
         else:
             result_msg.append("Disk Space: The free space on disk is {value:0.2f} GBs".format(
@@ -55,13 +63,14 @@ class DiskSpaceCheck:
 
         # evaluate for free space percentage
         if ((free/total) * 100) < self.min_percent:
-            result_msg.append("Low Free Disk Percentage: The free space percentage on the disk is low at {current:0.2f}"
-                              " than suggested minimum of {required:0.2f}!".format(current=((free/total) * 100),
-                                                                                   required=self.min_percent))
+            result_msg.append("Low Free Disk Percentage: The free space percentage on "
+                              "the disk is low at {current:0.2f} than suggested minimum "
+                              "of {required:0.2f}!".format(current=((free/total) * 100),
+                                                           required=self.min_percent))
             critical_flag = True
         else:
-            result_msg.append("Free Disk Percentage:  The free space on disk is {value:0.2f}%".format(
-                value=((free/total) * 100)))
+            result_msg.append("Free Disk Percentage:  The free space on disk is {value:0.2f}%"
+                              .format(value=((free/total) * 100)))
 
         return critical_flag, "\n".join(result_msg)
 

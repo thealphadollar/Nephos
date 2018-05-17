@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 
-    # =====================================
-    # THIS FILE WAS GENERATED AUTOMATICALLY
-    # =====================================
-    #
+"""
+Stores basic version information about the project
+"""
 
-    __title__ = 'Nephos'
-    __description__ = 'Nephos - Capture stream, process them and upload to cloud storage'
-    __author__ = 'thealphadollar @ CCExtractor'
-    __license__ = 'GNU GPL v3'
-    __version__ = '0.0.1'
-    __release__ = '0.0.1under.dev'
-    
-    
+# =====================================
+# THIS FILE WAS GENERATED AUTOMATICALLY
+# =====================================
+#
+
+__title__ = 'Nephos'
+__description__ = 'Nephos - Capture streams, process them and upload to cloud storage'
+__author__ = 'Shivam Kumar Jha (github@thealphadollar)'
+__author_mail__ = 'shivam.cs.iit.kgp+Nephos@gmail.com'
+__license__ = 'GNU GPL v3'
+__version__ = '0.0.1'
+__release__ = '0.0.1 under.dev'

@@ -4,11 +4,12 @@ File containing initialising functions for Nephos
 Used to store attributes which will be used throughout the program.
 """
 import os
-from distutils.dir_util import copy_tree
+from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
 
 
 __home_dir__ = os.path.expanduser('~')
-__package_dir__ = os.path.dirname(os.path.realpath(__file__))  # path of the directory where __init__.py is
+# path of the directory where __init__.py is
+__package_dir__ = os.path.dirname(os.path.realpath(__file__))
 
 __nephos_dir__ = os.path.join(__home_dir__, "Nephos")
 __config_dir__ = os.path.join(__nephos_dir__, "config")

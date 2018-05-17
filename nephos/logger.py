@@ -1,3 +1,7 @@
+"""
+Contains classes used for logging through logger.YAML config file
+"""
+
 import os
 import logging
 
