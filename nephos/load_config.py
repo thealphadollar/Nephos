@@ -14,7 +14,8 @@ class Config:
     """
     class managing all the configuration work
     """
-    nephos_config = None
+    logging_config = None
+    maintenance_config = None
     recorder_config = None
     preprocess_config = None
     uploader_config = None
@@ -28,14 +29,14 @@ class Config:
 
         """
 
-        nephos_config_path = os.path.join(__config_dir__, "nephos.yaml")
+        logging_config_path = os.path.join(__config_dir__, "logging.yaml")
         recorder_config_path = os.path.join(__config_dir__, "recorder.yaml")
         preprocess_config_path = os.path.join(__config_dir__, "preprocess.yaml")
         uploader_config_path = os.path.join(__config_dir__, "uploader.yaml")
 
         # loading configuration
-        self.nephos_config = self._load_config_data(nephos_config_path,
-                                                    os.path.join(__default_config_dir__, "nephos.yaml"))
+        self.logging_config = self._load_config_data(logging_config_path,
+                                                     os.path.join(__default_config_dir__, "logging.yaml"))
         self.recorder_config = self._load_config_data(recorder_config_path,
                                                       os.path.join(__default_config_dir__, "recorder.yaml"))
         self.preprocess_config = self._load_config_data(preprocess_config_path,
@@ -45,7 +46,7 @@ class Config:
 
         # updating configuration as needed with manual data / environment variables
         config_update = list(self._config_update())
-        pydash.merge(self.nephos_config, config_update[0])
+        pydash.merge(self.logging_config, config_update[0])
         pydash.merge(self.recorder_config, config_update[1])
         pydash.merge(self.preprocess_config, config_update[2])
         pydash.merge(self.uploader_config, config_update[3])
@@ -58,7 +59,7 @@ class Config:
 
         """
         # Initialise logger
-        logging.config.dictConfig(self.nephos_config['log'])
+        logging.config.dictConfig(self.logging_config)
         log.info("* LOGGER READY")
 
     @staticmethod
@@ -110,8 +111,8 @@ class Config:
             absolute path to the log file for the handle
 
         """
-        data_point = "log.handlers.{name}.filename".format(name=handler_name)
-        return os.path.join(__nephos_dir__, pydash.get(self.nephos_config, data_point))
+        data_point = "handlers.{name}.filename".format(name=handler_name)
+        return os.path.join(__nephos_dir__, pydash.get(self.logging_config, data_point))
 
     def _config_update(self):
         """
@@ -138,33 +139,30 @@ class Config:
 
         """
         # manual update of configuration data
-        nephos_config_update = {
-            'log':
+        logging_config_update = {
+            'handlers':
                 {
-                    'handlers':
+                    'nephos_file':
                         {
-                            'nephos_file':
-                                {
-                                    'filename': self._correct_log_file_path('nephos_file')
-                                },
-                            'recorder_file':
-                                {
-                                    'filename': self._correct_log_file_path('recorder_file')
-                                },
-                            'preprocess_file':
-                                {
-                                    'filename': self._correct_log_file_path('preprocess_file')
-                                },
-                            'uploader_file':
-                                {
-                                    'filename': self._correct_log_file_path('uploader_file')
-                                },
-                            'email':
-                                {
-                                    'credentials': (get_env_var('CRED_EMAIL'), get_env_var('CRED_PASS')),
-                                    'mailhost': (get_env_var('MAIL_HOST'), get_env_var('MAIL_PORT')),
-                                    'secure': ()
-                                }
+                            'filename': self._correct_log_file_path('nephos_file')
+                        },
+                    'recorder_file':
+                        {
+                            'filename': self._correct_log_file_path('recorder_file')
+                        },
+                    'preprocess_file':
+                        {
+                            'filename': self._correct_log_file_path('preprocess_file')
+                        },
+                    'uploader_file':
+                        {
+                            'filename': self._correct_log_file_path('uploader_file')
+                        },
+                    'email':
+                        {
+                            'credentials': (get_env_var('CRED_EMAIL'), get_env_var('CRED_PASS')),
+                            'mailhost': (get_env_var('MAIL_HOST'), get_env_var('MAIL_PORT')),
+                            'secure': ()
                         }
                 }
         }
@@ -179,7 +177,7 @@ class Config:
         }
         # TODO: Find a better method than this nesting
 
-        config_list = [nephos_config_update, recorder_config_update, preprocess_config_update, uploader_config_update]
+        config_list = [logging_config_update, recorder_config_update, preprocess_config_update, uploader_config_update]
         return config_list
 
 
