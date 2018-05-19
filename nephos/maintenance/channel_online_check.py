@@ -4,10 +4,10 @@ Contains class for the checking of channel, whether online or not
 import os
 import shutil
 from logging import getLogger
-from .checker import Checker
 from multiprocessing.pool import ThreadPool
 from multiprocessing import cpu_count
 import pydash
+from .checker import Checker
 from .. import __nephos_dir__
 
 LOG = getLogger(__name__)
@@ -55,7 +55,7 @@ class ChannelOnlineCheck(Checker):
             }
         }
 
-        prev_stats = self._channel_stats()  # storing current stats as prev_stats for later comparison
+        prev_stats = self._channel_stats()  # current stats as prev_stats for later comparison
 
         # create a list of IPs and pass it to recording
         ips = ["something@some", "something2@some2"]

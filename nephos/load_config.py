@@ -34,11 +34,11 @@ class Config:
         """
 
         # loading configuration
-        self.logging_config = self._load_config_data("logging.yaml")
-        self.maintenance_config = self._load_config_data("maintenance.yaml")
-        self.recorder_config = self._load_config_data("recorder.yaml")
-        self.preprocess_config = self._load_config_data("preprocess.yaml")
-        self.uploader_config = self._load_config_data("uploader.yaml")
+        self.logging_config = self.load_data("logging.yaml")
+        self.maintenance_config = self.load_data("maintenance.yaml")
+        self.recorder_config = self.load_data("recorder.yaml")
+        self.preprocess_config = self.load_data("preprocess.yaml")
+        self.uploader_config = self.load_data("uploader.yaml")
 
         # updating configuration as needed with manual data / environment variables
         config_update = list(self._config_update())
@@ -59,7 +59,7 @@ class Config:
         LOG.info("** LOGGER CONFIGURED")
 
     @staticmethod
-    def _load_config_data(file_name):
+    def load_data(file_name):
         """
         Loads data from YAML configuration
 
