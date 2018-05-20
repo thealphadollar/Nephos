@@ -26,3 +26,4 @@ jobs:
     type: "file_upload_check"
     interval: 1440  # minutes, translates to everyday
     at: '20:00'
+...
