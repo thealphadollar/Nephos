@@ -5,9 +5,13 @@ import os
 import shutil
 from logging import getLogger
 from multiprocessing.pool import ThreadPool
+from itertools import repeat
 from multiprocessing import cpu_count
 import pydash
 from .checker import Checker
+from ..manage_db import DBHandler
+from ..recorder.channels import ChannelHandler
+from ..custom_exceptions import DBException
 from .. import __nephos_dir__
 
 LOG = getLogger(__name__)
@@ -40,41 +44,41 @@ class ChannelOnlineCheck(Checker):
         self.TMP_PATH = os.path.join(__nephos_dir__, self._get_data("channel_online_check", "path"))
         os.makedirs(self.TMP_PATH, exist_ok=True)
 
-        # TODO: Create a ChannelHandler class with list channels functions and call it in here
-        # once the list if received, mock channel list below.
-        self.channel_list = {
-            "0": {
-                "id": "abc123",
-                "name": "channel_xyz",
-                "ip": "host:port",
-                "teltex_page": 34,
-                "country": "nation_zyx",
-                "languages": ["hello", "namaste", "salut"],
-                "timezone": "IST",
-                "status": "up"
-            }
-        }
+        self.channel_list = ChannelHandler.list_channels()
 
         prev_stats = self._channel_stats()  # current stats as prev_stats for later comparison
 
         # create a list of IPs and pass it to recording
-        ips = ["something@some", "something2@some2"]
-        POOL.map(self._check_ip, ips)
-        POOL.close()
-        POOL.join()
+        ips = self._extract_ips()
+        try:
+            with DBHandler.connect() as db_cur:
+                POOL.starmap(self._check_ip, zip(repeat(db_cur), ips))
+                POOL.close()
+                POOL.join()
+        except DBException as err:
+            LOG.warning("Couldn't update channel status")
+            LOG.debug("%s", err)
 
-        # TODO: grab new data and call _channel_stats
-        # In case of change in the statistics, formulate report
+        self.channel_list = ChannelHandler.list_channels()
+        new_stats = self._channel_stats()
 
+        # formulate report
+        report = self._formulate_report(prev_stats, new_stats)
+        self._handle(report[0], report[1])
+
+        LOG.info("Channel online check maintenance finished")
         shutil.rmtree(self.TMP_PATH)
+        LOG.info("tmp directory removed")
 
-    def _check_ip(self, ip):
+    def _check_ip(self, db_cur, ip):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
         in the database.
 
         Parameters
         -------
+        db_cur
+            sqlite database cursor
         ip
             type: str
             ip address of the channel to be checked
@@ -84,15 +88,18 @@ class ChannelOnlineCheck(Checker):
 
         """
         path = os.path.join(self.TMP_PATH, "test_{ip}.ts".format(ip=ip))
-        record(ip, path, 5)
+        ChannelHandler.record(ip, path, 5)
         if os.stat(path).st_size < MIN_BYTES:
-            # TODO: make channel status down
-            pass
+            command = """UPDATE channels
+                            SET status = "down"
+                            WHERE ip = ? 
+                        """
+            db_cur.execute(command, tuple(ip))
+            LOG.debug("Channel with ip: %s down", ip)
 
     def _channel_stats(self):
         """
         A minimal function that returns the number of online and offline channels.
-        # TODO: A full function to be developed for listing channels and their statistics.
 
         Returns
         -------
@@ -115,25 +122,54 @@ class ChannelOnlineCheck(Checker):
         stats = {"down_ch": down_ch, "down_ch_names": down_ch_names, "up_ch": up_ch}
         return stats
 
+    def _extract_ips(self):
+        """
+        extracts the list of ip of all channels
 
-def record(ip_addr, addr, duration):
-    """
-    Function to record stream from the ip address for the given duration,
-    and in the given addr.
-    # TODO: to be moved to ChannelHandler
+        Returns
+        -------
+        type: list
+        list of ips of all channels
 
-    Parameters
-    ----------
-    ip_addr
-        type: str
-        IP address of the stream, format "host:port"
-    addr
-        type: str
-        address of the file path
-    duration
+        """
+        ips = []
+        for key in self.channel_list:
+            ips.append(pydash.get(self.channel_list, key+".ip"))
 
-    Returns
-    -------
+        return ips
 
-    """
-    pass
+    @staticmethod
+    def _formulate_report(prev_stats, new_stats):
+        """
+        Frames a report based on the channel online tests
+
+        Parameters
+        ----------
+        prev_stats
+            type: dict
+            status of the channels before current maintenance run
+        new_stats
+            type: dict
+            status of the channels after current run
+
+        Returns
+        -------
+            type: tuple
+                type: bool
+                True if critical, False otherwise
+                type: str
+                Message
+
+        """
+        if set(prev_stats["down_ch_names"]) == set(new_stats["down_ch_names"]):
+            msg = "No channel in the status of channels"
+            return tuple(False, msg)
+
+        msg = [
+            "Current stats:\nFollowing {number} channels are down:".format(number=new_stats["down_ch"]),
+            ", ".join(new_stats["down_ch_names"]),
+            "\nPreviously:",
+            ", ".join(prev_stats["down_ch_names"])
+
+        ]
+        return tuple(True, "\n".join(msg))

@@ -58,7 +58,7 @@ class DBHandler:
 
             # indexing columns
             db_cur.execute(""" CREATE UNIQUE INDEX indexed_name ON channels(
-                                    name
+                                    ip
                                     );
                                 CREATE UNIQUE INDEX indexed_email ON share_list(
                                     email
@@ -66,7 +66,7 @@ class DBHandler:
             """)
 
     @staticmethod
-    def insert_data(db_cur, table_name, data):
+    def insert_data(db_cur, table_name, row_data):
         """
         Inserts data into tables
 
@@ -77,9 +77,9 @@ class DBHandler:
         table_name
             type: str
             name of the table to which the data is to be inserted
-        data
-            type: tuple
-            containing the comma separated row data to be appended
+        row_data
+            type: dict
+            containing the key-value paired row data to be appended
 
         Returns
         -------
@@ -88,10 +88,13 @@ class DBHandler:
             the channel_id/share_id of the new data
 
         """
+        cols = ', '.join('"{}"'.format(col) for col in row_data.keys())
+        vals = ', '.join(':{}'.format(col) for col in row.keys())
         try:
-            command = """ INSERT INTO {table_name}
-                            VALUES """.format(table_name=table_name)
-            db_cur.execute(command, data)
+            command = """ INSERT INTO "{table_name}"
+                            {keys} 
+                            VALUES ({values})""".format(table_name=table_name, keys=cols, values=vals)
+            db_cur.execute(command, row_data)
             return db_cur.lastrowid
         except Error as err:
             LOG.warning("Failed to insert %s into %s", data, table_name)
