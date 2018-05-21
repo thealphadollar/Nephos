@@ -13,6 +13,20 @@ LOG = getLogger(__name__)
 DB_PATH = os.path.join(__nephos_dir__, "databases/storage.db")
 
 
+# indexes for channel and share list
+CH_NAME_INDEX = 1
+CH_IP_INDEX = 2
+CH_COUN_INDEX = 3
+CH_LANG_INDEX = 4
+CH_TMZ_INDEX = 5
+CH_STAT_INDEX = 6
+SL_MAIL_INDEX = 1
+SL_CH_INDEX = 2
+SL_COUN_INDEX = 3
+SL_LANG_INDEX = 4
+SL_TMZ_INDEX = 5
+
+
 class DBHandler:
     """
     Handles operations related to database; insertion, updating and deletion.
@@ -89,7 +103,7 @@ class DBHandler:
 
         """
         cols = ', '.join('"{}"'.format(col) for col in row_data.keys())
-        vals = ', '.join(':{}'.format(col) for col in row.keys())
+        vals = ', '.join(':{}'.format(col) for col in row_data.keys())
         try:
             command = """ INSERT INTO "{table_name}"
                             {keys} 
@@ -97,7 +111,7 @@ class DBHandler:
             db_cur.execute(command, row_data)
             return db_cur.lastrowid
         except Error as err:
-            LOG.warning("Failed to insert %s into %s", data, table_name)
+            LOG.warning("Failed to insert %s into %s", row_data, table_name)
             LOG.debug(err)
 
     # TODO: add functions to retrieve data

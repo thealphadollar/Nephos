@@ -7,9 +7,8 @@ from logging import getLogger
 from multiprocessing.pool import ThreadPool
 from itertools import repeat
 from multiprocessing import cpu_count
-import pydash
 from .checker import Checker
-from ..manage_db import DBHandler
+from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
 from ..custom_exceptions import DBException
 from .. import __nephos_dir__
@@ -44,7 +43,7 @@ class ChannelOnlineCheck(Checker):
         self.TMP_PATH = os.path.join(__nephos_dir__, self._get_data("channel_online_check", "path"))
         os.makedirs(self.TMP_PATH, exist_ok=True)
 
-        self.channel_list = ChannelHandler.list_channels()
+        self.channel_list = ChannelHandler.grab_ch_list()
 
         prev_stats = self._channel_stats()  # current stats as prev_stats for later comparison
 
@@ -59,7 +58,7 @@ class ChannelOnlineCheck(Checker):
             LOG.warning("Couldn't update channel status")
             LOG.debug("%s", err)
 
-        self.channel_list = ChannelHandler.list_channels()
+        self.channel_list = ChannelHandler.grab_ch_list()
         new_stats = self._channel_stats()
 
         # formulate report
@@ -112,11 +111,11 @@ class ChannelOnlineCheck(Checker):
         up_ch = 0
         down_ch_names = []
 
-        for key in self.channel_list:
-            if pydash.get(self.channel_list, key+".status") == "down":
+        for _ in self.channel_list:
+            if self.channel_list[CH_STAT_INDEX] == "down":
                 down_ch += 1
-                down_ch_names.append(pydash.get(self.channel_list, key+".name") + "@" +
-                                     pydash.get(self.channel_list, key+".ip"))
+                down_ch_names.append(self.channel_list[CH_NAME_INDEX] + "@" +
+                                     self.channel_list[CH_IP_INDEX])
             else:
                 up_ch += 1
         stats = {"down_ch": down_ch, "down_ch_names": down_ch_names, "up_ch": up_ch}
@@ -133,8 +132,8 @@ class ChannelOnlineCheck(Checker):
 
         """
         ips = []
-        for key in self.channel_list:
-            ips.append(pydash.get(self.channel_list, key+".ip"))
+        for _ in self.channel_list:
+            ips.append(self.channel_list[CH_IP_INDEX])
 
         return ips
 
@@ -163,7 +162,8 @@ class ChannelOnlineCheck(Checker):
         """
         if set(prev_stats["down_ch_names"]) == set(new_stats["down_ch_names"]):
             msg = "No channel in the status of channels"
-            return tuple(False, msg)
+            report = (False, msg)
+            return report
 
         msg = [
             "Current stats:\nFollowing {number} channels are down:".format(number=new_stats["down_ch"]),
@@ -172,4 +172,5 @@ class ChannelOnlineCheck(Checker):
             ", ".join(prev_stats["down_ch_names"])
 
         ]
-        return tuple(True, "\n".join(msg))
+        report = (True, msg)
+        return report
