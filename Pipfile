@@ -11,6 +11,7 @@ pydash = "*"
 coloredlogs = "*"
 PyYAML = "*"
 click = "*"
+apscheduler = "*"
 
 [requires]
 python_version = "3.5"
