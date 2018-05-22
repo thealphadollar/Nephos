@@ -50,6 +50,19 @@ class ChannelHandler:
         with DBHandler.connect() as db_cur:
             self.insert_channels(db_cur, ch_data)
 
+    def display_channel(self):
+        """
+        Displays list of channels currently stored in the database
+
+        Returns
+        -------
+
+        """
+        channels = self.grab_ch_list()
+        LOG.info("id\tname\tip\tcountry\tlanguage\ttimezone\tstatus")
+        for channel in channels:
+            LOG.info("\t".join(str(x) for x in channel))
+
     @staticmethod
     def insert_channels(db_cur, ch_data):
         """
