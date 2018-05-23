@@ -59,7 +59,7 @@ class Scheduler:
             ip address of the channel
         out_path
             type: str
-            path where the file is to the saved
+            path, without ".ts", where the file is to the saved
         duration
             type: int
             duration in minutes for the job to run
@@ -80,7 +80,7 @@ class Scheduler:
         hour, minute = job_time.split(":")
         duration_secs = 60 * duration
         job = self._scheduler.add_job(ChannelHandler.record(ip_addr=ip, addr=out_path,
-                                                            duration=duration_secs), trigger='cron',
+                                                            duration_secs=duration_secs), trigger='cron',
                                       hour=hour, minute=minute, day_of_week=week_days, id=job_name,
                                       max_instances=1)
         LOG.info("Recording job added: %s", job)
@@ -109,6 +109,28 @@ class Scheduler:
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.info("Maintenance job added %s", job)
 
+    def print_jobs(self):
+        """
+        prints a formatted list of jobs, their triggers and next run times
 
+        Returns
+        -------
 
+        """
+        self._scheduler.print_jobs()
 
+    def rm_recording_job(self, job_id):
+        """
+        delete a recording job from schedule
+
+        Parameters
+        ----------
+        job_id
+            type: str
+            unique id (most probably name) of the job
+        Returns
+        -------
+
+        """
+        self._scheduler.remove_job(job_id)
+        LOG.info("%s job removed from schedule", job_id)

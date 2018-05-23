@@ -6,6 +6,7 @@ from sqlite3 import Error
 import click
 import subprocess
 import os
+from datetime import datetime
 from ..manage_db import DBHandler
 from ..custom_exceptions import DBException
 from .. import __recording_dir__
@@ -146,7 +147,7 @@ class ChannelHandler:
             IP address of the stream, format "host:port"
         addr
             type: str
-            absolute file path to save the recording
+            absolute file path, without ".ts", to save the recording
         duration_secs
             type: int
             duration to record the show in seconds
@@ -160,6 +161,8 @@ class ChannelHandler:
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)
+        addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
+
         cmd = "multicat {duration} -u @{channel_ip} {out_file}".format(
             duration=timeout_str, channel_ip=ip_addr, out_file=addr)
         try:
