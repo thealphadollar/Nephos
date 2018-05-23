@@ -63,6 +63,8 @@ class Nephos(ABC):
         self.Scheduler.start()
         LOG.info("Nephos is running")
 
+    @click.command()
+    @click.option("--file", prompt="File path", help="path to the data file")
     def load_jobs(self, data_file):
         """
         loads data from a file which contains jobs
@@ -87,6 +89,8 @@ class Nephos(ABC):
             LOG.warning("Data addition failed")
             LOG.error(err)
 
+    @click.command()
+    @click.option("--file", prompt="File path", help="path to the data file")
     def load_data(self, data_file):
         """
         loads data from a file which contains both channels and share entities
