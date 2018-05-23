@@ -92,6 +92,8 @@ class ChannelHandler:
             os.makedirs(ch_dir, exist_ok=True)
 
     @staticmethod
+    @click.command()
+    @click.option("--ch_ip_name", prompt="Channel ID", help="channel's ID to delete")
     def delete_channels(ch_ip_name):
         """
         Deletes channel from the database

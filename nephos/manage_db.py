@@ -49,7 +49,7 @@ class DBHandler:
             # create channels and share_list table
             # multiple values to be separated by space. Eg. "AUS IND" for AUS and IND
             # country channels to be shared
-            db_cur.execute(""" CREATE TABLE channels (
+            db_cur.execute(""" CREATE TABLE IF NOT EXISTS channels (
                                     channel_id integer PRIMARY KEY,
                                     name text NOT NULL,
                                     ip text NOT NULL,
@@ -59,7 +59,7 @@ class DBHandler:
                                     status text DEFAULT "up"
                                     );
                                         
-                                CREATE TABLE share_list (
+                                CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text,
                                     channel_name text,

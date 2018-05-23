@@ -3,14 +3,14 @@
 # can be inserted into Nephos. Use a modification of the file with the
 # `--load-data` argument to insert batch data to the database.
 # To add more data, create new dictionary elements with incrementing indexes. 
-# "0"  has been created for understanding and should NOT BE altered.
+# "0"  has been created for understanding.
 # Multiple values can be entered for single dict key by separation through
 # space. Hence do not use space otherwise.
 channels:
   0:
     name: [NAME]  # name, mandatory
     ip: [HOST:PORT]  # address eg. "0.0.0.0:8080", mandatory
-    country_code: [COUNTRY CODE]  # country codeeg. "IND", optional
+    country_code: [COUNTRY CODE]  # country code. eg "IND", optional
     language: [LANGUAGE CODE(S)]  # language codes eg. [ENG RUS], optional
     timezone: [TIMEZONE CODE]  # timezone, mandatory
 # At least one of the last four parameters should be filled.

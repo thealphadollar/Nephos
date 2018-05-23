@@ -8,6 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor
 import time
+import click
 from . import __nephos_dir__
 from .recorder.channels import ChannelHandler
 
@@ -107,7 +108,7 @@ class Scheduler:
         """
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
-        LOG.info("Maintenance job added %s", job)
+        LOG.info("Maintenance job added, %s", job)
 
     def print_jobs(self):
         """
@@ -119,6 +120,8 @@ class Scheduler:
         """
         self._scheduler.print_jobs()
 
+    @click.command()
+    @click.option("--job_id", "Job ID", help="job's id to delete")
     def rm_recording_job(self, job_id):
         """
         delete a recording job from schedule

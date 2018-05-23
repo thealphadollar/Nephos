@@ -6,6 +6,7 @@ import os
 from logging import getLogger
 import click
 from ..manage_db import DBHandler
+from ..custom_exceptions import DBException
 from .. import __recording_dir__
 
 LOG = getLogger(__name__)
@@ -18,7 +19,7 @@ class JobHandler:
 
     def __init__(self, scheduler):
         """
-        initiates the JobHandler with the Scheduler class'
+        initiates the JobHandler with the Scheduler class
 
         Parameters
         ----------
@@ -71,13 +72,21 @@ class JobHandler:
                 "repetition": rep
             }
         }
-        self.insert_jobs(job_data)
+        try:
+            with DBHandler.connect() as db_cur:
+                self.insert_jobs(db_cur, job_data)
+        except DBException as err:
+            LOG.warning("Data addition failed")
+            LOG.error(err)
 
-    def insert_jobs(self, job_data):
+    def insert_jobs(self, db_cur, job_data):
         """
         passes job data to add_recording_job method of Scheduler class.
         Parameters
         ----------
+        db_cur
+            type: sqlite database cursor
+            cursor to the database of channels
         job_data
             type: dict
             dict containing channel with data as in the above function
@@ -87,17 +96,16 @@ class JobHandler:
 
         """
         sq_command = "SELECT ip FROM channels WHERE name=?"
-        with DBHandler.connect() as db_cur:
-            for job in job_data:
-                ip = db_cur.execute(sq_command, job_data["channel_name"])
-                out_path = os.path.join(__recording_dir__, job_data["channel_name"], job["name"])
-                duration = job_data["duration"]
-                job_time = job_data["start_time"]
-                week_str = self._to_weekday(job_data["repetition"])
-                job_name = job_data["name"]
+        for job in job_data:
+            ip = db_cur.execute(sq_command, job_data["channel_name"])
+            out_path = os.path.join(__recording_dir__, job_data["channel_name"], job["name"])
+            duration = job_data["duration"]
+            job_time = job_data["start_time"]
+            week_str = self._to_weekday(job_data["repetition"])
+            job_name = job_data["name"]
 
-                self._scheduler.add_recording_job(ip=ip, out_path=out_path, duration=duration,
-                                                  job_time=job_time, week_days=week_str, job_name=job_name)
+            self._scheduler.add_recording_job(ip=ip, out_path=out_path, duration=duration,
+                                              job_time=job_time, week_days=week_str, job_name=job_name)
 
     def display_jobs(self):
         """
