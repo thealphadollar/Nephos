@@ -63,24 +63,18 @@ class Nephos(ABC):
         self.Scheduler.start()
         LOG.info("Nephos is running")
 
-    @click.command()
-    @click.option("--file", prompt="File path", help="path to the data file")
-    def load_channels_sharelist(self, data_file):
+    def load_channels_sharelist(self):
         """
         loads data from a file which contains both channels and share entities
         Segregates them based on the dictionary key and then passes the dictionary to
         appropriate functions in recorder and uploader.
 
-        Parameters
-        -------
-        data_file
-            type: str
-            path to the data file
-
         Returns
         -------
 
         """
+        data_file = input("File path: ")
+
         data = self.ConfigHandler.load_data(data_file, False)
         try:
             with self.DBHandler.connect() as db_cur:

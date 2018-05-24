@@ -4,7 +4,6 @@ Stores all code related to recording jobs
 
 import os
 from logging import getLogger
-import click
 from ..manage_db import DBHandler
 from ..custom_exceptions import DBException
 from ..load_config import Config
@@ -30,40 +29,20 @@ class JobHandler:
         """
         self._scheduler = scheduler
 
-    @click.command()
-    @click.option("--name", prompt="Job name", help="unique name of the job")
-    @click.option("--channel_name", prompt="Channel name", help="name "
-                                                                "of the channel to record")
-    @click.option("--start-time", prompt="Start time [HH:MM]", help="time to start the recording")
-    @click.option("--duration", prompt="Duration [in minutes]", help="duration of the recording")
-    @click.option("--rep", prompt="Run on [eg. 1010000 for sunday and tuesday]",
-                  help="task to be repeated on these days")
-    def add_job(self, name, channel_name, start_time, duration, rep):
+    def add_job(self):
         """
-
-        Parameters
-        ----------
-        name
-            type: str
-            unique name of the job
-        channel_name
-            type: str
-            name of the channel as in the database
-        start_time
-            type: HH:MM
-            time at which to start the recording
-        duration
-            type: int
-            duration of the run to run, in minutes
-        rep
-            type: int
-            on days to repeat the job
+        Provides CLI for a single job addition and then calls insert_jobs with the data
 
         Returns
         -------
 
         """
-
+        # accepting inputs
+        name = input("Job name: ")
+        channel_name = input("Channel name: ")
+        start_time = input("Start time [HH:MM]: ")
+        duration = int(input("Duration [in minutes]: "))
+        rep = input("Run on [eg. 1010000 for sunday and tuesday]: ")
         job_data = {
             0: {
                 "name": name,
@@ -80,24 +59,19 @@ class JobHandler:
             LOG.warning("Data addition failed")
             LOG.error(err)
 
-    @click.command()
-    @click.option("--file", prompt="File path", help="path to the data file")
-    def load_jobs(self, data_file):
+    def load_jobs(self):
         """
         loads data from a file which contains jobs
         Segregates them based on the dictionary key and then passes the dictionary to
         appropriate functions in JobHandler.
 
-        Parameters
-        -------
-        data_file
-            type: str
-            path to the data file
-
         Returns
         -------
 
         """
+        # path to the data file
+        data_file = input("File path: ")
+
         data = Config.load_data(data_file, False)
         try:
             with DBHandler.connect() as db_cur:
@@ -146,22 +120,17 @@ class JobHandler:
         LOG.info("Here is the list of all scheduled jobs:")
         self._scheduler.print_jobs()
 
-    @click.command()
-    @click.option("--job_name", prompt="Job name", help="job's name to removed")
-    def rm_job(self, job_name):
+    def rm_job(self):
         """
         removes a job from the schedule
-
-        Parameters
-        ----------
-        job_name
-            type: str
-            job name, unique id of the job
 
         Returns
         -------
 
         """
+        # job name, unique id of the job to be removed
+        job_name = input("Job name: ")
+
         self._scheduler.rm_recording_job(job_name)
 
     @staticmethod

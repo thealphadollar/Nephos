@@ -19,21 +19,9 @@ class ChannelHandler:
     Class unifying all channel concerned methods
     """
 
-    @click.command()
-    @click.option("--name", prompt="Channel name", help="name of the channel")
-    @click.option("--ip", prompt="IP", help="ip address of the channel")
-    @click.option("--country", prompt="Country codes [separated by space]",
-                  help="country codes for the channel")
-    @click.option("--lang", prompt="Language codes [separated by space]",
-                  help="available languages in the channel")
-    @click.option("--tmz", prompt="Timezone", help="timezone of the channel")
-    def add_channel(self, name, ip, country, lang, tmz):
+    def add_channel(self):
         """
         Provides CLI to add a single channel
-
-        Parameters
-        -------
-        explained in the click options
 
         Returns
         -------
@@ -42,6 +30,12 @@ class ChannelHandler:
             the unique id for the channel
 
         """
+        name = input("Channel name: ")
+        ip = input("IP address [e.g. 0.0.0.0@8080]: ")
+        country = input("Country codes [separated by space]: ")
+        lang = input("Language codes [separated by space]")
+        tmz = input("Timezone: ")
+
         ch_data = {
             0: {
                 "name": name,
@@ -92,22 +86,15 @@ class ChannelHandler:
             os.makedirs(ch_dir, exist_ok=True)
 
     @staticmethod
-    @click.command()
-    @click.option("--ch_ip_name", prompt="Channel ID", help="channel's ID to delete")
-    def delete_channel(ch_ip_name):
+    def delete_channel():
         """
         Deletes channel from the database
-
-        Parameters
-        ----------
-        ch_ip_name
-            type: str
-            channel' IP or name
 
         Returns
         -------
 
         """
+        ch_ip_name = input("Channel name or ip: ")
         command = "DELETE FROM channels WHERE name=? OR ip=?"
         try:
             with DBHandler.connect() as db_cur:

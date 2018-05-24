@@ -130,21 +130,16 @@ class Scheduler:
         """
         self._scheduler.print_jobs()
 
-    @click.command()
-    @click.option("--job_id", "Job ID", help="job's id to delete")
-    def rm_recording_job(self, job_id):
+    def rm_recording_job(self):
         """
         delete a recording job from schedule
 
-        Parameters
-        ----------
-        job_id
-            type: str
-            unique id (most probably name) of the job
         Returns
         -------
 
         """
+        job_id = input("Job ID: ")
+
         self._scheduler.remove_job(job_id)
         LOG.info("%s job removed from schedule", job_id)
 
