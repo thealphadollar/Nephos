@@ -11,7 +11,7 @@ from .manage_db import DBHandler
 from .scheduler import Scheduler
 from .recorder.channels import ChannelHandler
 from .recorder.jobs import JobHandler
-from .maintenance import Maintenance
+from .maintenance.main import Maintenance
 
 LOG = getLogger(__name__)
 

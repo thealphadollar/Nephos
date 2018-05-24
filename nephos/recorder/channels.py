@@ -136,42 +136,42 @@ class ChannelHandler:
             LOG.warning("Failed to get channel list.")
             LOG.error(err)
 
-    @staticmethod
-    def record(ip_addr, addr, duration_secs):
-        """
-        Function to record stream from the ip address for the given duration,
-        and in the given addr.
 
-        Parameters
-        ----------
-        ip_addr
-            type: str
-            IP address of the stream, format "host:port"
-        addr
-            type: str
-            absolute file path, without ".ts", to save the recording
-        duration_secs
-            type: int
-            duration to record the show in seconds
+def record_stream(ip_addr, addr, duration_secs):
+    """
+    Function to record stream from the ip address for the given duration,
+    and in the given addr.
 
-        Returns
-        -------
+    Parameters
+    ----------
+    ip_addr
+        type: str
+        IP address of the stream, format "host:port"
+    addr
+        type: str
+        absolute file path, without ".ts", to save the recording
+    duration_secs
+        type: int
+        duration to record the show in seconds
 
-        """
-        if not _is_up(ip_addr):
-            return
+    Returns
+    -------
 
-        duration_27khz = int(duration_secs * 27000000)
-        timeout_str = '-d {:d}'.format(duration_27khz)
-        addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
+    """
+    if not _is_up(ip_addr):
+        return
 
-        cmd = "multicat {duration} -u @{channel_ip} {out_file}".format(
-            duration=timeout_str, channel_ip=ip_addr, out_file=addr)
-        try:
-            subprocess.check_call(cmd, shell=False)
-        except subprocess.CalledProcessError as err:
-            LOG.warning("Recording for channel with ip %s", ip_addr)
-            LOG.error(err)
+    duration_27khz = int(duration_secs * 27000000)
+    timeout_str = '-d {:d}'.format(duration_27khz)
+    addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
+
+    cmd = "multicat {duration} -u @{channel_ip} {out_file}".format(
+        duration=timeout_str, channel_ip=ip_addr, out_file=addr)
+    try:
+        subprocess.check_call(cmd, shell=False)
+    except subprocess.CalledProcessError as err:
+        LOG.warning("Recording for channel with ip %s", ip_addr)
+        LOG.error(err)
 
 
 def _is_up(ip):

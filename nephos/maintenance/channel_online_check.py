@@ -9,7 +9,7 @@ from itertools import repeat
 from multiprocessing import cpu_count
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
-from ..recorder.channels import ChannelHandler
+from ..recorder.channels import ChannelHandler, record_stream
 from ..custom_exceptions import DBException
 from .. import __nephos_dir__
 
@@ -88,7 +88,7 @@ class ChannelOnlineCheck(Checker):
 
         """
         path = os.path.join(self.TMP_PATH, "test_{ip}.ts".format(ip=ip))
-        ChannelHandler.record(ip, path, 5)
+        record_stream(ip, path, 5)
         if os.stat(path).st_size < MIN_BYTES:
             command = """UPDATE channels
                             SET status = "down"
