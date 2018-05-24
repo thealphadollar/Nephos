@@ -12,6 +12,7 @@ coloredlogs = "*"
 PyYAML = "*"
 click = "*"
 apscheduler = "*"
+sqlalchemy = "*"
 
 [requires]
 python_version = "3.5"

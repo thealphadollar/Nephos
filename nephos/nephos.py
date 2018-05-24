@@ -36,11 +36,10 @@ class Nephos(ABC):
         self.ConfigHandler = Config()
         self.ConfigHandler.load_config()
         self.ConfigHandler.initialise()
-        LOG.info("Configuration loaded!")
+        LOG.info("Configuration completed!")
 
         LOG.info("Loading database, scheduler, maintenance modules...")
         self.DBHandler = DBHandler()
-
         self.Scheduler = Scheduler()
         self.ChannelHandler = ChannelHandler()
         self.JobHandler = JobHandler(Scheduler)
@@ -48,7 +47,8 @@ class Nephos(ABC):
 
         if first_time_init:
             self.DBHandler.first_time()
-            self.ConfigHandler.add_maintenance_to_scheduler(self.Scheduler, self.MaintenanceHandler)
+            self.DBHandler.init_jobs_db()
+            self.MaintenanceHandler.add_maintenance_to_scheduler(self.Scheduler)
 
         LOG.info("Nephos is all set to launch")
 
@@ -65,33 +65,7 @@ class Nephos(ABC):
 
     @click.command()
     @click.option("--file", prompt="File path", help="path to the data file")
-    def load_jobs(self, data_file):
-        """
-        loads data from a file which contains jobs
-        Segregates them based on the dictionary key and then passes the dictionary to
-        appropriate functions in JobHandler.
-
-        Parameters
-        -------
-        data_file
-            type: str
-            path to the data file
-
-        Returns
-        -------
-
-        """
-        data = self.ConfigHandler.load_data(data_file)
-        try:
-            with self.DBHandler.connect() as db_cur:
-                self.JobHandler.insert_jobs(db_cur, data)
-        except DBException as err:
-            LOG.warning("Data addition failed")
-            LOG.error(err)
-
-    @click.command()
-    @click.option("--file", prompt="File path", help="path to the data file")
-    def load_data(self, data_file):
+    def load_channels_sharelist(self, data_file):
         """
         loads data from a file which contains both channels and share entities
         Segregates them based on the dictionary key and then passes the dictionary to
@@ -107,7 +81,7 @@ class Nephos(ABC):
         -------
 
         """
-        data = self.ConfigHandler.load_data(data_file)
+        data = self.ConfigHandler.load_data(data_file, False)
         try:
             with self.DBHandler.connect() as db_cur:
                 self.ChannelHandler.insert_channels(db_cur, data["channels"])

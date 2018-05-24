@@ -41,9 +41,6 @@ def first_time():
     """
 
     if os.path.exists(__nephos_dir__):
-        # TODO: Remove copying from this nest when all configurations are written
-        # copy default configuration to the __config_dir__
-        copy_tree(__default_config_dir__, __config_dir__)
         return False
 
     # make directories

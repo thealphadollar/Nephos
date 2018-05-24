@@ -7,6 +7,7 @@ from logging import getLogger
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor
+from pytz.exceptions import UnknownTimeZoneError
 import time
 import click
 from . import __nephos_dir__
@@ -17,7 +18,7 @@ LOG = getLogger(__name__)
 # config for the scheduler, not to be set by the user
 PATH_JOB_DB = os.path.join(__nephos_dir__, "databases/jobs.db")
 MAX_CONCURRENT_JOBS = 20
-TMZ = time.tzname[time.daylight]
+TMZ = time.tzname[time.daylight].lower()
 
 
 class Scheduler:
@@ -29,14 +30,24 @@ class Scheduler:
         initialise Scheduler with basic configuration
         """
         job_stores = {
-            'default': SQLAlchemyJobStore(url='sqlite://' + PATH_JOB_DB)
+            'default': SQLAlchemyJobStore(url='sqlite:///' + PATH_JOB_DB)
         }
+
+        LOG.info("Storing scheduler jobs in %s", job_stores["default"])
+
         executors = {
             'default': ThreadPoolExecutor(MAX_CONCURRENT_JOBS)
         }
 
-        self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
-                                              timezone=TMZ)
+        LOG.info("Initialising scheduler with timezone %s", TMZ)
+        try:
+            self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
+                                                  timezone=TMZ)
+        # catch if the timezone is not recognised by the scheduler
+        except UnknownTimeZoneError as err:
+            LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", err)
+            self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
+                                                  timezone='utc')
         LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)
 
     def start(self):
@@ -47,7 +58,7 @@ class Scheduler:
 
         """
         self._scheduler.start()
-        LOG.info("Scheduler started!")
+        LOG.info("Scheduler running!")
 
     def add_recording_job(self, ip, out_path, duration, job_time, week_days, job_name):
         """
@@ -80,10 +91,9 @@ class Scheduler:
         """
         hour, minute = job_time.split(":")
         duration_secs = 60 * duration
-        job = self._scheduler.add_job(ChannelHandler.record(ip_addr=ip, addr=out_path,
-                                                            duration_secs=duration_secs), trigger='cron',
-                                      hour=hour, minute=minute, day_of_week=week_days, id=job_name,
-                                      max_instances=1)
+        job = self._scheduler.add_job(ChannelHandler.record, trigger='cron', hour=hour,
+                                      minute=minute, day_of_week=week_days, id=job_name,
+                                      max_instances=1, args=[ip, out_path, duration_secs])
         LOG.info("Recording job added: %s", job)
 
     def add_maintenance_jobs(self, func, main_id, interval):

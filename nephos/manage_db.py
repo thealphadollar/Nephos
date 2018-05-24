@@ -11,6 +11,7 @@ from . import __nephos_dir__
 
 LOG = getLogger(__name__)
 DB_PATH = os.path.join(__nephos_dir__, "databases/storage.db")
+DB_JOBS_PATH = os.path.join(__nephos_dir__, "databases/jobs.db")
 
 
 # indexes for channel and share list
@@ -58,8 +59,10 @@ class DBHandler:
                                     timezone text NOT NULL,
                                     status text DEFAULT "up"
                                     );
-                                        
-                                CREATE TABLE IF NOT EXISTS share_list (
+
+            """)
+
+            db_cur.execute(""" CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text,
                                     channel_name text,
@@ -73,10 +76,12 @@ class DBHandler:
             # indexing columns
             db_cur.execute(""" CREATE UNIQUE INDEX indexed_name ON channels(
                                     ip
-                                    );
-                                CREATE UNIQUE INDEX indexed_email ON share_list(
+                                    );                             
+            """)
+
+            db_cur.execute(""" CREATE UNIQUE INDEX indexed_email ON share_list(
                                     email
-                                    );                                
+                                    );   
             """)
 
     @staticmethod
@@ -114,7 +119,23 @@ class DBHandler:
             LOG.warning("Failed to insert %s into %s", row_data, table_name)
             LOG.debug(err)
 
-    # TODO: add functions to retrieve data
+    @staticmethod
+    def init_jobs_db():
+        """
+        creates the job database file
+
+        Returns
+        -------
+
+        """
+        try:
+            conn = sqlite3.connect(DB_JOBS_PATH)
+            conn.close()
+        except Error as error:
+            LOG.warning("Unable to connect to jobs database!\nPlease look into debugging details.")
+            LOG.debug(error)
+            # catch this exception only if the error can be ignored.
+            raise DBException("Database Operation failed!")
 
     @staticmethod
     @contextmanager

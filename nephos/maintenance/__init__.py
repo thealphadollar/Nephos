@@ -6,6 +6,7 @@ Defines maintenance class and it's functioning
 # To add a new job, create the job's python code file and add it to the maintenance class.
 
 from logging import getLogger
+import pydash
 from .disk_space_check import DiskSpaceCheck
 from .channel_online_check import ChannelOnlineCheck
 
@@ -32,9 +33,34 @@ class Maintenance:
         """
         self.config = maintenance_config
 
-        # add space check functions
         self.disk_checker = DiskSpaceCheck(self.config)
         self.channel_checker = ChannelOnlineCheck(self.config)
+
+    def add_maintenance_to_scheduler(self, scheduler):
+        """
+        adds all maintenance jobs to scheduler
+
+        Parameters
+        ----------
+        scheduler
+            type: Scheduler class
+            to add maintenance jobs into
+
+        Returns
+        -------
+
+        """
+        # TODO: Add more jobs in next phase
+        jobs = ["disk_space_check", "channel_online_check"]
+        job_funcs = {
+            "disk_space_check": self.call_disk_space_check,
+            "channel_online_check": self.call_channel_online_check
+        }
+
+        for job in jobs:
+            LOG.info("Adding %s maintenance job to scheduler...", job)
+            scheduler.add_maintenance_jobs(job_funcs[job], job,
+                                           self._get_maintenance_data(job))
 
     def call_disk_space_check(self):
         """
@@ -79,3 +105,20 @@ class Maintenance:
 
         """
         pass
+
+    def _get_maintenance_data(self, job):
+        """
+        loads particular value from the maintenance dictionary
+
+        Parameters
+        ----------
+        job
+            type: str
+            name of the job
+
+        Returns
+        -------
+        type: int
+        repeating interval of the job
+        """
+        return pydash.get(self.config, "jobs.{job}.interval".format(job=job))

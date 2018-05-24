@@ -8,6 +8,7 @@ import logging.config
 import yaml
 import yaml.error
 import pydash
+import click
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 
 
@@ -34,10 +35,10 @@ class Config:
         """
 
         # loading configuration
-        self.logging_config = self.load_data("logging.yaml")
-        self.maintenance_config = self.load_data("maintenance.yaml")
-        self.preprocess_config = self.load_data("preprocess.yaml")
-        self.uploader_config = self.load_data("uploader.yaml")
+        self.logging_config = self.load_data("logging.yaml", True)
+        self.maintenance_config = self.load_data("maintenance.yaml", True)
+        self.preprocess_config = self.load_data("preprocess.yaml", True)
+        self.uploader_config = self.load_data("uploader.yaml", True)
 
         # updating configuration as needed with manual data / environment variables
         config_update = list(self._config_update())
@@ -56,36 +57,8 @@ class Config:
         logging.config.dictConfig(self.logging_config)
         LOG.info("** LOGGER CONFIGURED")
 
-    def add_maintenance_to_scheduler(self, scheduler, maintenance):
-        """
-        adds all maintenance jobs to scheduler
-
-        Parameters
-        ----------
-        scheduler
-            type: Scheduler class
-            to add maintenance jobs into
-        maintenance
-            type: Maintenance Class
-            to extract maintenance job from
-
-        Returns
-        -------
-
-        """
-        # TODO: Add more jobs in next phase
-        JOB_INDEX = 0
-        JOB_FUNC_INDEX = 1
-        jobs = ["disk_space_check", "channel_online_check"]
-        job_funcs = [maintenance.call_disk_space_check(), maintenance.call_channel_online_check()]
-
-        for job in zip(jobs, job_funcs):
-            LOG.info("Adding %s maintenance job", job[JOB_INDEX])
-            scheduler.add_maintenance_jobs(job[JOB_FUNC_INDEX], job[JOB_INDEX],
-                                           self._get_maintenance_data(job[JOB_INDEX]))
-
     @staticmethod
-    def load_data(file_name):
+    def load_data(file_name, is_config):
         """
         Loads data from YAML configuration
 
@@ -96,7 +69,10 @@ class Config:
         ----------
         file_name
             type: str
-            name of the config file
+            name of the config file, else full path for data files
+        is_config
+            type: bool
+            if file is config, default loads.
 
         Returns
         -------
@@ -104,18 +80,28 @@ class Config:
         Dictionary containing configuration information provided by the path or default path
 
         """
-        path = os.path.join(__config_dir__, file_name)
+        if is_config:
+            path = os.path.join(__config_dir__, file_name)
+        else:
+            path = file_name
         default_path = os.path.join(__default_config_dir__, file_name)
+
         try:
-            with open(path, 'r') as config_file:
-                yaml_data = config_file.read()
-                return yaml.safe_load(yaml_data)
+            try:
+                with open(path, 'r') as config_file:
+                    yaml_data = config_file.read()
+                    return yaml.safe_load(yaml_data)
+            except IOError as err:
+                LOG.warning("Failed to open %s", path)
+                LOG.error(err)
+
         except yaml.error.YAMLError as exception:
-            print("YAMLError in {file}:\n".format(file=path) + str(exception))
-            print("using default configuration for {file}".format(file=path))
-            with open(default_path) as config_file:
-                yaml_data = config_file.read()
-                return yaml.safe_load(yaml_data)
+            click.echo("YAMLError in {file}:\n".format(file=path) + str(exception))
+            if is_config:
+                click.echo("using default configuration for {file}".format(file=path))
+                with open(default_path) as config_file:
+                    yaml_data = config_file.read()
+                    return yaml.safe_load(yaml_data)
 
     def _correct_log_file_path(self, handler_name):
         """
@@ -199,23 +185,6 @@ class Config:
                        uploader_config_update]
         return config_list
 
-    def _get_maintenance_data(self, job):
-        """
-        loads particular value from the maintenance dictionary
-
-        Parameters
-        ----------
-        job
-            type: str
-            name of the job
-
-        Returns
-        -------
-        type: int
-        repeating interval of the job
-        """
-        return pydash.get(self.maintenance_config, "jobs.{job}.interval".format(job=job))
-
 
 def get_env_var(name):
     """
@@ -237,6 +206,6 @@ def get_env_var(name):
     env_value = os.getenv(name)
 
     if not name:  # if no env variable set for the same
-        print("Warning: Environment variable {env_name} not set! "
-              "Some functions might not work properly!")
+        click.echo("Warning: Environment variable {env_name} not set! "
+                   "Some functions might not work properly!")
     return env_value

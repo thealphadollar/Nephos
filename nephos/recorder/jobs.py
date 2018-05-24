@@ -7,6 +7,7 @@ from logging import getLogger
 import click
 from ..manage_db import DBHandler
 from ..custom_exceptions import DBException
+from ..load_config import Config
 from .. import __recording_dir__
 
 LOG = getLogger(__name__)
@@ -75,6 +76,32 @@ class JobHandler:
         try:
             with DBHandler.connect() as db_cur:
                 self.insert_jobs(db_cur, job_data)
+        except DBException as err:
+            LOG.warning("Data addition failed")
+            LOG.error(err)
+
+    @click.command()
+    @click.option("--file", prompt="File path", help="path to the data file")
+    def load_jobs(self, data_file):
+        """
+        loads data from a file which contains jobs
+        Segregates them based on the dictionary key and then passes the dictionary to
+        appropriate functions in JobHandler.
+
+        Parameters
+        -------
+        data_file
+            type: str
+            path to the data file
+
+        Returns
+        -------
+
+        """
+        data = Config.load_data(data_file, False)
+        try:
+            with DBHandler.connect() as db_cur:
+                self.insert_jobs(db_cur, data)
         except DBException as err:
             LOG.warning("Data addition failed")
             LOG.error(err)

@@ -42,6 +42,7 @@ class ChannelOnlineCheck(Checker):
         """
         self.TMP_PATH = os.path.join(__nephos_dir__, self._get_data("channel_online_check", "path"))
         os.makedirs(self.TMP_PATH, exist_ok=True)
+        LOG.info("Channel online check started, tmp directory created")
 
         self.channel_list = ChannelHandler.grab_ch_list()
 
@@ -161,7 +162,7 @@ class ChannelOnlineCheck(Checker):
 
         """
         if set(prev_stats["down_ch_names"]) == set(new_stats["down_ch_names"]):
-            msg = "No channel in the status of channels"
+            msg = "No new down channels!"
             report = (False, msg)
             return report
 
