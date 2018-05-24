@@ -11,7 +11,7 @@ from pytz.exceptions import UnknownTimeZoneError
 import time
 import click
 from . import __nephos_dir__
-from .recorder.channels import record_stream
+from .recorder.channels import ChannelHandler
 
 LOG = getLogger(__name__)
 
@@ -91,7 +91,7 @@ class Scheduler:
         """
         hour, minute = job_time.split(":")
         duration_secs = 60 * duration
-        job = self._scheduler.add_job(record_stream, trigger='cron', hour=hour,
+        job = self._scheduler.add_job(ChannelHandler.record_stream, trigger='cron', hour=hour,
                                       minute=minute, day_of_week=week_days, id=job_name,
                                       max_instances=1, args=[ip, out_path, duration_secs])
         LOG.info("Recording job added: %s", job)

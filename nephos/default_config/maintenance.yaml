@@ -1,6 +1,7 @@
 ---
 # The file stores maintenance configuration for nephos
-# NOTE: If this file is edited, Nephos needs to be restarted to reflect changes
+# NOTE: If interval is edited, Nephos needs to be restarted to reflect changes
+# NOTE: If enabled is altered, no need to restart Nephos
 # path in reference to __nephos_dir__
 jobs:
   disk_space_check:

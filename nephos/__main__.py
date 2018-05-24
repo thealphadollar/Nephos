@@ -92,7 +92,7 @@ def start():
     LOG.info("NOTE: enter commands during runtime to perform operations over nephos, try \"help\"!")
 
     while True:
-        command = input("\nEnter command to perform: ")
+        command = input("\nEnter command to perform:\n")
         if command in cli.keys():
             cli[command]()
         elif command in ["quit", "exit", "stop"]:

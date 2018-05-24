@@ -9,6 +9,7 @@ from logging import getLogger
 import pydash
 from .disk_space_check import DiskSpaceCheck
 from .channel_online_check import ChannelOnlineCheck
+from ..load_config import Config
 
 
 LOG = getLogger(__name__)
@@ -62,7 +63,8 @@ class Maintenance:
             scheduler.add_maintenance_jobs(job_funcs[job], job,
                                            self._get_maintenance_data(job))
 
-    def call_disk_space_check(self):
+    @staticmethod
+    def call_disk_space_check():
         """
         Calls disk space check job passing the kind.
         It may or may not execute depending on the setting.
@@ -71,9 +73,10 @@ class Maintenance:
         -------
 
         """
-        self.disk_checker.to_run("disk_space_check")
+        DiskSpaceCheck(_refresh_config()).to_run("disk_space_check")
 
-    def call_channel_online_check(self):
+    @staticmethod
+    def call_channel_online_check():
         """
         Calls channel online check job passing the kind.
         It may or may not execute depending on the setting.
@@ -82,7 +85,7 @@ class Maintenance:
         -------
 
         """
-        self.channel_checker.to_run("channel_online_check")
+        ChannelOnlineCheck(_refresh_config()).to_run("channel_online_check")
 
     def call_uploader_auth_check(self):
         """
@@ -122,3 +125,20 @@ class Maintenance:
         repeating interval of the job
         """
         return pydash.get(self.config, "jobs.{job}.interval".format(job=job))
+
+
+def _refresh_config():
+    """
+    Refreshes the loaded configuration for the jobs to enable/disable
+    during runtime.
+
+    Returns
+    -------
+    type: dict
+    configuration for the maintenance job
+
+    """
+    config = Config()
+    config.load_config()
+    config = config.maintenance_config
+    return config
