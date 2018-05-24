@@ -63,7 +63,7 @@ class ChannelHandler:
 
         """
         channels = self.grab_ch_list()
-        LOG.info("id\tname\tip\tcountry\tlanguage\ttimezone\tstatus")
+        LOG.info("\nid\tname\tip\tcountry\tlanguage\ttimezone\tstatus")
         for channel in channels:
             LOG.info("\t".join(str(x) for x in channel))
 

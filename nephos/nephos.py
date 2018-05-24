@@ -42,7 +42,7 @@ class Nephos(ABC):
         self.DBHandler = DBHandler()
         self.Scheduler = Scheduler()
         self.ChannelHandler = ChannelHandler()
-        self.JobHandler = JobHandler(Scheduler)
+        self.JobHandler = JobHandler(self.Scheduler)
         self.MaintenanceHandler = Maintenance(self.ConfigHandler.maintenance_config)
 
         if first_time_init:

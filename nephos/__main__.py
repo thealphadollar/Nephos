@@ -1,6 +1,7 @@
 """
 The file run when Nephos is called as a module
 """
+import sys
 import logging
 import click
 import time
@@ -25,26 +26,48 @@ def runtime_help():
     You can enter the following options while nephos is
     running to perform various operations.
     
-    "help"\tShows help
-    "load batch jobs"\tload jobs from add_jobs file
-    "add job"\tadd a job using command line
-    "list jobs"\tlist currently scheduled jobs
-    "remove job"\tremove job using job name
-    "add data"\tadd channels and share entities
-    "add channel\tadd a channel using command line
-    "list channels"\tlist currently added channels
-    "remove channel"\tremove channel using ip or name''')
+    "help"\t\tshow help
+    "stop"\t\tstop nephos after completion of running jobs
+    "load batch jobs"\t\tload jobs from add_jobs file
+    "add job"\t\tadd a job using command line
+    "list jobs"\t\tlist currently scheduled jobs
+    "remove job"\t\tremove job using job name
+    "add data"\t\tadd channels and share entities
+    "add channel\t\tadd a channel using command line
+    "list channels"\t\tlist currently added channels
+    "remove channel"\t\tremove channel using ip or name
+    ==========
+    ''')
+
+
+def stop(client):
+    """
+    stops nephos' scheduler after finishing running jobs
+
+    Parameters
+    ----------
+    client
+        type: Nephos class
+        current running instance of Nephos class
+
+    Returns
+    -------
+
+    """
+    client.Scheduler.shutdown()
+    return
+
 
 @click.group(chain=True)
 def main():
     """
-    A minimalistic CLI to operation Nephos; record, process, push!
+    A minimalistic CLI to initiate Nephos; record, process, push!
 
     """
     pass
 
 
-@main.command("-s", "--start", help="run nephos in the terminal")
+@main.command("start", help="run nephos in the terminal")
 def start():
     """
     run nephos in the terminal
@@ -66,19 +89,22 @@ def start():
         "remove channel": client.ChannelHandler.delete_channel
     }
 
-    LOG.info("NOTE: enter commands anytime to perform operations over nephos, try \"help\"!")
+    LOG.info("NOTE: enter commands during runtime to perform operations over nephos, try \"help\"!")
 
     while True:
-        command = input("Enter command to perform: ")
+        command = input("\nEnter command to perform: ")
         if command in cli.keys():
             cli[command]()
+        elif command in ["quit", "exit", "stop"]:
+            stop(client)
+            sys.exit()
         else:
             LOG.error("Unrecognised operation %s, use \"help\" to know more.", command)
 
-        time.sleep(10)
+        time.sleep(1)
 
 
-@click.command("-v", "--version", help="shows version and other information")
+@main.command("version", help="shows version and other information")
 def print_ver_info():
     """
     displays information related to development cycle

@@ -147,3 +147,13 @@ class Scheduler:
         """
         self._scheduler.remove_job(job_id)
         LOG.info("%s job removed from schedule", job_id)
+
+    def shutdown(self):
+        """
+        shutdown scheduler after completing running jobs
+
+        Returns
+        -------
+
+        """
+        self._scheduler.shutdown()
