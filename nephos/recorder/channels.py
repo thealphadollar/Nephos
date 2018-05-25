@@ -30,11 +30,11 @@ class ChannelHandler:
             the unique id for the channel
 
         """
-        name = input("Channel name: ")
+        name = input("Channel name: ").lower()
         ip = input("IP address [e.g. 0.0.0.0@8080]: ")
-        country = input("Country codes [separated by space]: ")
-        lang = input("Language codes [separated by space]")
-        tmz = input("Timezone: ")
+        country = input("Country codes [separated by space]: ").lower()
+        lang = input("Language codes [separated by space]: ").lower()
+        tmz = input("Timezone: ").lower()
 
         ch_data = {
             0: {
@@ -94,7 +94,7 @@ class ChannelHandler:
         -------
 
         """
-        ch_ip_name = input("Channel name or ip: ")
+        ch_ip_name = input("Channel name or ip: ").lower()
         command = "DELETE FROM channels WHERE name=? OR ip=?"
         try:
             with DBHandler.connect() as db_cur:

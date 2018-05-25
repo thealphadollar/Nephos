@@ -38,8 +38,8 @@ class JobHandler:
 
         """
         # accepting inputs
-        name = input("Job name: ")
-        channel_name = input("Channel name: ")
+        name = input("Job name: ").lower()
+        channel_name = input("Channel name: ").lower()
         start_time = input("Start time [HH:MM]: ")
         duration = int(input("Duration [in minutes]: "))
         rep = input("Run on [eg. 1010000 for sunday and tuesday]: ")
