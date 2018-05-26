@@ -27,6 +27,7 @@ def runtime_help():
     running to perform various operations.
     
     "help"\t\tshow help
+    "version"\t\tshow version
     "stop"\t\tstop nephos after completion of running jobs
     "load batch jobs"\t\tload jobs from add_jobs file
     "add job"\t\tadd a job using command line
@@ -95,8 +96,11 @@ def start():
         command = input("\nEnter command to perform:\n").lower()
         if command in cli.keys():
             cli[command]()
+        elif command in ["ver", "version", "info"]:
+            click.echo(ver_info)
         elif command in ["quit", "exit", "stop"]:
             stop(client)
+            LOG.warning("Nephos Stopped!")
             sys.exit(0)
         else:
             LOG.error("Unrecognised operation \'%s\', use \'help\' to know more.", command)
@@ -110,7 +114,7 @@ def print_ver_info():
     displays information related to development cycle
 
     """
-    print(ver_info)
+    click.echo(ver_info)
 
 
 if __name__ == '__main__':

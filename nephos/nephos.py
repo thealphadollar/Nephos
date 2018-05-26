@@ -13,9 +13,20 @@ from .scheduler import Scheduler
 from .recorder.channels import ChannelHandler
 from .recorder.jobs import JobHandler
 from .maintenance.main import Maintenance
+from .maintenance.single_instance import SingleInstance
+from .custom_exceptions import SingleInstanceException
 
 
 LOG = getLogger(__name__)
+
+
+# Creates a PID file and locks on to it so only one running instance of Nephos possible at a time.
+# https://stackoverflow.com/a/1265445
+try:
+    _ = SingleInstance()
+except SingleInstanceException as err:
+    LOG.error(err)
+    sys.exit(-1)
 
 
 class Nephos(ABC):

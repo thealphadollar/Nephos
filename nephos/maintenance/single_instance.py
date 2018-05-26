@@ -49,15 +49,10 @@ class SingleInstance(object):
         if not self.initialized:
             return
         try:
-            if sys.platform == 'win32':
-                if hasattr(self, 'fd'):
-                    os.close(self.fd)
-                    os.unlink(self.lockfile)
-            else:
-                fcntl.lockf(self.fp, fcntl.LOCK_UN)
-                # os.close(self.fp)
-                if os.path.isfile(self.lockfile):
-                    os.unlink(self.lockfile)
+            fcntl.lockf(self.fp, fcntl.LOCK_UN)
+            # os.close(self.fp)
+            if os.path.isfile(self.lockfile):
+                os.unlink(self.lockfile)
         except Exception as e:
             LOG.error(e)
             sys.exit(-1)

@@ -2,29 +2,17 @@
 Manages all the database operations
 """
 import os
-import sys
 from contextlib import contextmanager
 from logging import getLogger
 import sqlite3
 from sqlite3 import Error
 from .custom_exceptions import DBException
 from . import __nephos_dir__
-from .maintenance.single_instance import SingleInstance
-from .custom_exceptions import SingleInstanceException
 
 
 LOG = getLogger(__name__)
 DB_PATH = os.path.join(__nephos_dir__, "databases/storage.db")
 DB_JOBS_PATH = os.path.join(__nephos_dir__, "databases/jobs.db")
-
-
-# Creates a PID file and locks on to it so only one instance possible at a time.
-# https://stackoverflow.com/a/1265445
-try:
-    _ = SingleInstance()
-except SingleInstanceException as err:
-    LOG.error(err)
-    sys.exit(-1)
 
 
 # indexes for channel and share list
