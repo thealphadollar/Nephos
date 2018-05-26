@@ -1,7 +1,7 @@
 # Project Nephos
 Google Summer Of Code 2018 Project under CCExtractor; Project Nephos
 
-# [![CodeFactor](https://www.codefactor.io/repository/github/thealphadollar/gsoc18nephos/badge)](https://www.codefactor.io/repository/github/thealphadollar/gsoc18nephos)
+# [![CodeFactor](https://www.codefactor.io/repository/github/thealphadollar/gsoc18nephos/badge)](https://www.codefactor.io/repository/github/thealphadollar/gsoc18nephos) [![Requirements Status](https://requires.io/github/thealphadollar/GSoC18Nephos/requirements.svg?branch=master)](https://requires.io/github/thealphadollar/GSoC18Nephos/requirements/?branch=master)
 ## Abstract
 Project Nephos aims at simplifying the process of moving samples from local storage to cloud for Universities by automating, almost, all the steps involved. It will be consisting of three independent modules; recording module, processing module, and uploading module.
 
