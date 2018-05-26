@@ -40,11 +40,11 @@ handlers:
     level: DEBUG
   email:
     class: logging.handlers.SMTPHandler
-    formatter: simple
+    formatter: colored
     # mailhost: set using environment variables MAIL_HOST and MAIL_PORT
     fromaddr: "no-reply@nephos"
-    toaddrs: ["shivam.cs.iit.kgp@gmail.com"]
-    subject: "Nephos Critical Error"
+    toaddrs: []
+    subject: "[NEPHOS] Critical Notification"
     # credentials: set using environment variables CRED_EMAIL and CRED_PASS
     level: CRITICAL
 root:

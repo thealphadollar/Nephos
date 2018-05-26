@@ -7,8 +7,8 @@ jobs:
   disk_space_check:
     enabled: True  # Bool
     type: "disk_space_check"
-    min_space: 10  # GBs TODO: To be updated
-    min_percent: 10  # TODO: To be updated
+    min_space: 100  # GBs
+    min_percent: 10  #
     interval: 30  # minutes
 
   channel_online_check:
