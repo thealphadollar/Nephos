@@ -2,7 +2,7 @@
 Contains class for the checking of channel, whether online or not
 """
 import os
-import shutil
+from tempfile import TemporaryDirectory
 from logging import getLogger
 from multiprocessing.pool import ThreadPool
 from itertools import repeat
@@ -11,7 +11,6 @@ from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
 from ..custom_exceptions import DBException
-from .. import __nephos_dir__
 
 LOG = getLogger(__name__)
 POOL = ThreadPool(cpu_count())
@@ -40,37 +39,39 @@ class ChannelOnlineCheck(Checker):
                 message that is to be logged
 
         """
-        self.TMP_PATH = os.path.join(__nephos_dir__, self._get_data("channel_online_check", "path"))
-        os.makedirs(self.TMP_PATH, exist_ok=True)
-        LOG.info("Channel online check started, tmp directory created")
 
-        self.channel_list = ChannelHandler.grab_ch_list()
+        with TemporaryDirectory() as tmpdir:
+            LOG.info("Channel online check started, tmp directory {dir} created".format(dir=tmpdir))
 
-        prev_stats = self._channel_stats()  # current stats as prev_stats for later comparison
+            self.channel_list = ChannelHandler.grab_ch_list()
 
-        # create a list of IPs and pass it to recording
-        ips = self._extract_ips()
-        try:
-            with DBHandler.connect() as db_cur:
-                POOL.starmap(self._check_ip, zip(repeat(db_cur), ips))
-                POOL.close()
-                POOL.join()
-        except DBException as err:
-            LOG.warning("Couldn't update channel status")
-            LOG.debug("%s", err)
+            prev_stats = self._channel_stats()  # current stats as prev_stats for later comparison
 
-        self.channel_list = ChannelHandler.grab_ch_list()
-        new_stats = self._channel_stats()
+            # create a list of IPs and pass it to recording
+            ips = self._extract_ips()
+            try:
+                with DBHandler.connect() as db_cur:
+                    POOL.starmap(self._universal_worker, self._pool_args(self._check_ip,
+                                                                         db_cur, ips, tmpdir))
+                    POOL.close()
+                    POOL.join()
+            except DBException as err:
+                LOG.warning("Couldn't update channel status")
+                LOG.debug("%s", err)
 
-        # formulate report
-        report = self._formulate_report(prev_stats, new_stats)
-        self._handle(report[0], report[1])
+            self.channel_list = ChannelHandler.grab_ch_list()
+            new_stats = self._channel_stats()
 
-        LOG.info("Channel online check maintenance finished")
-        shutil.rmtree(self.TMP_PATH)
+            # formulate report
+            report = self._formulate_report(prev_stats, new_stats)
+            self._handle(report[0], report[1])
+
+            LOG.info("Channel online check finished")
+
         LOG.info("tmp directory removed")
 
-    def _check_ip(self, db_cur, ip):
+    @staticmethod
+    def _check_ip(db_cur, ip, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
         in the database.
@@ -82,12 +83,15 @@ class ChannelOnlineCheck(Checker):
         ip
             type: str
             ip address of the channel to be checked
+        path
+            type: dir
+            temporary directory to be used for channel checking
 
         Returns
         -------
 
         """
-        path = os.path.join(self.TMP_PATH, "test_{ip}.ts".format(ip=ip))
+        path = os.path.join(path, "test_{ip}.ts".format(ip=ip))
         ChannelHandler.record_stream(ip, path, 5)
         if os.stat(path).st_size < MIN_BYTES:
             command = """UPDATE channels
@@ -112,11 +116,11 @@ class ChannelOnlineCheck(Checker):
         up_ch = 0
         down_ch_names = []
 
-        for _ in self.channel_list:
-            if self.channel_list[CH_STAT_INDEX] == "down":
+        for channel in self.channel_list:
+            if channel[CH_STAT_INDEX] == "down":
                 down_ch += 1
-                down_ch_names.append(self.channel_list[CH_NAME_INDEX] + "@" +
-                                     self.channel_list[CH_IP_INDEX])
+                down_ch_names.append(channel[CH_NAME_INDEX] + "::" +
+                                     channel[CH_IP_INDEX])
             else:
                 up_ch += 1
         stats = {"down_ch": down_ch, "down_ch_names": down_ch_names, "up_ch": up_ch}
@@ -175,3 +179,46 @@ class ChannelOnlineCheck(Checker):
         ]
         report = (True, msg)
         return report
+
+    @staticmethod
+    def _universal_worker(input_pair):
+        """
+        The function to be called with Pool
+        This is used to pass all arguments of the _check_ip function
+        which is otherwise not supported by Pool.
+
+        Parameters
+        ----------
+        input_pair
+            type: Tuple
+            contains function and it's arguments
+
+        Returns
+        -------
+
+        """
+        func, args = input_pair
+        func(*args)
+
+    @staticmethod
+    def _pool_args(func, *args):
+        """
+        Supports _universal_worker by zipping function and it's arguments together
+
+        Parameters
+        ----------
+        func
+            type: callable
+            function to be executed by the pool
+
+        args
+            type: varying
+            comma separated arguments for the function
+
+        Returns
+        -------
+        type: Tuple
+        contains function and it's arguments
+
+        """
+        return zip(repeat(func), zip(*args))

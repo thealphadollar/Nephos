@@ -3,7 +3,6 @@ Manages all operations related to channels, including adding, deleting and updat
 """
 from logging import getLogger
 from sqlite3 import Error
-import click
 import subprocess
 import os
 from datetime import datetime
@@ -78,11 +77,14 @@ class ChannelHandler:
         -------
 
         """
-        for channel in ch_data:
-            ch_id = DBHandler.insert_data(db_cur, "channels", channel)
-            LOG.info("New channel (id = %s) added with following data:\n%s", ch_id, channel)
+        for key in ch_data.keys():
+            ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
+            if ch_id is not None:
+                LOG.info("New channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
+
             # create directory for channel recordings
-            ch_dir = os.path.join(__recording_dir__, channel["name"])
+            LOG.warning(ch_data[key]["name"])
+            ch_dir = os.path.join(__recording_dir__, ch_data[key]["name"])
             os.makedirs(ch_dir, exist_ok=True)
 
     @staticmethod

@@ -97,9 +97,9 @@ def start():
             cli[command]()
         elif command in ["quit", "exit", "stop"]:
             stop(client)
-            sys.exit()
+            sys.exit(0)
         else:
-            LOG.error("Unrecognised operation %s, use \"help\" to know more.", command)
+            LOG.error("Unrecognised operation \'%s\', use \'help\' to know more.", command)
 
         time.sleep(1)
 

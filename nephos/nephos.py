@@ -4,6 +4,7 @@ The pipeline for the working of nephos
 from abc import ABC
 import click
 from logging import getLogger
+import sys
 from . import first_time
 from .custom_exceptions import DBException
 from .load_config import Config
@@ -12,6 +13,7 @@ from .scheduler import Scheduler
 from .recorder.channels import ChannelHandler
 from .recorder.jobs import JobHandler
 from .maintenance.main import Maintenance
+
 
 LOG = getLogger(__name__)
 
@@ -54,12 +56,13 @@ class Nephos(ABC):
 
     def start(self):
         """
-        Start nephos, with the background processes
+        Start nephos, with the background processes.
 
         Returns
         -------
 
         """
+
         self.Scheduler.start()
         LOG.info("Nephos is running")
 
