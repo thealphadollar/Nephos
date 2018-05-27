@@ -93,7 +93,8 @@ update_version()
 setup(
     name=__title__,
     version=__version__,
-    url="https://github.com/thealphadollar/GSoC18Nephos",
+    url="https://github.com/thealphadollar/Nephos.wiki",
+    download_url="https://github.com/thealphadollar/Nephos",
     license=__license__,
     author=__author__,
     author_email=__author_mail__,
@@ -101,7 +102,12 @@ setup(
     long_description=read('README.md'),
     keywords='network stream closed_captions subtitles',
     install_requires=[
-        'pydash'  # TODO: Add more requirements when finished
+        'pydash',
+        'coloredlogs',
+        'PyYAML',
+        'click',
+        'apscheduler',
+        'sqlalchemy'
     ],
     test_requires=[
         'pytest',

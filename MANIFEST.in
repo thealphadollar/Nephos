@@ -1,3 +1,5 @@
 include README.md
 include LICENSE
+include click_LICENSE
 include AUTHORS
+include docs/*

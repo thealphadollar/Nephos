@@ -92,8 +92,12 @@ class Nephos(ABC):
         data = self.ConfigHandler.load_data(data_file, False)
         try:
             with self.DBHandler.connect() as db_cur:
-                self.ChannelHandler.insert_channels(db_cur, data["channels"])
+                try:
+                    self.ChannelHandler.insert_channels(db_cur, data["channels"])
+                except KeyError as erro:
+                    LOG.warning("No channel data found!")
+                    LOG.error(erro)
                 # TODO: Function to manage share_lists
-        except DBException as err:
+        except DBException as erro:
             LOG.warning("Data addition failed")
-            LOG.error(err)
+            LOG.error(erro)

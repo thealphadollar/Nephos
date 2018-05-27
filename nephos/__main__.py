@@ -37,6 +37,8 @@ def runtime_help():
     "add channel\t\tadd a channel using command line
     "list channels"\t\tlist currently added channels
     "remove channel"\t\tremove channel using ip or name
+
+    For more details, see the docs present in $HOME/Nephos
     ==========
     ''')
 
