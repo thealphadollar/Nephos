@@ -24,7 +24,7 @@ __docs_dir__ = os.path.join(__nephos_dir__, "docs")
 __default_config_dir__ = os.path.join(__package_dir__, "default_config")
 __default_docs_dir__ = os.path.join(__package_dir__, "../docs")
 
-re_check = {
+REGEX_CHECK = {
     "email": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
     "ip": re.compile(r"[^\s]+:[\d]+"),
     "country_code": re.compile(r"[a-zA-Z ]+"),
@@ -37,61 +37,61 @@ re_check = {
 
 
 def validate_entries(data_type, data):
-        """
-        Validates the data entry for the channels, jobs and sharelists
+    """
+    Validates the data entry for the channels, jobs and sharelists
 
-        Parameters
-        ----------
-        data_type
-            type: str
-            information about whether it's channel, job or share entity
-        data
-            type: dict
-            contains multiple channels' data
-
-        Returns
-        -------
+    Parameters
+    ----------
+    data_type
+        type: str
+        information about whether it's channel, job or share entity
+    data
         type: dict
-        validated and rectified data
+        contains multiple channels' data
 
-        """
+    Returns
+    -------
+    type: dict
+    validated and rectified data
 
-        for key in data.keys():
-            name = key
+    """
 
-            def correct(dict_key):
-                """
-                Ask user to correct the value for the key
+    for key in data.keys():
+        name = key
 
-                Parameters
-                ----------
-                dict_key
-                    type: str
-                    dict key value to alter
+        def correct(dict_key):
+            """
+            Ask user to correct the value for the key
 
-                Returns
-                -------
+            Parameters
+            ----------
+            dict_key
+                type: str
+                dict key value to alter
 
-                """
-                data[key][dict_key] = input("Enter correct {key} for {type} {name}: ".format(
-                    key=dict_key,
-                    type=data_type,
-                    name=name
-                ))
+            Returns
+            -------
 
-            for key2 in data[key].keys():
-                if key2 in re_check.keys():
-                    # separate check for emails since they are clustered with space between them
-                    if key2 == "email":
-                        for email in data[key][key2]:
-                            if not re_check[key2].match(email):
-                                click.echo("{email} incorrect".format(email=email))
-                                correct(key2)
-                    else:
-                        if not re_check[key2].match(data[key][key2]):
+            """
+            data[key][dict_key] = input("Enter correct {key} for {type} {name}: ".format(
+                key=dict_key,
+                type=data_type,
+                name=name
+            ))
+
+        for key2 in data[key].keys():
+            if key2 in REGEX_CHECK.keys():
+                # separate check for emails since they are clustered with space between them
+                if key2 == "email":
+                    for email in data[key][key2]:
+                        if not REGEX_CHECK[key2].match(email):
+                            click.echo("{email} incorrect".format(email=email))
                             correct(key2)
+                else:
+                    if not REGEX_CHECK[key2].match(data[key][key2]):
+                        correct(key2)
 
-        return data
+    return data
 
 
 def first_time():

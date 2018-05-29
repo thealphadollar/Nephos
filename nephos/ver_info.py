@@ -9,7 +9,7 @@ Stores basic version information about the project
 # =====================================
 #
 
-ver_info = """
+VER_INFO = """
 __title__ = 'Nephos'
 __description__ = 'Nephos - Capture streams, process them and upload to cloud storage'
 __author__ = 'Shivam Kumar Jha (github@thealphadollar)'

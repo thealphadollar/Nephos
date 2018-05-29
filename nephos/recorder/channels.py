@@ -31,7 +31,7 @@ class ChannelHandler:
 
         """
         name = input("Channel name: ").lower()
-        ip = input("IP address [e.g. 0.0.0.0@8080]: ")
+        ip_addr = input("IP address [e.g. 0.0.0.0@8080]: ")
         country = input("Country codes [separated by space]: ").lower()
         lang = input("Language codes [separated by space]: ").lower()
         tmz = input("Timezone: ").lower()
@@ -39,7 +39,7 @@ class ChannelHandler:
         ch_data = {
             0: {
                 "name": name,
-                "ip": ip,
+                "ip": ip_addr,
                 "country_code": country,
                 "lang": lang,
                 "timezone": tmz
@@ -81,7 +81,7 @@ class ChannelHandler:
         for key in ch_data.keys():
             ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:
-                LOG.info("New channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
+                LOG.info("Channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
 
             # create directory for channel recordings
             LOG.warning(ch_data[key]["name"])
@@ -164,9 +164,15 @@ class ChannelHandler:
             LOG.error(err)
 
 
-def _is_up(ip):
+def _is_up(ip_addr):
     """
     Queries if the channel was up in the previous test.
+
+    Parameters
+    -------
+    ip_addr
+        type: str
+        ip address of the queried channel
 
     Returns
     -------
@@ -176,7 +182,7 @@ def _is_up(ip):
     """
     command = """SELECT status FROM channels WHERE ip=?"""
     with DBHandler.connect() as db_cur:
-        status = db_cur.execute(command, ip)
+        status = db_cur.execute(command, ip_addr)
 
     if status == "up":
         return True

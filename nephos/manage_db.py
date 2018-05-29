@@ -113,7 +113,8 @@ class DBHandler:
         try:
             command = """ INSERT INTO "{table_name}"
                             {keys} 
-                            VALUES ({values})""".format(table_name=table_name, keys=cols, values=vals)
+                            VALUES ({values})""".format(table_name=table_name, keys=cols,
+                                                        values=vals)
             db_cur.execute(command, row_data)
             return db_cur.lastrowid
         except Error as err:

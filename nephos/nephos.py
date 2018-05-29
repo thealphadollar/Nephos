@@ -2,9 +2,9 @@
 The pipeline for the working of nephos
 """
 from abc import ABC
-import click
 from logging import getLogger
 import sys
+import click
 from . import first_time
 from .custom_exceptions import DBException
 from .load_config import Config
@@ -46,22 +46,22 @@ class Nephos(ABC):
             first_time_init = True
 
         # loading and setting configuration
-        self.ConfigHandler = Config()
-        self.ConfigHandler.load_config()
-        self.ConfigHandler.initialise()
+        self.config_handler = Config()
+        self.config_handler.load_config()
+        self.config_handler.initialise()
         LOG.info("Configuration completed!")
 
         LOG.info("Loading database, scheduler, maintenance modules...")
-        self.DBHandler = DBHandler()
-        self.Scheduler = Scheduler()
-        self.ChannelHandler = ChannelHandler()
-        self.JobHandler = JobHandler(self.Scheduler)
-        self.MaintenanceHandler = Maintenance(self.ConfigHandler.maintenance_config)
+        self.db_handler = DBHandler()
+        self.scheduler = Scheduler()
+        self.channel_handler = ChannelHandler()
+        self.job_handler = JobHandler(self.scheduler)
+        self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
 
         if first_time_init:
-            self.DBHandler.first_time()
-            self.DBHandler.init_jobs_db()
-            self.MaintenanceHandler.add_maintenance_to_scheduler(self.Scheduler)
+            self.db_handler.first_time()
+            self.db_handler.init_jobs_db()
+            self.maintenance_handler.add_maintenance_to_scheduler(self.scheduler)
 
         LOG.info("Nephos is all set to launch")
 
@@ -74,7 +74,7 @@ class Nephos(ABC):
 
         """
 
-        self.Scheduler.start()
+        self.scheduler.start()
         LOG.info("Nephos is running")
 
     def load_channels_sharelist(self):
@@ -89,11 +89,11 @@ class Nephos(ABC):
         """
         data_file = input("File path: ")
 
-        data = self.ConfigHandler.load_data(data_file, False)
+        data = self.config_handler.load_data(data_file, False)
         try:
-            with self.DBHandler.connect() as db_cur:
+            with self.db_handler.connect() as db_cur:
                 try:
-                    self.ChannelHandler.insert_channels(db_cur, data["channels"])
+                    self.channel_handler.insert_channels(db_cur, data["channels"])
                 except KeyError as erro:
                     LOG.warning("No channel data found!")
                     LOG.error(erro)

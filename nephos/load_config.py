@@ -10,7 +10,7 @@ import yaml.error
 import pydash
 import click
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
-from . import re_check
+from . import REGEX_CHECK
 
 LOG = logging.getLogger(__name__)
 
@@ -99,9 +99,9 @@ class Config:
                 LOG.error(err)
 
         except yaml.error.YAMLError as exception:
-            click.echo("YAMLError in {file}:\n".format(file=path) + str(exception))
+            print("YAMLError in {file}:\n".format(file=path) + str(exception))
             if is_config:
-                click.echo("using default configuration for {file}".format(file=path))
+                print("using default configuration for {file}".format(file=path))
                 with open(default_path) as config_file:
                     yaml_data = config_file.read()
                     return yaml.safe_load(yaml_data)
@@ -203,11 +203,11 @@ class Config:
         """
 
         if os.path.exists(CRITICAL_MAIL_ADDRS_PATH):
-            LOG.info("Critical mail recipients loaded from %s", CRITICAL_MAIL_ADDRS_PATH)
+            print("Critical mail recipients loaded from", CRITICAL_MAIL_ADDRS_PATH)
             with open(CRITICAL_MAIL_ADDRS_PATH, "r") as file:
                 raw_data = file.read()
         else:
-            LOG.warning("No critical mail list file found!")
+            print("No critical mail list file found!")
             raw_data = input("Enter email address(es) separated by single whitespace:\n")
             with open(CRITICAL_MAIL_ADDRS_PATH, "w+") as file:
                 file.write(raw_data)
@@ -216,15 +216,15 @@ class Config:
 
         removed = []
         for email in emails:
-            if not re_check["email"].match(email):
+            if not REGEX_CHECK["email"].match(email):
                 removed.append(email)
                 emails.remove(email)
 
         if removed:
-            LOG.warning("Following emails removed from critical mail list due to wrong format!")
-            LOG.warning(removed)
+            print("Following emails removed from critical mail list due to wrong format!")
+            print(removed)
 
-        LOG.info("You can add more critical mail recipients in %s", CRITICAL_MAIL_ADDRS_PATH)
+        print("You can add more critical mail recipients in", CRITICAL_MAIL_ADDRS_PATH)
         return emails
 
 
@@ -248,6 +248,6 @@ def get_env_var(name):
     env_value = os.getenv(name)
 
     if not name:  # if no env variable set for the same
-        click.echo("Warning: Environment variable {env_name} not set! "
+        print("Warning: Environment variable {env_name} not set! "
                    "Some functions might not work properly!")
     return env_value

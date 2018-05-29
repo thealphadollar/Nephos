@@ -3,10 +3,10 @@ The file run when Nephos is called as a module
 """
 import sys
 import logging
-import click
 import time
+import click
 from .nephos import Nephos
-from .ver_info import ver_info
+from .ver_info import VER_INFO
 
 
 # Here logger defined manually since this is the first file launched and has __name__ = "__main__"
@@ -57,7 +57,7 @@ def stop(client):
     -------
 
     """
-    client.Scheduler.shutdown()
+    client.scheduler.shutdown()
     return
 
 
@@ -82,14 +82,14 @@ def start():
     # provides functions to launch while scheduler in background
     cli = {
         "help": runtime_help,
-        "load batch jobs": client.JobHandler.load_jobs,
-        "add job": client.JobHandler.add_job,
-        "list jobs": client.JobHandler.display_jobs,
-        "remove job": client.JobHandler.rm_job,
+        "load batch jobs": client.job_handler.load_jobs,
+        "add job": client.job_handler.add_job,
+        "list jobs": client.job_handler.display_jobs,
+        "remove job": client.job_handler.rm_job,
         "add data": client.load_channels_sharelist,
-        "add channel": client.ChannelHandler.add_channel,
-        "list channels": client.ChannelHandler.display_channel,
-        "remove channel": client.ChannelHandler.delete_channel
+        "add channel": client.channel_handler.add_channel,
+        "list channels": client.channel_handler.display_channel,
+        "remove channel": client.channel_handler.delete_channel
     }
 
     LOG.info("NOTE: enter commands during runtime to perform operations over nephos, try \"help\"!")
@@ -99,7 +99,7 @@ def start():
         if command in cli.keys():
             cli[command]()
         elif command in ["ver", "version", "info"]:
-            click.echo(ver_info)
+            click.echo(VER_INFO)
         elif command in ["quit", "exit", "stop"]:
             stop(client)
             LOG.warning("Nephos Stopped!")
@@ -116,7 +116,7 @@ def print_ver_info():
     displays information related to development cycle
 
     """
-    click.echo(ver_info)
+    click.echo(VER_INFO)
 
 
 if __name__ == '__main__':

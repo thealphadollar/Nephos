@@ -15,10 +15,8 @@ LOG = getLogger(__name__)
 class SingleInstance(object):
     """
     Class that can be instantiated only once per machine.
-    If you want to prevent your script from running in parallel just instantiate SingleInstance() class.
     If is there another instance already running it will throw a `SingleInstanceException`.
-    This option is very useful if you have scripts executed by crontab at small amounts of time.
-    Remember that this works by creating a lock file with a filename based on the full path to the script file.
+    This works by creating a lock file with a filename based on the full path to the script file.
 
     """
 
@@ -34,11 +32,11 @@ class SingleInstance(object):
         self.lockfile = os.path.normpath(
             tempfile.gettempdir() + '/' + basename)
 
-        LOG.debug("SingleInstance lockfile: " + self.lockfile)
-        self.fp = open(self.lockfile, 'w')
-        self.fp.flush()
+        LOG.debug("SingleInstance lockfile: %s", self.lockfile)
+        self.file_path = open(self.lockfile, 'w')
+        self.file_path.flush()
         try:
-            fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.lockf(self.file_path, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
             LOG.warning("Nephos is already running, quitting!")
             raise SingleInstanceException()
@@ -49,10 +47,9 @@ class SingleInstance(object):
         if not self.initialized:
             return
         try:
-            fcntl.lockf(self.fp, fcntl.LOCK_UN)
-            # os.close(self.fp)
+            fcntl.lockf(self.file_path, fcntl.LOCK_UN)
             if os.path.isfile(self.lockfile):
                 os.unlink(self.lockfile)
-        except Exception as e:
-            LOG.error(e)
+        except OSError as error:
+            LOG.error(error)
             sys.exit(-1)

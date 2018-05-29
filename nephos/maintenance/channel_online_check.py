@@ -4,16 +4,15 @@ Contains class for the checking of channel, whether online or not
 import os
 from tempfile import TemporaryDirectory
 from logging import getLogger
-from multiprocessing.pool import ThreadPool
+from multiprocessing import pool, cpu_count
 from itertools import repeat
-from multiprocessing import cpu_count
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
 from ..custom_exceptions import DBException
 
 LOG = getLogger(__name__)
-POOL = ThreadPool(cpu_count())
+POOL = pool.ThreadPool(cpu_count())
 MIN_BYTES = 10 * 1024  # 10 KBs, recording created in 5 seconds should be larger than this
 
 
@@ -23,6 +22,11 @@ class ChannelOnlineCheck(Checker):
     prepares a report of the number of channels up, down and
     the magnitude of change.
     """
+
+    def __init__(self, config_maintain):
+
+        Checker.__init__(self, config_maintain)
+        self.channel_list = None
 
     def _execute(self):
         """
@@ -41,7 +45,7 @@ class ChannelOnlineCheck(Checker):
         """
 
         with TemporaryDirectory() as tmpdir:
-            LOG.info("Channel online check started, tmp directory {dir} created".format(dir=tmpdir))
+            LOG.info("Channel online check started, tmp directory %s created", tmpdir)
 
             self.channel_list = ChannelHandler.grab_ch_list()
 
@@ -71,7 +75,7 @@ class ChannelOnlineCheck(Checker):
         LOG.info("tmp directory removed")
 
     @staticmethod
-    def _check_ip(db_cur, ip, path):
+    def _check_ip(db_cur, ip_addr, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
         in the database.
@@ -80,7 +84,7 @@ class ChannelOnlineCheck(Checker):
         -------
         db_cur
             sqlite database cursor
-        ip
+        ip_addr
             type: str
             ip address of the channel to be checked
         path
@@ -91,15 +95,15 @@ class ChannelOnlineCheck(Checker):
         -------
 
         """
-        path = os.path.join(path, "test_{ip}.ts".format(ip=ip))
-        ChannelHandler.record_stream(ip, path, 5)
+        path = os.path.join(path, "test_{ip}.ts".format(ip=ip_addr))
+        ChannelHandler.record_stream(ip_addr, path, 5)
         if os.stat(path).st_size < MIN_BYTES:
             command = """UPDATE channels
                             SET status = "down"
                             WHERE ip = ? 
                         """
-            db_cur.execute(command, tuple(ip))
-            LOG.debug("Channel with ip: %s down", ip)
+            db_cur.execute(command, tuple(ip_addr))
+            LOG.debug("Channel with ip: %s down", ip_addr)
 
     def _channel_stats(self):
         """
@@ -171,7 +175,8 @@ class ChannelOnlineCheck(Checker):
             return report
 
         msg = [
-            "Current stats:\nFollowing {number} channels are down:".format(number=new_stats["down_ch"]),
+            "Current stats:\nFollowing {number} channels are down:".format(
+                number=new_stats["down_ch"]),
             ", ".join(new_stats["down_ch_names"]),
             "\nPreviously:",
             ", ".join(prev_stats["down_ch_names"])
