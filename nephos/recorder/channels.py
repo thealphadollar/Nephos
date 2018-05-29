@@ -46,7 +46,7 @@ class ChannelHandler:
             }
         }
         with DBHandler.connect() as db_cur:
-            self.insert_channels(db_cur, validate_entries(ch_data))
+            self.insert_channels(db_cur, validate_entries("channel", ch_data))
 
     def display_channel(self):
         """

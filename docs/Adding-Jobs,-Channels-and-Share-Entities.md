@@ -31,3 +31,18 @@ A single channel can be added using the CLI in the following manner:
 - `add channel`
 - Provide appropriate input to the CLI prompts
 - The log will notify of success/failure of the operation
+***
+## Filtering Wrong Inputs
+Nephos uses [Regular Expressions](https://en.wikipedia.org/wiki/Regular_expression) to validate
+entries for channels, jobs and share entities. The patterns are listed below, any violation of the below patterns, prompts the user to enter the particular data field again.
+
+- email: "[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]" 
+- ip: "[^\s]+:[\d]+" 
+- country_code: "[a-zA-Z ]+" 
+- language: "[a-zA-Z ]+"
+- timezone: "[a-zA-Z]"
+- start_time: "\d{2}:\d{2}"
+- duration: "\d+"
+- repetition: "[01]{7}"
+
+**NOTE:** You can execute these Reg-Ex patterns [here](https://regexr.com/) and check if your entry qualifies.

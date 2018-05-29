@@ -55,7 +55,7 @@ class JobHandler:
         }
         try:
             with DBHandler.connect() as db_cur:
-                self.insert_jobs(db_cur, validate_entries(job_data))
+                self.insert_jobs(db_cur, validate_entries("job", job_data))
         except DBException as err:
             LOG.warning("Data addition failed")
             LOG.error(err)

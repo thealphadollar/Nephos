@@ -35,12 +35,15 @@ re_check = {
 }
 
 
-def validate_entries(data):
+def validate_entries(data_type, data):
         """
         Validates the data entry for the channels, jobs and sharelists
 
         Parameters
         ----------
+        data_type
+            type: str
+            information about whether it's channel, job or share entity
         data
             type: dict
             contains multiple channels' data
@@ -69,8 +72,9 @@ def validate_entries(data):
                 -------
 
                 """
-                data[key][dict_key] = input("Enter correct {key} for entry {name}: ".format(
+                data[key][dict_key] = input("Enter correct {key} for {type} {name}: ".format(
                     key=dict_key,
+                    type=data_type,
                     name=name
                 ))
 
