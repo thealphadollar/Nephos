@@ -23,17 +23,62 @@ __docs_dir__ = os.path.join(__nephos_dir__, "docs")
 __default_config_dir__ = os.path.join(__package_dir__, "default_config")
 __default_docs_dir__ = os.path.join(__package_dir__, "../docs")
 
-
 re_check = {
-    "EMAIL": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
-    "IP": re.compile(r"[^\s]+:[\d]+"),
-    "COUNTRY_CODE": re.compile(r"[a-zA-Z ]+"),
-    "LANGUAGE_CODE": re.compile(r"[a-zA-Z ]+"),
-    "TIMEZONE": re.compile(r"[a-zA-Z]"),
-    "JOB_TIME": re.compile(r"\d{2}:\d{2}"),
-    "DURATION": re.compile(r"\d+"),
-    "REPETITION": re.compile(r"[01]{7}")
+    "email": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
+    "ip": re.compile(r"[^\s]+:[\d]+"),
+    "country_code": re.compile(r"[a-zA-Z ]+"),
+    "language": re.compile(r"[a-zA-Z ]+"),
+    "timezone": re.compile(r"[a-zA-Z]"),
+    "start_time": re.compile(r"\d{2}:\d{2}"),
+    "duration": re.compile(r"\d+"),
+    "repetition": re.compile(r"[01]{7}")
 }
+
+
+def validate_entries(data):
+        """
+        Validates the data entry for the channels, jobs and sharelists
+
+        Parameters
+        ----------
+        data
+            type: dict
+            contains multiple channels' data
+
+        Returns
+        -------
+        type: dict
+        validated and rectified data
+
+        """
+
+        for key in data.keys():
+            name = key
+
+            def correct(dict_key):
+                """
+                Ask user to correct the value for the key
+
+                Parameters
+                ----------
+                dict_key
+                    type: str
+                    dict key value to alter
+
+                Returns
+                -------
+
+                """
+                data[key][dict_key] = input("Enter correct {key} for entry {name}: ".format(
+                    key=dict_key,
+                    name=name
+                ))
+
+            for key2 in data[key].keys():
+                if key2 in re_check.keys() and (not re_check[key2].match(data[key][key2])):
+                    correct(key2)
+
+        return data
 
 
 def first_time():

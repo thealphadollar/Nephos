@@ -9,6 +9,7 @@ from datetime import datetime
 from ..manage_db import DBHandler
 from ..custom_exceptions import DBException
 from .. import __recording_dir__
+from .. import validate_entries
 
 LOG = getLogger(__name__)
 
@@ -45,7 +46,7 @@ class ChannelHandler:
             }
         }
         with DBHandler.connect() as db_cur:
-            self.insert_channels(db_cur, ch_data)
+            self.insert_channels(db_cur, validate_entries(ch_data))
 
     def display_channel(self):
         """

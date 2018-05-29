@@ -16,9 +16,9 @@ channels:
 # At least one of the last four parameters should be filled.
 sharing_entity:
   0:
-    emails: [EMAIL ADDRESS(ES)]  # email address of the entities, mandatory
+    email: [EMAIL ADDRESS(ES)]  # email address of the entities, mandatory
     channels: [CHANNEL NAME(S)]  # channels to be shared, optional
-    country: [COUNTRY CODE(S)]  # channels from these countries, optional
-    langs: [LANGUAGE CODE(S)]  # recording with these languages, optional
+    country_code: [COUNTRY CODE(S)]  # channels from these countries, optional
+    language: [LANGUAGE CODE(S)]  # recording with these languages, optional
     timezone: [TIMEZONE CODE]  # recordings from this timezone, optional
 ...

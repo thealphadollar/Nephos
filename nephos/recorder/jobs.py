@@ -8,6 +8,7 @@ from ..manage_db import DBHandler
 from ..custom_exceptions import DBException
 from ..load_config import Config
 from .. import __recording_dir__
+from .. import validate_entries
 
 LOG = getLogger(__name__)
 
@@ -54,7 +55,7 @@ class JobHandler:
         }
         try:
             with DBHandler.connect() as db_cur:
-                self.insert_jobs(db_cur, job_data)
+                self.insert_jobs(db_cur, validate_entries(job_data))
         except DBException as err:
             LOG.warning("Data addition failed")
             LOG.error(err)
