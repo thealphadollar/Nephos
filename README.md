@@ -13,11 +13,21 @@ Nephos will be developed, using Python and few other open source projects, to ac
 ## Installation (And Setup)
 1.  [Install Python3](https://kerneltalks.com/tools/install-python-3-on-linux-redhat-centos-ubuntu/)
 2. [Install Pip](https://www.tecmint.com/install-pip-in-linux/)
-3. [Set the following environment variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps) for email notifications to work.
+3.1 [Set the following environment variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps) for email notifications to work.
 - MAIL_HOST: Host of the mailing service, eg. for GMail, "smtp.gmail.com"
 - MAIL_PORT: Port of the mailing service (for TLS connection), eg. for GMail, "587"
 - CRED_EMAIL: Email address of the sender
 - CRED_PASS: Password of the sender
+3.2 You'll be asked to enter the email address(es) of recipient(s) of critical mails
+at initialisation of Nephos. It is only asked on first launch, to edit it
+later:
+- Go to Nephos directory, default is $HOME/Nephos
+- Edit the hidden file ".critical_mail_addrs", multiple addresses separated by
+  a single whitespace
+- Restart Nephos after editing the file
+- In case of any email address fails at RegEx match, it'll be listed in info
+  logs, ignored by config handler and you can correct it in the same file
+
 
 ### Install Using PyPI package
 #### NOTE: This method is compromised at the moment!

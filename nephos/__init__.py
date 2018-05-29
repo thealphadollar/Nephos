@@ -6,6 +6,7 @@ Used to store attributes which will be used throughout the program.
 import os
 from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
 import re
+import click
 
 
 __home_dir__ = os.path.expanduser('~')
@@ -28,7 +29,7 @@ re_check = {
     "ip": re.compile(r"[^\s]+:[\d]+"),
     "country_code": re.compile(r"[a-zA-Z ]+"),
     "language": re.compile(r"[a-zA-Z ]+"),
-    "timezone": re.compile(r"[a-zA-Z]"),
+    "timezone": re.compile(r"[a-zA-Z ]+"),
     "start_time": re.compile(r"\d{2}:\d{2}"),
     "duration": re.compile(r"\d+"),
     "repetition": re.compile(r"[01]{7}")
@@ -79,8 +80,16 @@ def validate_entries(data_type, data):
                 ))
 
             for key2 in data[key].keys():
-                if key2 in re_check.keys() and (not re_check[key2].match(data[key][key2])):
-                    correct(key2)
+                if key2 in re_check.keys():
+                    # separate check for emails since they are clustered with space between them
+                    if key2 == "email":
+                        for email in data[key][key2]:
+                            if not re_check[key2].match(email):
+                                click.echo("{email} incorrect".format(email=email))
+                                correct(key2)
+                    else:
+                        if not re_check[key2].match(data[key][key2]):
+                            correct(key2)
 
         return data
 

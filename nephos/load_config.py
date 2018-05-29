@@ -10,9 +10,12 @@ import yaml.error
 import pydash
 import click
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
-
+from . import re_check
 
 LOG = logging.getLogger(__name__)
+
+# path to store the list of critical mail recipients
+CRITICAL_MAIL_ADDRS_PATH = os.path.join(__nephos_dir__, ".critical_mail_addrs")
 
 
 class Config:
@@ -146,6 +149,7 @@ class Config:
 
         """
         # manual update of configuration data
+        # extensive nesting method has been used for better readability
         logging_config_update = {
             'handlers':
                 {
@@ -167,6 +171,7 @@ class Config:
                         },
                     'email':
                         {
+                            'toaddrs': self.load_mail_list(),
                             'credentials': (get_env_var('CRED_EMAIL'), get_env_var('CRED_PASS')),
                             'mailhost': (get_env_var('MAIL_HOST'), get_env_var('MAIL_PORT')),
                             'secure': ()
@@ -179,11 +184,48 @@ class Config:
         uploader_config_update = {
 
         }
-        # TODO: Find a better method than this nesting
 
         config_list = [logging_config_update, preprocess_config_update,
                        uploader_config_update]
         return config_list
+
+    @staticmethod
+    def load_mail_list():
+        """
+        Checks and removes incorrect mail addresses from toaddr parameter
+        of logger's SMTP handler
+
+        Returns
+        -------
+        type: list
+        updated list of emails
+
+        """
+
+        if os.path.exists(CRITICAL_MAIL_ADDRS_PATH):
+            LOG.info("Critical mail recipients loaded from %s", CRITICAL_MAIL_ADDRS_PATH)
+            with open(CRITICAL_MAIL_ADDRS_PATH, "r") as file:
+                raw_data = file.read()
+        else:
+            LOG.warning("No critical mail list file found!")
+            raw_data = input("Enter email address(es) separated by single whitespace:\n")
+            with open(CRITICAL_MAIL_ADDRS_PATH, "w+") as file:
+                file.write(raw_data)
+
+        emails = [str(email) for email in raw_data.split(" ")]
+
+        removed = []
+        for email in emails:
+            if not re_check["email"].match(email):
+                removed.append(email)
+                emails.remove(email)
+
+        if removed:
+            LOG.warning("Following emails removed from critical mail list due to wrong format!")
+            LOG.warning(removed)
+
+        LOG.info("You can add more critical mail recipients in %s", CRITICAL_MAIL_ADDRS_PATH)
+        return emails
 
 
 def get_env_var(name):
