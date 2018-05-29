@@ -5,6 +5,7 @@ Used to store attributes which will be used throughout the program.
 """
 import os
 from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
+import re
 
 
 __home_dir__ = os.path.expanduser('~')
@@ -21,6 +22,18 @@ __docs_dir__ = os.path.join(__nephos_dir__, "docs")
 
 __default_config_dir__ = os.path.join(__package_dir__, "default_config")
 __default_docs_dir__ = os.path.join(__package_dir__, "../docs")
+
+
+re_check = {
+    "EMAIL": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
+    "IP": re.compile(r"[^\s]+:[\d]+"),
+    "COUNTRY_CODE": re.compile(r"[a-zA-Z ]+"),
+    "LANGUAGE_CODE": re.compile(r"[a-zA-Z ]+"),
+    "TIMEZONE": re.compile(r"[a-zA-Z]"),
+    "JOB_TIME": re.compile(r"\d{2}:\d{2}"),
+    "DURATION": re.compile(r"\d+"),
+    "REPETITION": re.compile(r"[01]{7}")
+}
 
 
 def first_time():
