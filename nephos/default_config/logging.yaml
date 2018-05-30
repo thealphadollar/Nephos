@@ -40,7 +40,7 @@ handlers:
     level: DEBUG
   email:
     class: logging.handlers.SMTPHandler
-    formatter: colored
+    formatter: simple
     # mailhost: set using environment variables MAIL_HOST and MAIL_PORT
     fromaddr: "no-reply@nephos"
     # toaddrs: set at the first run, or loaded from Nephos/.critical_mail_addrs
