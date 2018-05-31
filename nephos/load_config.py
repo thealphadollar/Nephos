@@ -8,7 +8,6 @@ import logging.config
 import yaml
 import yaml.error
 import pydash
-import click
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 from . import REGEX_CHECK
 
@@ -249,5 +248,5 @@ def get_env_var(name):
 
     if not name:  # if no env variable set for the same
         print("Warning: Environment variable {env_name} not set! "
-                   "Some functions might not work properly!")
+              "Some functions might not work properly!")
     return env_value
