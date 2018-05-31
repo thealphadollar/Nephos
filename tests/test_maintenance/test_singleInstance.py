@@ -1,5 +1,5 @@
 from unittest import TestCase
 
 
-class TestSingleInstance(TestCase):
-    pass
+# class TestSingleInstance(TestCase):
+#     pass

@@ -246,7 +246,7 @@ def get_env_var(name):
     """
     env_value = os.getenv(name)
 
-    if not name:  # if no env variable set for the same
+    if not env_value:  # if no env variable set for the same
         print("Warning: Environment variable {env_name} not set! "
-              "Some functions might not work properly!")
+              "Some functions might not work properly!".format(env_name=name))
     return env_value
