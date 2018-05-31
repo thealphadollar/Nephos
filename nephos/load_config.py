@@ -23,7 +23,6 @@ class Config:
     """
     logging_config = None
     maintenance_config = None
-    recorder_config = None
     preprocess_config = None
     uploader_config = None
 
@@ -96,9 +95,10 @@ class Config:
             except IOError as err:
                 LOG.warning("Failed to open %s", path)
                 LOG.error(err)
+                raise yaml.error.YAMLError
 
         except yaml.error.YAMLError as exception:
-            print("YAMLError in {file}:\n".format(file=path) + str(exception))
+            print("Error in {file}:\n".format(file=path) + str(exception))
             if is_config:
                 print("using default configuration for {file}".format(file=path))
                 with open(default_path) as config_file:
