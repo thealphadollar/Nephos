@@ -1,0 +1,25 @@
+sudo: true
+
+language: python
+
+python:
+    - 3.6
+
+cache: pip
+
+install:
+    - pip install pipenv
+    - pip install codecov
+    - pipenv install
+
+script:
+    - coverage run setup.py test
+
+after_success:
+# TODO: Add instructions to push to pypi
+    - codecov
+
+notifications:
+    - on_success: change
+    - on_failure: always
+    - on_pull_requests: change

@@ -109,12 +109,14 @@ setup(
         'apscheduler',
         'sqlalchemy'
     ],
+    setup_requires=[
+	'pytest-runner'
+    ],
     test_requires=[
         'pytest',
         'mock',
         'unittest'
     ],
-    test_suite="tests",
     entry_points={
         'console_scripts': ['nephos=nephos:main']
     },
