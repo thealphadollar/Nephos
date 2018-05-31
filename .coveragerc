@@ -15,4 +15,4 @@ omit =
     */distutils/*
     tests/*
     docs/*
-
+    setup.py

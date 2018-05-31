@@ -7,6 +7,7 @@ name = "pypi"
 pylint = "*"
 pytest-cov = "*"
 pytest = "*"
+codecov = "*"
 
 [packages]
 pydash = "*"

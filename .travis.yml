@@ -3,21 +3,22 @@ sudo: true
 language: python
 
 python:
-    - 3.6
+    - "3.3"
+    - "3.4"
+    - "3.5"
+    - "3.6"
+    - "3.7-dev"
 
 cache: pip
 
 install:
-    - pip install pipenv
-    - pip install codecov
-    - pipenv install
+    - make travis_install
 
 script:
-    - coverage run setup.py test
+    - make travis_test
 
 after_success:
-# TODO: Add instructions to push to pypi
-    - codecov
+    - make travis_after_success
 
 notifications:
     - on_success: change
