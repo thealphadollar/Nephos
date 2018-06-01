@@ -2,9 +2,13 @@ import os
 from unittest import TestCase
 from unittest import mock
 from io import StringIO
+import tempfile
+import pytest
+import pydash
+import yaml
 from nephos.load_config import get_env_var
 from nephos.load_config import Config
-import pydash
+from nephos import __nephos_dir__
 
 
 def mock_load(to_load, _=True):
@@ -44,6 +48,50 @@ def mock_load(to_load, _=True):
             }
     }
     return data[to_load]
+
+
+def create_mock_yaml(dir_name):
+    """
+    Creates mock yaml files in the given dir
+
+    Parameters
+    ----------
+    dir_name
+        type: str
+        name of the directory
+
+    Returns
+    -------
+    type: tuple
+    containing path to correct and incorrect yaml file directories
+
+    """
+    config_path = os.path.join(dir_name, "config")
+    default_config_path = os.path.join(dir_name, "default")
+
+    os.makedirs(config_path, exist_ok=True)
+    os.makedirs(default_config_path, exist_ok=True)
+    incorrect = os.path.join(config_path, "test.yaml")
+    correct = os.path.join(default_config_path, "test.yaml")
+
+    with open(incorrect, "w+") as file:
+        file.write("---\nversion\\\\: -something...\n-vers\n...")
+
+    data = {'version': 1}
+    with open(correct, "w+") as file:
+        yaml.dump(data, file)
+
+    return config_path, default_config_path
+
+
+mock_logging_config_data = {
+    'handlers':
+        {
+            'mock_handler': {
+                'filename': 'mock.log'
+            }
+        }
+}
 
 
 class TestConfig(TestCase):
@@ -97,21 +145,118 @@ class TestConfig(TestCase):
         self.assertEqual(email_addr, expected_email_addr)
         self.assertEqual(credentials, expected_credentials)
         # =============================================
-#
-#     def test_initialise(self):
-#         self.fail()
-#
-#     def test_load_data(self):
-#         self.fail()
-#
-#     def test__correct_log_file_path(self):
-#         self.fail()
-#
-#     def test__config_update(self):
-#         self.fail()
-#
-#     def test_load_mail_list(self):
-#         self.fail()
+
+    @mock.patch('logging.config.dictConfig')
+    def test_logger_running(self, mock_logging_config):
+
+        with mock.patch('nephos.load_config.LOG') as mock_log:
+            self.TestConfig.initialise()
+
+            mock_logging_config.assert_called_with(mock.ANY)
+            call_args, call_kwargs = mock_logging_config.call_args
+            self.assertIsInstance(call_args[0], dict)
+
+            expected_log_info = "** LOGGER CONFIGURED"
+            mock_log.info.assert_called_with(expected_log_info)
+
+    def test_load_data_correct_config_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=default), mock.patch(
+                    'nephos.load_config.__default_config_dir__', new=default):
+                call_return = self.TestConfig.load_data("test.yaml", True)
+                self.assertIsInstance(call_return, dict)
+
+    def test_load_data_correct_nonconfig_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=default), mock.patch(
+                    'nephos.load_config.__default_config_dir__', new=default):
+                file_path = os.path.join(default, "test.yaml")
+                call_return = self.TestConfig.load_data(file_path, False)
+                self.assertIsInstance(call_return, dict)
+
+    def test_load_data_incorrect_config_file(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
+                    'nephos.load_config.__default_config_dir__', new=default):
+                call_return = self.TestConfig.load_data("test.yaml", True)
+                self.assertIsInstance(call_return, dict)
+
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def test_load_data_incorrect_nonconfig_file(self, mock_out):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
+                    'nephos.load_config.__default_config_dir__', new=default):
+                file_path = os.path.join(config, "test.yaml")
+                call_return = self.TestConfig.load_data(file_path, False)
+                output = mock_out.getvalue()
+                expected_output = "Error in {file}:\n".format(file=file_path)
+                self.assertIsNone(call_return)
+                self.assertIn(expected_output, output)
+
+    @mock.patch('nephos.load_config.__config_dir__')
+    @mock.patch('nephos.load_config.__default_config_dir__')
+    def test_load_data_nonexistent_config_file(self, mock_conf_dir, mock_def_conf_dir):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            mock_conf_dir.new, mock_def_conf_dir.new = create_mock_yaml(temp_dir)
+            self.TestConfig.load_data("test", True)
+            self.assertRaises(IOError)
+
+    @mock.patch('sys.stdout', new_callable=StringIO)
+    def test_load_data_nonexistent_nonconfig_file(self, mock_out):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
+                    'nephos.load_config.__default_config_dir__', new=default):
+                file_path = os.path.join(config, "test")
+                self.TestConfig.load_data(file_path, False)
+                output = mock_out.getvalue()
+                expected_output = "Failed to open {file}".format(file=file_path)
+                self.assertIn(expected_output, output)
+
+    @mock.patch('nephos.load_config.Config.logging_config')
+    def test_correct_log_path(self, config_data):
+        config_data.__getitem__.side_effect = mock_logging_config_data.__getitem__
+        config_data.__iter__.side_effect = mock_logging_config_data.__iter__
+        name = self.TestConfig._correct_log_file_path('mock_handler')
+        raw_name = pydash.get(mock_logging_config_data, 'handlers.mock_handler.filename')
+        self.assertNotEqual(name, raw_name)
+        full_name = os.path.join(__nephos_dir__, raw_name)
+        self.assertEqual(name, full_name)
+
+    @mock.patch('nephos.load_config.input')
+    def test_load_mail_list(self, mock_input):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file = os.path.join(temp_dir, "email_test")
+
+            # initially temp_file doesn't exist
+            with mock.patch('nephos.load_config.CRITICAL_MAIL_ADDRS_PATH', new=temp_file):
+                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
+                    mock_input.return_value = "shivam.cs.iit.kgp@gmail.com shiv"
+                    self.TestConfig.load_mail_list()
+                    output = mock_out.getvalue()
+                    expected_output = [
+                        "No critical mail list file found!",
+                        "Following emails removed from critical mail list due to wrong format!",
+                        "['shiv']",
+                        "You can add more critical mail recipients in {path}\n".format(path=temp_file)
+                    ]
+                    self.assertEqual(output, "\n".join(expected_output))
+
+                # now temp_file exists
+                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
+                    self.TestConfig.load_mail_list()
+                    output = mock_out.getvalue()
+                    expected_output = [
+                        "Critical mail recipients loaded from {path}".format(path=temp_file),
+                        "Following emails removed from critical mail list due to wrong format!",
+                        "['shiv']",
+                        "You can add more critical mail recipients in {path}\n".format(path=temp_file)
+                    ]
+                    self.assertEqual(output, "\n".join(expected_output))
 
 
 class TestGetEnvVar(TestCase):

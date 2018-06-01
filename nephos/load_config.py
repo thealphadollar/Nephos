@@ -4,6 +4,7 @@ Contains class which facilitates loading configurations files and implementing t
 
 import os
 import logging
+from logging import getLogger
 import logging.config
 import yaml
 import yaml.error
@@ -11,7 +12,7 @@ import pydash
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 from . import REGEX_CHECK
 
-LOG = logging.getLogger(__name__)
+LOG = getLogger(__name__)
 
 # path to store the list of critical mail recipients
 CRITICAL_MAIL_ADDRS_PATH = os.path.join(__nephos_dir__, ".critical_mail_addrs")
@@ -93,12 +94,13 @@ class Config:
                     yaml_data = config_file.read()
                     return yaml.safe_load(yaml_data)
             except IOError as err:
-                LOG.warning("Failed to open %s", path)
-                LOG.error(err)
+                print("Failed to open", path)
+                print(err)
                 raise yaml.error.YAMLError
 
         except yaml.error.YAMLError as exception:
-            print("Error in {file}:\n".format(file=path) + str(exception))
+            print("Error in {file}:\n".format(file=path))
+            print(exception)
             if is_config:
                 print("using default configuration for {file}".format(file=path))
                 with open(default_path) as config_file:
