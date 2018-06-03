@@ -1,13 +1,10 @@
 import os
-from unittest import TestCase
-from unittest import mock
+from unittest import TestCase, mock
 from io import StringIO
 import tempfile
-import pytest
 import pydash
 import yaml
-from nephos.load_config import get_env_var
-from nephos.load_config import Config
+from nephos.load_config import get_env_var, Config
 from nephos import __nephos_dir__
 
 

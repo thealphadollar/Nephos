@@ -1,11 +1,9 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 import os
 import tempfile
-from unittest import mock
 from io import StringIO
-from nephos import first_time, validate_entries
 from nephos import __nephos_dir__, __config_dir__, __log_dir__, __db_dir__, \
-    __recording_dir__, __upload_dir__, __docs_dir__
+    __recording_dir__, __upload_dir__, __docs_dir__, first_time, validate_entries
 
 mock_wrong_data = {
     '0': {

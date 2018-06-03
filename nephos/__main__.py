@@ -21,7 +21,7 @@ def runtime_help():
     -------
 
     """
-    click.echo('''
+    print('''
     ==========
     You can enter the following options while nephos is
     running to perform various operations.
@@ -43,21 +43,21 @@ def runtime_help():
     ''')
 
 
-def stop(client):
+def stop(scheduler):
     """
     stops nephos' scheduler after finishing running jobs
 
     Parameters
     ----------
-    client
-        type: Nephos class
+    scheduler
+        type: APS background scheduler
         current running instance of Nephos class
 
     Returns
     -------
 
     """
-    client.scheduler.shutdown()
+    scheduler.shutdown()
     return
 
 
@@ -99,9 +99,9 @@ def start():
         if command in cli.keys():
             cli[command]()
         elif command in ["ver", "version", "info"]:
-            click.echo(VER_INFO)
+            print(VER_INFO)
         elif command in ["quit", "exit", "stop"]:
-            stop(client)
+            stop(client.scheduler)
             LOG.warning("Nephos Stopped!")
             sys.exit(0)
         else:
@@ -116,7 +116,7 @@ def print_ver_info():
     displays information related to development cycle
 
     """
-    click.echo(VER_INFO)
+    print(VER_INFO)
 
 
 if __name__ == '__main__':

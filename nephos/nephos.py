@@ -42,7 +42,7 @@ class Nephos(ABC):
         """
         first_time_init = None
         if first_time():
-            click.echo("This is the first time Nephos is being run; copied necessary files.")
+            print("This is the first time Nephos is being run; copied necessary files.")
             first_time_init = True
 
         # loading and setting configuration
