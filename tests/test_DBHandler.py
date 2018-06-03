@@ -39,6 +39,7 @@ class TestDBHandler(TestCase):
         with self.failUnlessRaises(DBException):
             with self.db_handler.init_jobs_db():
                 pass
+        temp_dir.cleanup()  # in tests, this is the last to be called from this test module
 
     @mock.patch('nephos.manage_db.DB_PATH', new=temp_dir.name)
     def test_wrong_connect_channel_db(self):

@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-#
-# class TestChannelOnlineCheck(TestCase):
-#     def test__execute(self):
-#         self.fail()
+
+class TestChannelOnlineCheck(TestCase):
+    def test__execute(self):
+        self.fail()
 #
 #     def test__check_ip(self):
 #         self.fail()

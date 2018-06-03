@@ -7,6 +7,7 @@ import time
 from logging import getLogger
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.jobstores.base import JobLookupError
 from apscheduler.executors.pool import ThreadPoolExecutor
 from pytz.exceptions import UnknownTimeZoneError
 from . import __nephos_dir__
@@ -44,7 +45,8 @@ class Scheduler:
                                                   timezone=TMZ)
         # catch if the timezone is not recognised by the scheduler
         except UnknownTimeZoneError as err:
-            LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", err)
+            LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", TMZ)
+            LOG.error(err)
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone='utc')
         LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)
@@ -117,7 +119,7 @@ class Scheduler:
         """
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
-        LOG.info("Maintenance job added, %s", job)
+        LOG.info("Maintenance job added: %s", job)
 
     def print_jobs(self):
         """
@@ -138,9 +140,11 @@ class Scheduler:
 
         """
         job_id = input("Job ID: ")
-
-        self._scheduler.remove_job(job_id)
-        LOG.info("%s job removed from schedule", job_id)
+        try:
+            self._scheduler.remove_job(job_id)
+            LOG.info("%s job removed from schedule", job_id)
+        except JobLookupError as error:
+            LOG.error(error)
 
     def shutdown(self):
         """
