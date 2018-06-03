@@ -144,7 +144,7 @@ class DBHandler:
     def connect():
         """
         Instantiates the class with a connection to the main database which stores
-
+        channels and share lists.
         Provides cursor to the database connection.
 
         """
