@@ -4,7 +4,6 @@ The pipeline for the working of nephos
 from abc import ABC
 from logging import getLogger
 import sys
-import click
 from . import first_time
 from .custom_exceptions import DBException
 from .load_config import Config
