@@ -36,13 +36,13 @@ class TestFirstTime(TestCase):
 
     def test_first_time_false(self):
         with tempfile.TemporaryDirectory() as temp_dir:
-            with mock.patch('nephos.__nephos_dir__', new=os.path.join(temp_dir)):
+            with mock.patch('nephos.__nephos_dir__', new=temp_dir):
                 self.assertFalse(first_time())
 
-    @mock.patch('os.path.exists', return_value=False)
     @mock.patch('nephos.copy_tree')
-    def test_first_time_true(self, mock_exists, mock_copy):
-        with mock.patch('os.makedirs') as mock_makedir:
+    @mock.patch('os.makedirs')
+    def test_first_time_true(self, mock_makedir, mock_copy):
+        with mock.patch('os.path.exists', return_value=False):
             self.assertTrue(first_time())
 
             mock_makedir.mock_calls[0] = [mock.call(__nephos_dir__)]
@@ -52,6 +52,7 @@ class TestFirstTime(TestCase):
             mock_makedir.mock_calls[4] = [mock.call(__recording_dir__)]
             mock_makedir.mock_calls[5] = [mock.call(__upload_dir__)]
             mock_makedir.mock_calls[6] = [mock.call(__docs_dir__)]
+            self.assertTrue(mock_copy.called)
 
 
 class TestValidateEntries(TestCase):

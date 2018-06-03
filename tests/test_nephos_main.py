@@ -32,12 +32,12 @@ class TestStop(TestCase):
 
 
 class TestStart(TestCase):
-    def test_start(self):
+    @mock.patch('nephos.__main__.LOG')
+    def test_start(self, mock_log):
         runner = CliRunner()
-        with mock.patch('nephos.__main__.LOG') as mock_log:
-            runner.invoke(start, input='quit')
-            expected = "Nephos Stopped!"
-            mock_log.warning.assert_called_with(expected)
+        runner.invoke(start, input='quit')
+        expected = "Nephos Stopped!"
+        mock_log.warning.assert_called_with(expected)
 
 
 class TestPrintVerInfo(TestCase):

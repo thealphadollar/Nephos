@@ -13,7 +13,7 @@ from ..custom_exceptions import DBException
 
 LOG = getLogger(__name__)
 POOL = pool.ThreadPool(cpu_count())
-MIN_BYTES = 10 * 1024  # 10 KBs, recording created in 5 seconds should be larger than this
+MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this
 
 
 class ChannelOnlineCheck(Checker):
@@ -141,8 +141,8 @@ class ChannelOnlineCheck(Checker):
 
         """
         ips = []
-        for _ in self.channel_list:
-            ips.append(self.channel_list[CH_IP_INDEX])
+        for channel in self.channel_list:
+            ips.append(channel[CH_IP_INDEX])
 
         return ips
 

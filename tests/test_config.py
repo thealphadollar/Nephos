@@ -102,73 +102,73 @@ class TestConfig(TestCase):
         self.assertIsNone(self.TestConfig.preprocess_config)
         self.assertIsNone(self.TestConfig.uploader_config)
 
-    @mock.patch('nephos.load_config.Config.load_data', side_effect=mock_load)
-    @mock.patch('nephos.load_config.Config._correct_log_file_path', return_value="correct_path")
-    @mock.patch('nephos.load_config.Config.load_mail_list', return_value=["abc@xyz.com"])
-    @mock.patch('nephos.load_config.get_env_var', return_value="env_value")
-    def test_load_config(self, mock_load_config, mock_correct_path, mock_mail_list, mock_load_env):
+    def test_load_config(self):
+        with mock.patch('nephos.load_config.Config.load_data', side_effect=mock_load), \
+             mock.patch('nephos.load_config.Config._correct_log_file_path', return_value="correct_path"), \
+             mock.patch('nephos.load_config.Config.load_mail_list', return_value=["abc@xyz.com"]), \
+             mock.patch('nephos.load_config.get_env_var', return_value="env_value"):
 
-        self.TestConfig.load_config()
+            self.TestConfig.load_config()
 
-        self.assertIsInstance(self.TestConfig.logging_config, dict)
-        self.assertIsInstance(self.TestConfig.maintenance_config, dict)
-        self.assertIsInstance(self.TestConfig.preprocess_config, dict)
-        self.assertIsInstance(self.TestConfig.uploader_config, dict)
+            self.assertIsInstance(self.TestConfig.logging_config, dict)
+            self.assertIsInstance(self.TestConfig.maintenance_config, dict)
+            self.assertIsInstance(self.TestConfig.preprocess_config, dict)
+            self.assertIsInstance(self.TestConfig.uploader_config, dict)
 
-        # =============================================
-        # below tests check for the correction of input
-        log_version = pydash.get(self.TestConfig.logging_config, "version")
-        maintainer_version = pydash.get(self.TestConfig.maintenance_config, "version")
-        preprocessor_version = pydash.get(self.TestConfig.preprocess_config, "version")
-        uploader_version = pydash.get(self.TestConfig.uploader_config, "version")
+            # =============================================
+            # below tests check for the correction of input
+            log_version = pydash.get(self.TestConfig.logging_config, "version")
+            maintainer_version = pydash.get(self.TestConfig.maintenance_config, "version")
+            preprocessor_version = pydash.get(self.TestConfig.preprocess_config, "version")
+            uploader_version = pydash.get(self.TestConfig.uploader_config, "version")
 
-        self.assertEqual(log_version, 1)
-        self.assertEqual(maintainer_version, 1)
-        self.assertEqual(preprocessor_version, 1)
-        self.assertEqual(uploader_version, 1)
-        # =============================================
+            self.assertEqual(log_version, 1)
+            self.assertEqual(maintainer_version, 1)
+            self.assertEqual(preprocessor_version, 1)
+            self.assertEqual(uploader_version, 1)
+            # =============================================
 
-        # =============================================
-        # below tests pass if _config_updates works fine
-        nephos_log_file = pydash.get(self.TestConfig.logging_config, 'handlers.nephos_file.filename')
-        email_addr = pydash.get(self.TestConfig.logging_config, 'handlers.email.toaddrs')
-        credentials = pydash.get(self.TestConfig.logging_config, 'handlers.email.credentials')
+            # =============================================
+            # below tests pass if _config_updates works fine
+            nephos_log_file = pydash.get(self.TestConfig.logging_config, 'handlers.nephos_file.filename')
+            email_addr = pydash.get(self.TestConfig.logging_config, 'handlers.email.toaddrs')
+            credentials = pydash.get(self.TestConfig.logging_config, 'handlers.email.credentials')
 
-        expected_nephos_log_file = "correct_path"
-        expected_email_addr = ["abc@xyz.com"]
-        expected_credentials = ("env_value", "env_value")
+            expected_nephos_log_file = "correct_path"
+            expected_email_addr = ["abc@xyz.com"]
+            expected_credentials = ("env_value", "env_value")
 
-        self.assertEqual(nephos_log_file, expected_nephos_log_file)
-        self.assertEqual(email_addr, expected_email_addr)
-        self.assertEqual(credentials, expected_credentials)
-        # =============================================
+            self.assertEqual(nephos_log_file, expected_nephos_log_file)
+            self.assertEqual(email_addr, expected_email_addr)
+            self.assertEqual(credentials, expected_credentials)
+            # =============================================
 
+    @mock.patch('nephos.load_config.LOG')
     @mock.patch('logging.config.dictConfig')
-    def test_logger_running(self, mock_logging_config):
+    def test_logger_running(self, mock_logging_config, mock_log):
 
-        with mock.patch('nephos.load_config.LOG') as mock_log:
-            self.TestConfig.initialise()
+        self.TestConfig.initialise()
 
-            mock_logging_config.assert_called_with(mock.ANY)
-            call_args, call_kwargs = mock_logging_config.call_args
-            self.assertIsInstance(call_args[0], dict)
+        mock_logging_config.assert_called_with(mock.ANY)
+        call_args, call_kwargs = mock_logging_config.call_args
+        self.assertIsInstance(call_args[0], dict)
 
-            expected_log_info = "** LOGGER CONFIGURED"
-            mock_log.info.assert_called_with(expected_log_info)
+        expected_log_info = "** LOGGER CONFIGURED"
+        mock_log.info.assert_called_with(expected_log_info)
 
     def test_load_data_correct_config_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             config, default = create_mock_yaml(temp_dir)
-            with mock.patch('nephos.load_config.__config_dir__', new=default), mock.patch(
-                    'nephos.load_config.__default_config_dir__', new=default):
+            with mock.patch('nephos.load_config.__config_dir__', new=default), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
                 call_return = self.TestConfig.load_data("test.yaml", True)
                 self.assertIsInstance(call_return, dict)
 
     def test_load_data_correct_nonconfig_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             config, default = create_mock_yaml(temp_dir)
-            with mock.patch('nephos.load_config.__config_dir__', new=default), mock.patch(
-                    'nephos.load_config.__default_config_dir__', new=default):
+            with mock.patch('nephos.load_config.__config_dir__', new=default), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
                 file_path = os.path.join(default, "test.yaml")
                 call_return = self.TestConfig.load_data(file_path, False)
                 self.assertIsInstance(call_return, dict)
@@ -176,8 +176,8 @@ class TestConfig(TestCase):
     def test_load_data_incorrect_config_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             config, default = create_mock_yaml(temp_dir)
-            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
-                    'nephos.load_config.__default_config_dir__', new=default):
+            with mock.patch('nephos.load_config.__config_dir__', new=config), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
                 call_return = self.TestConfig.load_data("test.yaml", True)
                 self.assertIsInstance(call_return, dict)
 
@@ -185,8 +185,8 @@ class TestConfig(TestCase):
     def test_load_data_incorrect_nonconfig_file(self, mock_out):
         with tempfile.TemporaryDirectory() as temp_dir:
             config, default = create_mock_yaml(temp_dir)
-            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
-                    'nephos.load_config.__default_config_dir__', new=default):
+            with mock.patch('nephos.load_config.__config_dir__', new=config), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
                 file_path = os.path.join(config, "test.yaml")
                 call_return = self.TestConfig.load_data(file_path, False)
                 output = mock_out.getvalue()
@@ -196,7 +196,7 @@ class TestConfig(TestCase):
 
     @mock.patch('nephos.load_config.__config_dir__')
     @mock.patch('nephos.load_config.__default_config_dir__')
-    def test_load_data_nonexistent_config_file(self, mock_conf_dir, mock_def_conf_dir):
+    def test_load_data_nonexistent_config_file(self, mock_def_conf_dir, mock_conf_dir):
         with tempfile.TemporaryDirectory() as temp_dir:
             mock_conf_dir.new, mock_def_conf_dir.new = create_mock_yaml(temp_dir)
             self.TestConfig.load_data("test", True)
@@ -206,8 +206,8 @@ class TestConfig(TestCase):
     def test_load_data_nonexistent_nonconfig_file(self, mock_out):
         with tempfile.TemporaryDirectory() as temp_dir:
             config, default = create_mock_yaml(temp_dir)
-            with mock.patch('nephos.load_config.__config_dir__', new=config), mock.patch(
-                    'nephos.load_config.__default_config_dir__', new=default):
+            with mock.patch('nephos.load_config.__config_dir__', new=config), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
                 file_path = os.path.join(config, "test")
                 self.TestConfig.load_data(file_path, False)
                 output = mock_out.getvalue()
