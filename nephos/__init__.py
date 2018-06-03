@@ -83,7 +83,7 @@ def validate_entries(data_type, data):
             if key2 in REGEX_CHECK.keys():
                 # separate check for emails since they are clustered with space between them
                 if key2 == "email":
-                    for email in data[key][key2]:
+                    for email in data[key][key2].split(' '):
                         if not REGEX_CHECK[key2].match(email):
                             click.echo("{email} incorrect".format(email=email))
                             correct(key2)
@@ -109,7 +109,7 @@ def first_time():
     Returns
     -------
     bool: True, when Nephos launched first time
-          False,  otherwise
+          False, otherwise
 
     """
 
