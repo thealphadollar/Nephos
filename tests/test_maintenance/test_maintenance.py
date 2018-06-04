@@ -13,17 +13,17 @@ class TestMaintenance(TestCase):
 
     @mock.patch('nephos.maintenance.main.DiskSpaceCheck')
     def test_call_disk_space_check(self, mock_disk_space, _):
-        Maintenance.call_disk_space_check()
+        with mock.patch('nephos.maintenance.main._refresh_config'):
+            Maintenance.call_disk_space_check()
 
-        call_args, _ = mock_disk_space.call_args
-        self.assertIsInstance(call_args[0], dict)
+            self.assertTrue(mock_disk_space.called)
 
     @mock.patch('nephos.maintenance.main.ChannelOnlineCheck')
     def test_call_channel_online_check(self, mock_channel_check, _):
-        Maintenance.call_channel_online_check()
+        with mock.patch('nephos.maintenance.main._refresh_config'):
+            Maintenance.call_channel_online_check()
 
-        call_args, _ = mock_channel_check.call_args
-        self.assertIsInstance(call_args[0], dict)
+            self.assertTrue(mock_channel_check.called)
 
     def test_call_uploader_auth_check(self, _):
         # TODO

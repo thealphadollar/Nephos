@@ -194,13 +194,13 @@ class TestConfig(TestCase):
                 self.assertIsNone(call_return)
                 self.assertIn(expected_output, output)
 
-    @mock.patch('nephos.load_config.__config_dir__')
-    @mock.patch('nephos.load_config.__default_config_dir__')
-    def test_load_data_nonexistent_config_file(self, mock_def_conf_dir, mock_conf_dir):
+    def test_load_data_nonexistent_config_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
-            mock_conf_dir.new, mock_def_conf_dir.new = create_mock_yaml(temp_dir)
-            self.TestConfig.load_data("test", True)
-            self.assertRaises(IOError)
+            config, default = create_mock_yaml(temp_dir)
+            with mock.patch('nephos.load_config.__config_dir__', new=config), \
+                 mock.patch('nephos.load_config.__default_config_dir__', new=default):
+                with self.failUnlessRaises(IOError):
+                    self.TestConfig.load_data("test", True)
 
     @mock.patch('sys.stdout', new_callable=StringIO)
     def test_load_data_nonexistent_nonconfig_file(self, mock_out):
