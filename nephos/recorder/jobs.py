@@ -43,7 +43,7 @@ class JobHandler:
         channel_name = input("Channel name: ").lower()
         start_time = input("Start time [HH:MM]: ")
         duration = int(input("Duration [in minutes]: "))
-        rep = input("Run on [eg. 1010000 for sunday and tuesday]: ")
+        rep = input("Run on [eg. 1010000 for monday and wednesday]: ")
         job_data = {
             0: {
                 "name": name,
@@ -98,13 +98,13 @@ class JobHandler:
 
         """
         sq_command = "SELECT ip FROM channels WHERE name=?"
-        for job in job_data:
-            ip_addr = db_cur.execute(sq_command, job_data["channel_name"])
-            out_path = os.path.join(__recording_dir__, job_data["channel_name"], job["name"])
-            duration = job_data["duration"]
-            job_time = job_data["start_time"]
-            week_str = self._to_weekday(job_data["repetition"])
-            job_name = job_data["name"]
+        for job_key in job_data.keys():
+            ip_addr = db_cur.execute(sq_command, job_data[job_key]["channel_name"])
+            out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"], job_data[job_key]["name"])
+            duration = job_data[job_key]["duration"]
+            job_time = job_data[job_key]["start_time"]
+            week_str = self._to_weekday(job_data[job_key]["repetition"])
+            job_name = job_data[job_key]["name"]
 
             self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
                                               job_time=job_time, week_days=week_str,
@@ -143,7 +143,7 @@ class JobHandler:
         Parameters
         ----------
         entry
-            type: int
+            type: str
             integer from, eg. 0001000 for only wednesday
 
         Returns
@@ -152,11 +152,11 @@ class JobHandler:
             string containing short forms of weekdays
 
         """
-        week_list = ["sun", "mon", "tue", "wed", "thurs", "fri", "sat"]
+        week_list = ["mon", "tue", "wed", "thurs", "fri", "sat", "sun"]
         week_str = []
         int_list = [int(x) for x in entry]
-        for value, index in enumerate(int_list):
+        for index, value in enumerate(int_list):
             if value:
                 week_str.append(week_list[index])
 
-        return " ".join(week_list)
+        return " ".join(week_str)

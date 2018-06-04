@@ -13,6 +13,7 @@ class TestRuntimeHelp(TestCase):
         runtime_help()
         output = mock_output.getvalue()
         expected_str = '"help"\t\tshow help'
+
         self.assertIn(expected_str, output)
 
 
@@ -22,21 +23,26 @@ class TestStop(TestCase):
         scheduler = BackgroundScheduler()
         scheduler.start()
         self.assertTrue(scheduler.running)
+
         stop(scheduler)
         self.assertFalse(scheduler.running)
 
     def test_stop_not_running(self):
         scheduler = BackgroundScheduler()
+
         with self.failUnlessRaises(SchedulerNotRunningError):
             stop(scheduler)
 
 
 class TestStart(TestCase):
+    @mock.patch('nephos.__main__.Nephos')
     @mock.patch('nephos.__main__.LOG')
-    def test_start(self, mock_log):
+    def test_start(self, mock_log, mock_nephos):
         runner = CliRunner()
         runner.invoke(start, input='quit')
         expected = "Nephos Stopped!"
+
+        self.assertTrue(mock_nephos.called)
         mock_log.warning.assert_called_with(expected)
 
 
@@ -46,4 +52,5 @@ class TestPrintVerInfo(TestCase):
         runner = CliRunner()
         result = runner.invoke(print_ver_info)
         expected_output = "__title__ = 'Nephos'"
+
         self.assertIn(expected_output, result.output)

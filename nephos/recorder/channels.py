@@ -82,11 +82,12 @@ class ChannelHandler:
             ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:
                 LOG.info("Channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
+                # create directory for channel recordings
 
-            # create directory for channel recordings
-            LOG.warning(ch_data[key]["name"])
-            ch_dir = os.path.join(__recording_dir__, ch_data[key]["name"])
-            os.makedirs(ch_dir, exist_ok=True)
+                ch_dir = os.path.join(__recording_dir__, ch_data[key]["name"])
+                os.makedirs(ch_dir, exist_ok=True)
+            else:
+                LOG.warning("%s not created!", ch_data[key]["name"])
 
     @staticmethod
     def delete_channel():
