@@ -5,7 +5,7 @@ import os
 from tempfile import TemporaryDirectory
 from logging import getLogger
 from multiprocessing import pool, cpu_count
-from itertools import repeat
+from functools import partial
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
@@ -55,8 +55,7 @@ class ChannelOnlineCheck(Checker):
             ips = self._extract_ips()
             try:
                 with DBHandler.connect() as db_cur:
-                    POOL.starmap(self._universal_worker, self._pool_args(self._check_ip,
-                                                                         db_cur, ips, tmpdir))
+                    POOL.map(partial(self._check_ip, db_cur=db_cur, path=tmpdir), ips)
                     POOL.close()
                     POOL.join()
             except DBException as err:
@@ -75,18 +74,18 @@ class ChannelOnlineCheck(Checker):
         LOG.info("tmp directory removed")
 
     @staticmethod
-    def _check_ip(db_cur, ip_addr, path):
+    def _check_ip(ip_addr, db_cur, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
         in the database.
 
         Parameters
         -------
-        db_cur
-            sqlite database cursor
         ip_addr
             type: str
             ip address of the channel to be checked
+        db_cur
+            sqlite database cursor
         path
             type: dir
             temporary directory to be used for channel checking
@@ -182,48 +181,5 @@ class ChannelOnlineCheck(Checker):
             ", ".join(prev_stats["down_ch_names"])
 
         ]
-        report = (True, msg)
+        report = (True, "".join(msg))
         return report
-
-    @staticmethod
-    def _universal_worker(input_pair):
-        """
-        The function to be called with Pool
-        This is used to pass all arguments of the _check_ip function
-        which is otherwise not supported by Pool.
-
-        Parameters
-        ----------
-        input_pair
-            type: Tuple
-            contains function and it's arguments
-
-        Returns
-        -------
-
-        """
-        func, args = input_pair
-        func(*args)
-
-    @staticmethod
-    def _pool_args(func, *args):
-        """
-        Supports _universal_worker by zipping function and it's arguments together
-
-        Parameters
-        ----------
-        func
-            type: callable
-            function to be executed by the pool
-
-        args
-            type: varying
-            comma separated arguments for the function
-
-        Returns
-        -------
-        type: Tuple
-        contains function and it's arguments
-
-        """
-        return zip(repeat(func), zip(*args))
