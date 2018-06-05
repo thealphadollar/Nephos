@@ -3,7 +3,7 @@ Nephos provides a minimal CLI to interact with it at the runtime. All the option
 ## Basic Info
 Below is a screenshot of the help screen of the CLI.
 
-![CLI help](https://preview.ibb.co/hBiv8J/Screenshot_from_2018_05_27_22_50_32.png)
+![CLI help](https://github.com/thealphadollar/Nephos/blob/master/docs/cli_help.png)
 
 ### Adding Data
 The CLI provides options to add data to Nephos. This has been explained in "Adding Jobs, Channels, And Share Entities" page in details. 
