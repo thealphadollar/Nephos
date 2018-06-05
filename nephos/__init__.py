@@ -6,7 +6,6 @@ Used to store attributes which will be used throughout the program.
 import os
 from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
 import re
-import click
 
 
 __home_dir__ = os.path.expanduser('~')

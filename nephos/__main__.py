@@ -13,10 +13,28 @@ from .ver_info import VER_INFO
 LOG = logging.getLogger('nephos')
 
 
-def multi_key_dict_get(d, k):
-    for keys, v in d.items():
-        if k in keys:
-            return v
+def multi_key_dict_get(multi_key_dict, key):
+    """
+    finds the value of a single key in dictionary with tuple keys
+
+    Parameters
+    ----------
+    multi_key_dict
+        type: dict
+        dictionary with tuple as keys
+    key
+        type: str
+        key
+
+    Returns
+    -------
+    Corresponding value of the key in dictionary if exists,
+    None otherwise.
+
+    """
+    for keys, value in multi_key_dict.items():
+        if key in keys:
+            return value
     return None
 
 
