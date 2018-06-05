@@ -24,7 +24,6 @@ class TestScheduler(TestCase):
         Scheduler()
         mock_log.info.assert_called_with("Scheduler initialised with database at %s", DB_JOBS_PATH)
         mock_log.warning.assert_called_with("Unknown timezone %s, resetting timezone to 'utc'", 'IST')
-        mock_log.error.assert_called_with(mock.ANY)
 
     def test_start_and_shutdown(self, mock_log):
         scheduler = Scheduler()

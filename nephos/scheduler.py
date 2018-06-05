@@ -46,7 +46,6 @@ class Scheduler:
         # catch if the timezone is not recognised by the scheduler
         except UnknownTimeZoneError as err:
             LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", TMZ)
-            LOG.error(err)
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone='utc')
         LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)

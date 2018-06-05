@@ -51,7 +51,7 @@ class DBHandler:
             # create channels and share_list table
             # multiple values to be separated by space. Eg. "AUS IND" for AUS and IND
             # country channels to be shared
-            db_cur.execute(""" CREATE TABLE IF NOT EXISTS channels (
+            db_cur.execute("""CREATE TABLE IF NOT EXISTS channels (
                                     channel_id integer PRIMARY KEY,
                                     name text NOT NULL,
                                     ip text NOT NULL,
@@ -63,7 +63,7 @@ class DBHandler:
 
             """)
 
-            db_cur.execute(""" CREATE TABLE IF NOT EXISTS share_list (
+            db_cur.execute("""CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text,
                                     channel_name text,
@@ -75,12 +75,12 @@ class DBHandler:
             """)
 
             # indexing columns
-            db_cur.execute(""" CREATE UNIQUE INDEX indexed_name ON channels(
+            db_cur.execute("""CREATE UNIQUE INDEX indexed_name ON channels(
                                     ip
                                     );                             
             """)
 
-            db_cur.execute(""" CREATE UNIQUE INDEX indexed_email ON share_list(
+            db_cur.execute("""CREATE UNIQUE INDEX indexed_email ON share_list(
                                     email
                                     );   
             """)
@@ -108,14 +108,14 @@ class DBHandler:
             the channel_id/share_id of the new data
 
         """
-        cols = ', '.join('"{}"'.format(col) for col in row_data.keys())
-        vals = ', '.join(':{}'.format(col) for col in row_data.keys())
+        cols = ', '.join('{}'.format(col) for col in row_data.keys())
+        vals = ', '.join("'{}'".format(col) for col in row_data.values())
         try:
-            command = """ INSERT INTO "{table_name}"
-                            {keys} 
+            command = """INSERT INTO "{table_name}"
+                            ({keys}) 
                             VALUES ({values})""".format(table_name=table_name, keys=cols,
                                                         values=vals)
-            db_cur.execute(command, row_data)
+            db_cur.execute(command)
             return db_cur.lastrowid
         except Error as err:
             LOG.warning("Failed to insert %s into %s", row_data, table_name)
@@ -151,6 +151,7 @@ class DBHandler:
         try:
             conn = sqlite3.connect(DB_PATH)
             yield conn.cursor()
+            conn.commit()
             conn.close()
         except Error as error:
             LOG.warning("Unable to connect to database!\nPlease look into debugging details.")

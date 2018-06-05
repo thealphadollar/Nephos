@@ -31,7 +31,7 @@ class ChannelHandler:
 
         """
         name = input("Channel name: ").lower()
-        ip_addr = input("IP address [e.g. 0.0.0.0@8080]: ")
+        ip_addr = str(input("IP address [e.g. 0.0.0.0:8080]: "))
         country = input("Country codes [separated by space]: ").lower()
         lang = input("Language codes [separated by space]: ").lower()
         tmz = input("Timezone: ").lower()
@@ -57,9 +57,9 @@ class ChannelHandler:
 
         """
         channels = self.grab_ch_list()
-        LOG.info("\nid\tname\tip\tcountry\tlanguage\ttimezone\tstatus")
+        LOG.info("\nid\tname\tip\t\tcountry\tlang\ttmz\tstatus")
         for channel in channels:
-            LOG.info("\t".join(str(x) for x in channel))
+            print("\t".join(str(x) for x in channel))
 
     @staticmethod
     def insert_channels(db_cur, ch_data):

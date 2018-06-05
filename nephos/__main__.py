@@ -13,6 +13,13 @@ from .ver_info import VER_INFO
 LOG = logging.getLogger('nephos')
 
 
+def multi_key_dict_get(d, k):
+    for keys, v in d.items():
+        if k in keys:
+            return v
+    return None
+
+
 def runtime_help():
     """
     Provides help for options during runtime
@@ -26,17 +33,17 @@ def runtime_help():
     You can enter the following options while nephos is
     running to perform various operations.
     
-    "help"\t\tshow help
-    "version"\t\tshow version
-    "stop"\t\tstop nephos after completion of running jobs
-    "load batch jobs"\t\tload jobs from add_jobs file
-    "add job"\t\tadd a job using command line
-    "list jobs"\t\tlist currently scheduled jobs
-    "remove job"\t\tremove job using job name
-    "add data"\t\tadd channels and share entities
-    "add channel\t\tadd a channel using command line
-    "list channels"\t\tlist currently added channels
-    "remove channel"\t\tremove channel using ip or name
+    "help", "?"\t\t\t\tshow help
+    "version", "ver"\t\t\tshow version
+    "stop", "st"\t\t\tstop nephos after completion of running jobs
+    "load batch jobs", "ldjb"\t\tload jobs from add_jobs file
+    "add job", "adjb"\t\t\tadd a job using command line
+    "list jobs", "lsjb"\t\t\tlist currently scheduled jobs
+    "remove job", "rmjb"\t\tremove job using job name
+    "add data", "adda"\t\t\tadd channels and share entities
+    "add channel, "adch"\t\tadd a channel using command line
+    "list channels", "lsch"\t\tlist currently added channels
+    "remove channel", "rmch"\t\tremove channel using ip or name
 
     For more details, see the docs present in $HOME/Nephos
     ==========
@@ -81,23 +88,23 @@ def start():
 
     # provides functions to launch while scheduler in background
     cli = {
-        "help": runtime_help,
-        "load batch jobs": client.job_handler.load_jobs,
-        "add job": client.job_handler.add_job,
-        "list jobs": client.job_handler.display_jobs,
-        "remove job": client.job_handler.rm_job,
-        "add data": client.load_channels_sharelist,
-        "add channel": client.channel_handler.add_channel,
-        "list channels": client.channel_handler.display_channel,
-        "remove channel": client.channel_handler.delete_channel
+        ("help", "?"): runtime_help,
+        ("load batch jobs", "ldjb"): client.job_handler.load_jobs,
+        ("add job", "adjb"): client.job_handler.add_job,
+        ("list jobs", "lsjb"): client.job_handler.display_jobs,
+        ("remove job", "rmjb"): client.job_handler.rm_job,
+        ("add data", "adda"): client.load_channels_sharelist,
+        ("add channel", "adch"): client.channel_handler.add_channel,
+        ("list channels", "lsch"): client.channel_handler.display_channel,
+        ("remove channel", "rmch"): client.channel_handler.delete_channel
     }
 
     LOG.info("NOTE: enter commands during runtime to perform operations over nephos, try \"help\"!")
 
     while True:
         command = input("\nEnter command to perform:\n").lower()
-        if command in cli.keys():
-            cli[command]()
+        if multi_key_dict_get(cli, command) is not None:
+            multi_key_dict_get(cli, command)()
         elif command in ["ver", "version", "info"]:
             print(VER_INFO)
         elif command in ["quit", "exit", "stop"]:
