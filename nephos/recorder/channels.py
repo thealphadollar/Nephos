@@ -183,7 +183,7 @@ def _is_up(ip_addr):
     """
     command = """SELECT status FROM channels WHERE ip=?"""
     with DBHandler.connect() as db_cur:
-        status = db_cur.execute(command, ip_addr)
+        status = db_cur.execute(command, (ip_addr, ))
 
     if status == "up":
         return True

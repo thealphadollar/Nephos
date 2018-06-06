@@ -102,7 +102,7 @@ class ChannelOnlineCheck(Checker):
                             SET status = "down"
                             WHERE ip = ? 
                         """
-            db_cur.execute(command, tuple(ip_addr))
+            db_cur.execute(command, (ip_addr, ))
             LOG.debug("Channel with ip: %s down", ip_addr)
 
     def _channel_stats(self):
