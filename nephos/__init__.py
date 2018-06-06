@@ -87,7 +87,7 @@ def validate_entries(data_type, data):
                             print("{email} incorrect".format(email=email))
                             correct(key2)
                 else:
-                    if not REGEX_CHECK[key2].match(data[key][key2]):
+                    if not REGEX_CHECK[key2].match('{}'.format(data[key][key2])):
                         correct(key2)
 
     return data

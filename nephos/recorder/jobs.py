@@ -99,7 +99,7 @@ class JobHandler:
         """
         sq_command = "SELECT ip FROM channels WHERE name=?"
         for job_key in job_data.keys():
-            ip_addr = db_cur.execute(sq_command, job_data[job_key]["channel_name"])
+            ip_addr = db_cur.execute(sq_command, (job_data[job_key]["channel_name"], ))
             out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
                                     job_data[job_key]["name"])
             duration = job_data[job_key]["duration"]
@@ -120,7 +120,6 @@ class JobHandler:
         -------
 
         """
-        LOG.info("Here is the list of all scheduled jobs:")
         self._scheduler.print_jobs()
 
     def rm_job(self):

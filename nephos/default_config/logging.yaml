@@ -23,21 +23,6 @@ handlers:
     formatter: simple
     filename: logs/nephos.log
     level: DEBUG
-  recorder_file:
-    class: nephos.logger.EnsureFolderFileHandler
-    formatter: simple
-    filename: logs/recorder.log
-    level: DEBUG
-  preprocess_file:
-    class: nephos.logger.EnsureFolderFileHandler
-    formatter: simple
-    filename: logs/preprocess.log
-    level: DEBUG
-  uploader_file:
-    class: nephos.logger.EnsureFolderFileHandler
-    formatter: simple
-    filename: logs/uploader.log
-    level: DEBUG
   email:
     class: logging.handlers.SMTPHandler
     formatter: simple
@@ -54,13 +39,4 @@ loggers:
   nephos:
     level: DEBUG
     handler: [console, nephos_file, email]
-  nephos.recoder:
-    level: DEBUG
-    handler: [console, recorder_file, email]
-  nephos.preprocessor:
-    level: DEBUG
-    handle: [console, preprocess_file, email]
-  nephos.uploader:
-    level: DEBUG
-    handle: [console, uploader_file, email]
 ...
