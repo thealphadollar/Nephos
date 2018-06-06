@@ -45,7 +45,7 @@ class ChannelOnlineCheck(Checker):
         """
 
         with TemporaryDirectory() as tmpdir:
-            LOG.info("Channel online check started, tmp directory %s created", tmpdir)
+            LOG.debug("Channel online check started, tmp directory %s created", tmpdir)
 
             self.channel_list = ChannelHandler.grab_ch_list()
 
@@ -53,25 +53,26 @@ class ChannelOnlineCheck(Checker):
 
             # create a list of IPs and pass it to recording
             ips = self._extract_ips()
-            try:
-                with DBHandler.connect() as db_cur:
-                    POOL.map(partial(self._check_ip, db_cur=db_cur, path=tmpdir), ips)
-                    POOL.close()
-                    POOL.join()
-            except DBException as err:
-                LOG.warning("Couldn't update channel status")
-                LOG.debug("%s", err)
+            if ips:  # when ip is not empty
+                try:
+                    with DBHandler.connect() as db_cur:
+                        POOL.map(partial(self._check_ip, db_cur=db_cur, path=tmpdir), ips)
+                        POOL.close()
+                        POOL.join()
+                except DBException as err:
+                    LOG.warning("Couldn't update channel status")
+                    LOG.debug("%s", err)
 
-            self.channel_list = ChannelHandler.grab_ch_list()
-            new_stats = self._channel_stats()
+                self.channel_list = ChannelHandler.grab_ch_list()
+                new_stats = self._channel_stats()
 
-            # formulate report
-            report = self._formulate_report(prev_stats, new_stats)
-            self._handle(report[0], report[1])
+                # formulate report
+                report = self._formulate_report(prev_stats, new_stats)
+                self._handle(report[0], report[1])
+            else:
+                LOG.warning("No channels found!")
 
-            LOG.info("Channel online check finished")
-
-        LOG.info("tmp directory removed")
+        LOG.debug("tmp directory removed")
 
     @staticmethod
     def _check_ip(ip_addr, db_cur, path):
