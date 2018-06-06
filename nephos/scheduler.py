@@ -3,22 +3,22 @@ All scheduler tasks go here.
 """
 
 import os
-import time
 from logging import getLogger
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.executors.pool import ThreadPoolExecutor
 from pytz.exceptions import UnknownTimeZoneError
+from tzlocal import get_localzone
 from . import __nephos_dir__
 from .recorder.channels import ChannelHandler
 
 LOG = getLogger(__name__)
 
 # config for the scheduler, not to be set by the user
+TMZ = get_localzone()
 PATH_JOB_DB = os.path.join(__nephos_dir__, "databases/jobs.db")
 MAX_CONCURRENT_JOBS = 20
-TMZ = time.tzname[time.daylight].lower()
 
 
 class Scheduler:

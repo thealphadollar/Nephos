@@ -158,18 +158,6 @@ class Config:
                         {
                             'filename': self._correct_log_file_path('nephos_file')
                         },
-                    'recorder_file':
-                        {
-                            'filename': self._correct_log_file_path('recorder_file')
-                        },
-                    'preprocess_file':
-                        {
-                            'filename': self._correct_log_file_path('preprocess_file')
-                        },
-                    'uploader_file':
-                        {
-                            'filename': self._correct_log_file_path('uploader_file')
-                        },
                     'email':
                         {
                             'toaddrs': self.load_mail_list(),
