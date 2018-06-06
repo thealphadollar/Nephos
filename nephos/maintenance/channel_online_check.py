@@ -9,7 +9,7 @@ from functools import partial
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
-from ..custom_exceptions import DBException
+from ..exceptions import DBException
 
 LOG = getLogger(__name__)
 POOL = pool.ThreadPool(cpu_count())
@@ -61,7 +61,7 @@ class ChannelOnlineCheck(Checker):
                         POOL.join()
                 except DBException as err:
                     LOG.warning("Couldn't update channel status")
-                    LOG.debug("%s", err)
+                    LOG.debug(err)
 
                 self.channel_list = ChannelHandler.grab_ch_list()
                 new_stats = self._channel_stats()

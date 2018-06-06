@@ -20,7 +20,7 @@ class TestDBHandler(TestCase):
     def test_first_time(self, mock_connect, mock_log):
         self.db_handler.first_time()
 
-        mock_log.info.assert_called_with("Initialising database at %s", DB_PATH)
+        mock_log.debug.assert_called_with("Initialising database at %s", DB_PATH)
         self.assertTrue(mock_connect.called)
 
     @mock.patch('nephos.manage_db.DB_PATH', new=DB_PATH)
@@ -32,7 +32,7 @@ class TestDBHandler(TestCase):
 
             mock_log.warning.assert_called_with("Failed to insert %s into %s",
                                                 mock_data, table_name)
-            self.assertTrue(mock_log.error.called)
+            self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.manage_db.DB_JOBS_PATH', new=temp_dir.name)
     def test_wrong_connect_jobs_db(self):

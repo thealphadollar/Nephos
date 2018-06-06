@@ -5,7 +5,7 @@ from abc import ABC
 from logging import getLogger
 import sys
 from . import first_time
-from .custom_exceptions import DBException
+from .exceptions import DBException
 from .load_config import Config
 from .manage_db import DBHandler
 from .scheduler import Scheduler
@@ -13,7 +13,7 @@ from .recorder.channels import ChannelHandler
 from .recorder.jobs import JobHandler
 from .maintenance.main import Maintenance
 from .maintenance.single_instance import SingleInstance
-from .custom_exceptions import SingleInstanceException
+from .exceptions import SingleInstanceException
 
 
 LOG = getLogger(__name__)
@@ -74,7 +74,6 @@ class Nephos(ABC):
         """
 
         self.scheduler.start()
-        LOG.info("Nephos is running")
 
     def load_channels_sharelist(self):
         """
@@ -93,10 +92,10 @@ class Nephos(ABC):
             with self.db_handler.connect() as db_cur:
                 try:
                     self.channel_handler.insert_channels(db_cur, data["channels"])
-                except KeyError as erro:
+                except KeyError as error:
                     LOG.warning("No channel data found!")
-                    LOG.error(erro)
+                    LOG.debug(error)
                 # TODO: Function to manage share_lists
-        except DBException as erro:
+        except DBException as error:
             LOG.warning("Data addition failed")
-            LOG.error(erro)
+            LOG.debug(error)

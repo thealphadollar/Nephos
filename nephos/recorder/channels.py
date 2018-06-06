@@ -7,7 +7,7 @@ import subprocess
 import os
 from datetime import datetime
 from ..manage_db import DBHandler
-from ..custom_exceptions import DBException
+from ..exceptions import DBException
 from .. import __recording_dir__
 from .. import validate_entries
 
@@ -106,7 +106,7 @@ class ChannelHandler:
                 LOG.info("Channel with name/ip = %s removed from database", ch_ip_name)
         except Error as err:
             LOG.warning("Failed to remove channel!")
-            LOG.error(err)
+            LOG.debug(err)
 
     @staticmethod
     def grab_ch_list():
@@ -125,7 +125,7 @@ class ChannelHandler:
                 return db_cur.fetchall()
         except DBException as err:
             LOG.warning("Failed to get channel list.")
-            LOG.error(err)
+            LOG.debug(err)
 
     @staticmethod
     def record_stream(ip_addr, addr, duration_secs):
@@ -161,8 +161,8 @@ class ChannelHandler:
         try:
             subprocess.check_call(cmd, shell=False)
         except subprocess.CalledProcessError as err:
-            LOG.warning("Recording for channel with ip %s", ip_addr)
-            LOG.error(err)
+            LOG.warning("Recording for channel with ip %s, failed!", ip_addr)
+            LOG.debug(err)
 
 
 def _is_up(ip_addr):

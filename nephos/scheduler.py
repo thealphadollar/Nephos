@@ -33,7 +33,7 @@ class Scheduler:
             'default': SQLAlchemyJobStore(url='sqlite:///' + PATH_JOB_DB)
         }
 
-        LOG.info("Storing scheduler jobs in %s", job_stores["default"])
+        LOG.debug("Storing scheduler jobs in %s", job_stores["default"])
 
         executors = {
             'default': ThreadPoolExecutor(MAX_CONCURRENT_JOBS)
@@ -44,7 +44,7 @@ class Scheduler:
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone=TMZ)
         # catch if the timezone is not recognised by the scheduler
-        except UnknownTimeZoneError as err:
+        except UnknownTimeZoneError as _:
             LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", TMZ)
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone='utc')
@@ -118,7 +118,7 @@ class Scheduler:
         """
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
-        LOG.info("Maintenance job added: %s", job)
+        LOG.debug("Maintenance job added: %s", job)
 
     def print_jobs(self):
         """
@@ -143,7 +143,8 @@ class Scheduler:
             self._scheduler.remove_job(job_id)
             LOG.info("%s job removed from schedule", job_id)
         except JobLookupError as error:
-            LOG.error(error)
+            LOG.warning('Job %s not found', job_id)
+            LOG.debug(error)
 
     def shutdown(self):
         """

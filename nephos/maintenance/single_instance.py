@@ -7,7 +7,7 @@ import os
 import sys
 import tempfile
 import fcntl
-from ..custom_exceptions import SingleInstanceException
+from ..exceptions import SingleInstanceException
 
 LOG = getLogger(__name__)
 
@@ -38,7 +38,7 @@ class SingleInstance(object):
         try:
             fcntl.lockf(self.file_path, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
-            LOG.warning("Nephos is already running, quitting!")
+            print("Nephos is already running, quitting!")
             raise SingleInstanceException()
         self.initialized = True
 
@@ -51,5 +51,6 @@ class SingleInstance(object):
             if os.path.isfile(self.lockfile):
                 os.unlink(self.lockfile)
         except OSError as error:
-            LOG.error(error)
+            LOG.warning("Error in unlocking PID file!")
+            LOG.debug(error)
             sys.exit(-1)

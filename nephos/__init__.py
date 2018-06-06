@@ -104,6 +104,7 @@ def first_time():
         - databases: stores the database for Nephos
         - recordings: stores the recorded streams
         - processed: stores processed mp4 files to be uploaded
+        - docs: stores the detailed documentation for Nephos
 
     Returns
     -------

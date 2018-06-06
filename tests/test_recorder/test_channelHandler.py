@@ -2,7 +2,7 @@ from unittest import TestCase, mock
 from sqlite3 import Error
 import subprocess
 from nephos.recorder.channels import ChannelHandler, _is_up
-from nephos.custom_exceptions import DBException
+from nephos.exceptions import DBException
 
 mock_ch_tuple = (
     ("0", "ch_test", "0.0.0.0:8080")
@@ -73,7 +73,7 @@ class TestChannelHandler(TestCase):
         self.assertTrue(mock_db_handler.connect.called)
         self.assertTrue(mock_log.info.called)
         self.assertFalse(mock_log.warning.called)
-        self.assertFalse(mock_log.error.called)
+        self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.input')
     @mock.patch('nephos.recorder.channels.LOG')
@@ -87,7 +87,7 @@ class TestChannelHandler(TestCase):
         self.assertTrue(mock_db_handler.connect.called)
         self.assertFalse(mock_log.info.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.DBHandler')
@@ -96,7 +96,7 @@ class TestChannelHandler(TestCase):
 
         self.assertTrue(mock_db_handler.connect.called)
         self.assertFalse(mock_log.warning.called)
-        self.assertFalse(mock_log.error.called)
+        self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.DBHandler')
@@ -106,7 +106,7 @@ class TestChannelHandler(TestCase):
 
         self.assertTrue(mock_db_handler.connect.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.subprocess')
     @mock.patch('nephos.recorder.channels.LOG')
@@ -116,7 +116,7 @@ class TestChannelHandler(TestCase):
 
             self.assertTrue(mock_subprocess.check_call.called)
             self.assertFalse(mock_log.warning.called)
-            self.assertFalse(mock_log.error.called)
+            self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.subprocess')
     @mock.patch('nephos.recorder.channels.LOG')
@@ -128,7 +128,7 @@ class TestChannelHandler(TestCase):
 
             self.assertTrue(mock_subprocess.check_call.called)
             self.assertTrue(mock_log.warning.called)
-            self.assertTrue(mock_log.error.called)
+            self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.DBHandler')
     def test__is_up(self, mock_db_handler, _):

@@ -95,7 +95,7 @@ class Checker(ABC):
                 LOG.critical(msg)
             except SMTPException as error:
                 LOG.warning("Sending mail failed due to SMTPException! For details "
-                            "please check nephos.txt logs")
+                            "please check nephos logs")
                 LOG.debug(error)
 
         else:

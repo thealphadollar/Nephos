@@ -95,7 +95,7 @@ class Config:
                     return yaml.safe_load(yaml_data)
             except IOError as err:
                 print("Failed to open", path)
-                print(err)
+                LOG.debug(err)
                 raise yaml.error.YAMLError
 
         except yaml.error.YAMLError as exception:

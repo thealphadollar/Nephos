@@ -5,7 +5,7 @@ Stores all code related to recording jobs
 import os
 from logging import getLogger
 from ..manage_db import DBHandler
-from ..custom_exceptions import DBException
+from ..exceptions import DBException
 from ..load_config import Config
 from .. import __recording_dir__
 from .. import validate_entries
@@ -58,7 +58,7 @@ class JobHandler:
                 self.insert_jobs(db_cur, validate_entries("job", job_data))
         except DBException as err:
             LOG.warning("Data addition failed")
-            LOG.error(err)
+            LOG.debug(err)
 
     def load_jobs(self):
         """
@@ -79,7 +79,7 @@ class JobHandler:
                 self.insert_jobs(db_cur, data)
         except DBException as err:
             LOG.warning("Data addition failed")
-            LOG.error(err)
+            LOG.debug(err)
 
     def insert_jobs(self, db_cur, job_data):
         """

@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from logging import getLogger
 import sqlite3
 from sqlite3 import Error
-from .custom_exceptions import DBException
+from .exceptions import DBException
 from . import __nephos_dir__
 
 
@@ -44,7 +44,7 @@ class DBHandler:
         -------
 
         """
-        LOG.info("Initialising database at %s", DB_PATH)
+        LOG.debug("Initialising database at %s", DB_PATH)
 
         with self.connect() as db_cur:
 
@@ -119,7 +119,7 @@ class DBHandler:
             return db_cur.lastrowid
         except Error as err:
             LOG.warning("Failed to insert %s into %s", row_data, table_name)
-            LOG.error(err)
+            LOG.debug(err)
 
     @staticmethod
     def init_jobs_db():

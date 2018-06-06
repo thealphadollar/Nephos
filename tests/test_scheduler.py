@@ -49,7 +49,7 @@ class TestScheduler(TestCase):
 
         expected = 'Maintenance job added: %s'
         self.assertTrue(mock_scheduler._scheduler.add_job.called)
-        self.assertIn(expected, mock_log.info.call_args[0])
+        self.assertIn(expected, mock_log.debug.call_args[0])
 
     @mock.patch('sys.stdout', new_callable=StringIO)
     def test_print_jobs(self, mock_output, _):
@@ -68,4 +68,5 @@ class TestScheduler(TestCase):
     def test_rm_non_existing_recording_job(self, mock_log):
         with mock.patch('nephos.scheduler.input', return_value=mock_job_id):
             Scheduler().rm_recording_job()
-            self.assertTrue(mock_log.error.called)
+            self.assertTrue(mock_log.warning.called)
+            self.assertTrue(mock_log.debug.called)

@@ -59,7 +59,7 @@ class Maintenance:
         }
 
         for job in jobs:
-            LOG.info("Adding %s maintenance job to scheduler...", job)
+            LOG.debug("Adding %s maintenance job to scheduler...", job)
             scheduler.add_maintenance_jobs(job_funcs[job], job,
                                            self._get_maintenance_data(job))
 

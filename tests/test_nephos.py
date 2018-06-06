@@ -29,7 +29,6 @@ class TestNephos(TestCase):
         Nephos.start(mock_nephos)
 
         self.assertTrue(mock_nephos.scheduler.start.called)
-        self.assertTrue(mock_log.info.called)
 
     @mock.patch('nephos.nephos.input')
     def test_load_channels_sharelist(self, mock_input, mock_log, mock_nephos):
@@ -52,7 +51,7 @@ class TestNephos(TestCase):
         self.assertTrue(mock_nephos.db_handler.connect.called)
         self.assertTrue(mock_nephos.channel_handler.insert_channels.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.nephos.input')
     def test_load_channels_sharelist_DBException(self, mock_input, mock_log, mock_nephos):
@@ -64,4 +63,4 @@ class TestNephos(TestCase):
         self.assertTrue(mock_nephos.db_handler.connect.called)
         self.assertFalse(mock_nephos.channel_handler.insert_channels.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)

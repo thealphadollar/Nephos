@@ -28,7 +28,7 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_db.connect.called)
         mock_job_handler.insert_jobs.assert_called_with(mock.ANY, mock.ANY)
         self.assertFalse(mock_log.warning.called)
-        self.assertFalse(mock_log.error.called)
+        self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
     @mock.patch('nephos.recorder.jobs.input')
@@ -42,7 +42,7 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_db.connect.called)
         self.assertFalse(mock_job_handler.insert_jobs.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
     @mock.patch('nephos.recorder.jobs.input', return_value='test')
@@ -56,7 +56,7 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_db.connect.called)
         mock_job_handler.insert_jobs.assert_called_with(mock.ANY, mock.ANY)
         self.assertFalse(mock_log.warning.called)
-        self.assertFalse(mock_log.error.called)
+        self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
     @mock.patch('nephos.recorder.jobs.input', return_value='test')
@@ -71,7 +71,7 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_db.connect.called)
         self.assertFalse(mock_job_handler.insert_jobs.called)
         self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.error.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.DBHandler')
     def test_insert_jobs(self, mock_db, mock_job_handler):

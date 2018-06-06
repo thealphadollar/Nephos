@@ -5,8 +5,6 @@ Contains classes used for logging through logger.YAML config file
 import os
 import logging
 
-# TODO: Create instance of storing logs in a database
-
 
 class EnsureFolderFileHandler(logging.FileHandler):
     """
