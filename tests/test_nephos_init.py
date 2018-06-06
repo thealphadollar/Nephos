@@ -1,11 +1,10 @@
 from unittest import TestCase, mock
-import os
 import tempfile
 from io import StringIO
 from nephos import __nephos_dir__, __config_dir__, __log_dir__, __db_dir__, \
     __recording_dir__, __upload_dir__, __docs_dir__, first_time, validate_entries
 
-mock_wrong_data = {
+MOCK_WRONG_DATA = {
     '0': {
         'email': 'abc@xyz.com abc.com',
         'ip': '0.0.0.0:8080',
@@ -18,7 +17,7 @@ mock_wrong_data = {
     }
 }
 
-mock_correct_data = {
+MOCK_CORRECT_DATA = {
     '0': {
         'email': 'abc@xyz.com',
         'ip': '0.0.0.0:8080',
@@ -60,11 +59,9 @@ class TestValidateEntries(TestCase):
     @mock.patch('sys.stdout', new_callable=StringIO)
     def test_validate_entries(self, mock_output):
         with mock.patch('nephos.input', return_value='abc@xyz.com'):
-            correct_data = validate_entries('test', mock_wrong_data)
-            self.assertDictEqual(correct_data, mock_correct_data)
+            correct_data = validate_entries('test', MOCK_WRONG_DATA)
+            self.assertDictEqual(correct_data, MOCK_CORRECT_DATA)
 
             output = mock_output.getvalue()
             expected_output = "abc.com incorrect\n"
             self.assertEqual(output, expected_output)
-
-

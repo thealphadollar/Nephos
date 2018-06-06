@@ -7,7 +7,7 @@ from multiprocessing import Process
 from nephos.maintenance.single_instance import SingleInstance, SingleInstanceException
 
 
-def f(name):
+def func(name):
     try:
         me2 = SingleInstance(flavor_id=name)
         del me2
@@ -23,18 +23,18 @@ class TestSingleton(TestCase):
         assert True
 
     def test_simple_process_instantiation(self):
-        p = Process(target=f, args=("test-2",))
-        p.start()
-        p.join()
+        proc = Process(target=func, args=("test-2",))
+        proc.start()
+        proc.join()
         # the called function should succeed
-        assert p.exitcode == 0, "%s != 0" % p.exitcode
+        assert proc.exitcode == 0, "%s != 0" % proc.exitcode
 
     def test_error_process_instantiation(self):
         me = SingleInstance(flavor_id="test-3")  # noqa -- me should still kept
-        p = Process(target=f, args=("test-3",))
-        p.start()
-        p.join()
+        proc = Process(target=func, args=("test-3",))
+        proc.start()
+        proc.join()
         # the called function should fail because we already have another
         # instance running
-        assert p.exitcode != 0, "%s != 0 (2nd execution)" % p.exitcode
+        assert proc.exitcode != 0, "%s != 0 (2nd execution)" % proc.exitcode
         del me

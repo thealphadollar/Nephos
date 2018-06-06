@@ -4,7 +4,7 @@ from functools import partial
 from nephos.maintenance.channel_online_check import ChannelOnlineCheck
 
 
-mockPOOL = pool.ThreadPool(2)
+MOCK_POOL = pool.ThreadPool(2)
 
 
 class MockOSReturn:
@@ -12,18 +12,18 @@ class MockOSReturn:
         self.st_size = value
 
 
-mock_ch_list = (
+MOCK_CH_LIST = (
     ("ch_up", "0.0.0.0", "up"),
     ("ch_down", '127.0.0.1', "down")
 )
 
-mock_prev_stats = {
+MOCK_PREV_STATS = {
     "down_ch": 1,
     "down_ch_names": ["ch_down::0.0.0.0"],
     "up_ch": 1
 }
 
-mock_new_stats = {
+MOCK_NEW_STATS = {
     "down_ch": 2,
     "down_ch_names": ["ch_down::0.0.0.0", "ch_up::127.0.0.1"],
     "up_ch": 1
@@ -71,7 +71,8 @@ class TestChannelOnlineCheck(TestCase):
             mock_log.debug.assert_called_with("Channel with ip: %s down", ip_addr)
 
     def test__channel_stats(self, mock_channel_checker):
-        with mock.patch('nephos.maintenance.channel_online_check.ChannelOnlineCheck.channel_list', new=mock_ch_list), \
+        with mock.patch('nephos.maintenance.channel_online_check.ChannelOnlineCheck.channel_list',
+                        new=MOCK_CH_LIST), \
              mock.patch('nephos.maintenance.channel_online_check.CH_NAME_INDEX', new=0), \
              mock.patch('nephos.maintenance.channel_online_check.CH_IP_INDEX', new=1), \
              mock.patch('nephos.maintenance.channel_online_check.CH_STAT_INDEX', new=2):
@@ -83,7 +84,8 @@ class TestChannelOnlineCheck(TestCase):
             self.assertEqual(out_dict['up_ch'], 1)
 
     def test__extract_ips(self, mock_channel_checker):
-        with mock.patch('nephos.maintenance.channel_online_check.ChannelOnlineCheck.channel_list', new=mock_ch_list), \
+        with mock.patch('nephos.maintenance.channel_online_check.ChannelOnlineCheck.channel_list',
+                        new=MOCK_CH_LIST), \
              mock.patch('nephos.maintenance.channel_online_check.CH_IP_INDEX', new=1):
             ip_list = ChannelOnlineCheck._extract_ips(mock_channel_checker)
 
@@ -91,20 +93,21 @@ class TestChannelOnlineCheck(TestCase):
             self.assertEqual(ip_list, ['0.0.0.0', '127.0.0.1'])
 
     def test__formulate_report_no_change(self, _):
-        report = ChannelOnlineCheck._formulate_report(mock_prev_stats, mock_prev_stats)
+        report = ChannelOnlineCheck._formulate_report(MOCK_PREV_STATS, MOCK_PREV_STATS)
 
         self.assertFalse(report[0])
         self.assertEqual(report[1], "No new down channels!")
 
     def test__formulate_report_change(self, _):
-        report = ChannelOnlineCheck._formulate_report(mock_prev_stats, mock_new_stats)
+        report = ChannelOnlineCheck._formulate_report(MOCK_PREV_STATS, MOCK_NEW_STATS)
 
         self.assertTrue(report[0])
         self.assertIn("Following 2 channels are down:", report[1])
 
     def test__pool_args(self, mock_channel_checker):
         """
-        Tests the multiprocessing's pool for correct argument passing, doesn't concern any nephos's module directly
+        Tests the multiprocessing's pool for correct argument passing, doesn't concern any nephos's
+        module directly
 
         Parameters
         ----------
@@ -119,9 +122,9 @@ class TestChannelOnlineCheck(TestCase):
         db_cur = "test"
         ips = ['0.0.0.0', '127.0.0.1']
         tmpdir = "test"
-        mockPOOL.map(partial(mock_channel_checker, arg2=db_cur, arg3=tmpdir), ips)
-        mockPOOL.close()
-        mockPOOL.join()
+        MOCK_POOL.map(partial(mock_channel_checker, arg2=db_cur, arg3=tmpdir), ips)
+        MOCK_POOL.close()
+        MOCK_POOL.join()
 
         self.assertTrue(mock_channel_checker.called)
         mock_channel_checker.has_any_call(ips[0], arg2=db_cur, arg3=tmpdir)

@@ -2,7 +2,7 @@ from unittest import TestCase, mock
 from nephos.recorder.jobs import JobHandler, DBException
 
 
-mock_job_data = {
+MOCK_JOB_DATA = {
     0:
         {
             "name": "job_test",
@@ -77,7 +77,7 @@ class TestJobHandler(TestCase):
     def test_insert_jobs(self, mock_db, mock_job_handler):
         with mock_db.connect() as db_cur, \
              mock.patch('os.path'):
-            JobHandler.insert_jobs(mock_job_handler, db_cur, mock_job_data)
+            JobHandler.insert_jobs(mock_job_handler, db_cur, MOCK_JOB_DATA)
 
             db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
             mock_job_handler._to_weekday.assert_called_with('0000000')

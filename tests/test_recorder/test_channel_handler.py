@@ -4,11 +4,11 @@ import subprocess
 from nephos.recorder.channels import ChannelHandler, _is_up
 from nephos.exceptions import DBException
 
-mock_ch_tuple = (
+MOCK_CH_TUPLE = (
     ("0", "ch_test", "0.0.0.0:8080")
 )
 
-mock_ch_data = {
+MOCK_CH_DATA = {
     '0': {
         'name': 'ch_test'
     }
@@ -30,7 +30,7 @@ class TestChannelHandler(TestCase):
 
     @mock.patch('nephos.recorder.channels.LOG')
     def test_display_channel(self, mock_log, mock_ch_handler):
-        mock_ch_handler.grab_ch_list.return_value = mock_ch_tuple
+        mock_ch_handler.grab_ch_list.return_value = MOCK_CH_TUPLE
         ChannelHandler.display_channel(mock_ch_handler)
 
         self.assertTrue(mock_ch_handler.grab_ch_list.called)
@@ -42,7 +42,7 @@ class TestChannelHandler(TestCase):
     def test_insert_channels_correct(self, mock_db_handler, mock_os, mock_log, _):
         mock_db_handler.insert_data.return_value = 0
         with mock_db_handler.connect() as db_cur:
-            ChannelHandler.insert_channels(db_cur, mock_ch_data)
+            ChannelHandler.insert_channels(db_cur, MOCK_CH_DATA)
 
             self.assertTrue(mock_db_handler.insert_data.called)
             self.assertTrue(mock_log.info.called)
@@ -55,7 +55,7 @@ class TestChannelHandler(TestCase):
     def test_insert_channels_invalid(self, mock_db_handler, mock_os, mock_log, _):
         mock_db_handler.insert_data.return_value = None
         with mock_db_handler.connect() as db_cur:
-            ChannelHandler.insert_channels(db_cur, mock_ch_data)
+            ChannelHandler.insert_channels(db_cur, MOCK_CH_DATA)
 
             self.assertTrue(mock_db_handler.insert_data.called)
             self.assertFalse(mock_log.info.called)

@@ -13,7 +13,7 @@ class TestNephos(TestCase):
     @mock.patch('nephos.nephos.JobHandler')
     @mock.patch('nephos.nephos.Maintenance')
     def test_init(self, mock_maintenance, mock_job, mock_ch, mock_scheduler,
-                  mock_db, mock_config, mock_log, mock_nephos):
+                  mock_db, mock_config, mock_log, _):
         with mock.patch('nephos.nephos.first_time', return_value=True):
             Nephos()
 
@@ -25,7 +25,7 @@ class TestNephos(TestCase):
             self.assertTrue(mock_maintenance.called)
             mock_log.info.assert_called_with("Nephos is all set to launch")
 
-    def test_start(self, mock_log, mock_nephos):
+    def test_start(self, _, mock_nephos):
         Nephos.start(mock_nephos)
 
         self.assertTrue(mock_nephos.scheduler.start.called)

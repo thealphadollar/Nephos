@@ -60,7 +60,8 @@ class Scheduler:
         self._scheduler.start()
         LOG.info("Scheduler running!")
 
-    def add_recording_job(self, ip_addr, out_path, duration, job_time, week_days, job_name):
+    def add_recording_job(self, ip_addr, out_path,  # pylint: disable=too-many-arguments
+                          duration, job_time, week_days, job_name):
         """
         Add recording jobs to the scheduler
 

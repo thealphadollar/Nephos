@@ -4,9 +4,9 @@ import tempfile
 from io import StringIO
 from nephos.scheduler import Scheduler
 
-temp_dir = tempfile.TemporaryDirectory()
-DB_JOBS_PATH = os.path.join(temp_dir.name, "jobs.db")
-mock_job_id = 'xyz'
+TEMP_DIR = tempfile.TemporaryDirectory()
+DB_JOBS_PATH = os.path.join(TEMP_DIR.name, "jobs.db")
+MOCK_JOB_ID = 'xyz'
 
 
 @mock.patch('nephos.scheduler.PATH_JOB_DB', DB_JOBS_PATH)
@@ -22,8 +22,10 @@ class TestScheduler(TestCase):
     @mock.patch('nephos.scheduler.TMZ', new='IST')
     def test_init_ist(self, mock_log):
         Scheduler()
-        mock_log.info.assert_called_with("Scheduler initialised with database at %s", DB_JOBS_PATH)
-        mock_log.warning.assert_called_with("Unknown timezone %s, resetting timezone to 'utc'", 'IST')
+        mock_log.info.assert_called_with("Scheduler initialised with database at %s",
+                                         DB_JOBS_PATH)
+        mock_log.warning.assert_called_with("Unknown timezone %s, resetting timezone to 'utc'",
+                                            'IST')
 
     def test_start_and_shutdown(self, mock_log):
         scheduler = Scheduler()
@@ -60,13 +62,13 @@ class TestScheduler(TestCase):
 
     @mock.patch('nephos.scheduler.Scheduler')
     def test_rm_recording_job(self, mock_scheduler, mock_log):
-        with mock.patch('nephos.scheduler.input', return_value=mock_job_id):
+        with mock.patch('nephos.scheduler.input', return_value=MOCK_JOB_ID):
             Scheduler.rm_recording_job(mock_scheduler)
-            mock_scheduler._scheduler.remove_job.assert_called_with(mock_job_id)
-            mock_log.info.assert_called_with("%s job removed from schedule", mock_job_id)
+            mock_scheduler._scheduler.remove_job.assert_called_with(MOCK_JOB_ID)
+            mock_log.info.assert_called_with("%s job removed from schedule", MOCK_JOB_ID)
 
     def test_rm_non_existing_recording_job(self, mock_log):
-        with mock.patch('nephos.scheduler.input', return_value=mock_job_id):
+        with mock.patch('nephos.scheduler.input', return_value=MOCK_JOB_ID):
             Scheduler().rm_recording_job()
             self.assertTrue(mock_log.warning.called)
             self.assertTrue(mock_log.debug.called)

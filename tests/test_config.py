@@ -81,7 +81,7 @@ def create_mock_yaml(dir_name):
     return config_path, default_config_path
 
 
-mock_logging_config_data = {
+MOCK_LOGGING_CONFIG_DATA = {
     'handlers':
         {
             'mock_handler': {
@@ -104,7 +104,8 @@ class TestConfig(TestCase):
 
     def test_load_config(self):
         with mock.patch('nephos.load_config.Config.load_data', side_effect=mock_load), \
-             mock.patch('nephos.load_config.Config._correct_log_file_path', return_value="correct_path"), \
+             mock.patch('nephos.load_config.Config._correct_log_file_path',
+                        return_value="correct_path"), \
              mock.patch('nephos.load_config.Config.load_mail_list', return_value=["abc@xyz.com"]), \
              mock.patch('nephos.load_config.get_env_var', return_value="env_value"):
 
@@ -130,7 +131,8 @@ class TestConfig(TestCase):
 
             # =============================================
             # below tests pass if _config_updates works fine
-            nephos_log_file = pydash.get(self.TestConfig.logging_config, 'handlers.nephos_file.filename')
+            nephos_log_file = pydash.get(self.TestConfig.logging_config,
+                                         'handlers.nephos_file.filename')
             email_addr = pydash.get(self.TestConfig.logging_config, 'handlers.email.toaddrs')
             credentials = pydash.get(self.TestConfig.logging_config, 'handlers.email.credentials')
 
@@ -216,10 +218,10 @@ class TestConfig(TestCase):
 
     @mock.patch('nephos.load_config.Config.logging_config')
     def test_correct_log_path(self, config_data):
-        config_data.__getitem__.side_effect = mock_logging_config_data.__getitem__
-        config_data.__iter__.side_effect = mock_logging_config_data.__iter__
+        config_data.__getitem__.side_effect = MOCK_LOGGING_CONFIG_DATA.__getitem__
+        config_data.__iter__.side_effect = MOCK_LOGGING_CONFIG_DATA.__iter__
         name = self.TestConfig._correct_log_file_path('mock_handler')
-        raw_name = pydash.get(mock_logging_config_data, 'handlers.mock_handler.filename')
+        raw_name = pydash.get(MOCK_LOGGING_CONFIG_DATA, 'handlers.mock_handler.filename')
         self.assertNotEqual(name, raw_name)
         full_name = os.path.join(__nephos_dir__, raw_name)
         self.assertEqual(name, full_name)
@@ -239,7 +241,8 @@ class TestConfig(TestCase):
                         "No critical mail list file found!",
                         "Following emails removed from critical mail list due to wrong format!",
                         "['shiv']",
-                        "You can add more critical mail recipients in {path}\n".format(path=temp_file)
+                        "You can add more critical mail recipients in {path}\n".format(
+                            path=temp_file)
                     ]
                     self.assertEqual(output, "\n".join(expected_output))
 
@@ -251,7 +254,8 @@ class TestConfig(TestCase):
                         "Critical mail recipients loaded from {path}".format(path=temp_file),
                         "Following emails removed from critical mail list due to wrong format!",
                         "['shiv']",
-                        "You can add more critical mail recipients in {path}\n".format(path=temp_file)
+                        "You can add more critical mail recipients in {path}\n".format
+                        (path=temp_file)
                     ]
                     self.assertEqual(output, "\n".join(expected_output))
 

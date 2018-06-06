@@ -1,12 +1,12 @@
 from unittest import TestCase, mock
 from io import StringIO
-from click.testing import CliRunner
-from nephos.__main__ import runtime_help, stop, print_ver_info, start, multi_key_dict_get
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers import SchedulerNotRunningError
+from click.testing import CliRunner
+from nephos.__main__ import runtime_help, stop, print_ver_info, start, multi_key_dict_get
 
 
-mock_multi_key_dict = {
+MOCK_MULTI_KEY_DICT = {
     ("key1", "key2"): "pass"
 }
 
@@ -35,7 +35,7 @@ class TestStop(TestCase):
     def test_stop_not_running(self):
         scheduler = BackgroundScheduler()
 
-        with self.failUnlessRaises(SchedulerNotRunningError):
+        with self.assertRaises(SchedulerNotRunningError):
             stop(scheduler)
 
 
@@ -64,11 +64,11 @@ class TestPrintVerInfo(TestCase):
 class TestMultiKeyDictGet(TestCase):
 
     def test_multi_key_present(self):
-        value = multi_key_dict_get(mock_multi_key_dict, "key1")
+        value = multi_key_dict_get(MOCK_MULTI_KEY_DICT, "key1")
         expected_value = "pass"
         self.assertEqual(value, expected_value)
 
     def test_multi_key_absent(self):
-        value = multi_key_dict_get(mock_multi_key_dict, "key3")
+        value = multi_key_dict_get(MOCK_MULTI_KEY_DICT, "key3")
 
         self.assertIsNone(value)
