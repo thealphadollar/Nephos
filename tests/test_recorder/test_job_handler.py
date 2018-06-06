@@ -86,7 +86,7 @@ class TestJobHandler(TestCase):
     def test_display_jobs(self, mock_job_handler):
         JobHandler.display_jobs(mock_job_handler)
 
-        self.assertTrue(mock_job_handler._scheduler.print_jobs.called)
+        self.assertTrue(mock_job_handler._scheduler.get_jobs.called)
 
     @mock.patch('nephos.recorder.jobs.input')
     def test_rm_job(self, mock_input, mock_job_handler):

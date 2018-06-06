@@ -121,25 +121,33 @@ class Scheduler:
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.debug("Maintenance job added: %s", job)
 
-    def print_jobs(self):
+    def get_jobs(self):
         """
         prints a formatted list of jobs, their triggers and next run times
 
         Returns
         -------
+        type: list
+        list of jobs
 
         """
-        self._scheduler.print_jobs()
+        return self._scheduler.get_jobs()
 
-    def rm_recording_job(self):
+
+    def rm_recording_job(self, job_id):
         """
         delete a recording job from schedule
+
+        Parameters
+        -------
+        job_id
+            type: str
+            name of the job
 
         Returns
         -------
 
         """
-        job_id = input("Job ID: ")
         try:
             self._scheduler.remove_job(job_id)
             LOG.info("%s job removed from schedule", job_id)

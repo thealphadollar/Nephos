@@ -53,22 +53,20 @@ class TestScheduler(TestCase):
         self.assertTrue(mock_scheduler._scheduler.add_job.called)
         self.assertIn(expected, mock_log.debug.call_args[0])
 
-    @mock.patch('sys.stdout', new_callable=StringIO)
-    def test_print_jobs(self, mock_output, _):
-        Scheduler().print_jobs()
-        output = mock_output.getvalue()
-        expected = "Pending jobs:"
-        self.assertIn(expected, output)
+    def test_get_jobs(self, _):
+        output = Scheduler().get_jobs()
+
+        self.assertIsInstance(output, list)
 
     @mock.patch('nephos.scheduler.Scheduler')
     def test_rm_recording_job(self, mock_scheduler, mock_log):
-        with mock.patch('nephos.scheduler.input', return_value=MOCK_JOB_ID):
-            Scheduler.rm_recording_job(mock_scheduler)
-            mock_scheduler._scheduler.remove_job.assert_called_with(MOCK_JOB_ID)
-            mock_log.info.assert_called_with("%s job removed from schedule", MOCK_JOB_ID)
+        Scheduler.rm_recording_job(mock_scheduler, MOCK_JOB_ID)
+
+        mock_scheduler._scheduler.remove_job.assert_called_with(MOCK_JOB_ID)
+        mock_log.info.assert_called_with("%s job removed from schedule", MOCK_JOB_ID)
 
     def test_rm_non_existing_recording_job(self, mock_log):
-        with mock.patch('nephos.scheduler.input', return_value=MOCK_JOB_ID):
-            Scheduler().rm_recording_job()
-            self.assertTrue(mock_log.warning.called)
-            self.assertTrue(mock_log.debug.called)
+        Scheduler().rm_recording_job(MOCK_JOB_ID)
+
+        self.assertTrue(mock_log.warning.called)
+        self.assertTrue(mock_log.debug.called)

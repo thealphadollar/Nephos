@@ -120,7 +120,9 @@ class JobHandler:
         -------
 
         """
-        self._scheduler.print_jobs()
+        job_list = self._scheduler.get_jobs()
+        for job in job_list:
+            print("Name: " + job.id, "\tNextRun: ",  job.next_run_time)
 
     def rm_job(self):
         """
