@@ -14,6 +14,9 @@ from ..exceptions import DBException
 LOG = getLogger(__name__)
 POOL = pool.ThreadPool(cpu_count())
 MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this
+CH_DOWN_COMMAND = """UPDATE channels
+                    SET status = "down"
+                    WHERE ip = ?"""
 
 
 class ChannelOnlineCheck(Checker):
@@ -57,8 +60,6 @@ class ChannelOnlineCheck(Checker):
                 try:
                     with DBHandler.connect() as db_cur:
                         POOL.map(partial(self._check_ip, db_cur=db_cur, path=tmpdir), ips)
-                        POOL.close()
-                        POOL.join()
                 except DBException as err:
                     LOG.warning("Couldn't update channel status")
                     LOG.debug(err)
@@ -96,14 +97,17 @@ class ChannelOnlineCheck(Checker):
 
         """
         path = os.path.join(path, "test_{ip}.ts".format(ip=ip_addr))
-        ChannelHandler.record_stream(ip_addr, path, 5)
-        if os.stat(path).st_size < MIN_BYTES:
-            command = """UPDATE channels
-                            SET status = "down"
-                            WHERE ip = ? 
-                        """
-            db_cur.execute(command, (ip_addr, ))
-            LOG.debug("Channel with ip: %s down", ip_addr)
+        is_down = False
+        if ChannelHandler.record_stream(ip_addr, path, 5, test=True):
+            if os.stat(path).st_size < MIN_BYTES:
+                is_down = True
+                LOG.debug("Channel with ip: %s down", ip_addr)
+        else:
+            is_down = True
+            LOG.debug("IP:%s check failed", ip_addr)
+
+        if is_down:
+            db_cur.execute(CH_DOWN_COMMAND, (ip_addr,))
 
     def _channel_stats(self):
         """
@@ -175,12 +179,12 @@ class ChannelOnlineCheck(Checker):
             return report
 
         msg = [
-            "Current stats:\nFollowing {number} channels are down:".format(
+            "\nCurrent stats:\nFollowing {number} channel(s) are down:".format(
                 number=new_stats["down_ch"]),
             ", ".join(new_stats["down_ch_names"]),
-            "\nPreviously:",
+            "Previously:",
             ", ".join(prev_stats["down_ch_names"])
 
         ]
-        report = (True, "".join(msg))
+        report = (True, "\n".join(msg))
         return report

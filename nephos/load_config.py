@@ -192,7 +192,7 @@ class Config:
         """
 
         if os.path.exists(CRITICAL_MAIL_ADDRS_PATH):
-            print("Critical mail recipients loaded from", CRITICAL_MAIL_ADDRS_PATH)
+            # print("Critical mail recipients loaded from", CRITICAL_MAIL_ADDRS_PATH)
             with open(CRITICAL_MAIL_ADDRS_PATH, "r") as file:
                 raw_data = file.read()
         else:
@@ -213,7 +213,7 @@ class Config:
             print("Following emails removed from critical mail list due to wrong format!")
             print(removed)
 
-        print("You can add more critical mail recipients in", CRITICAL_MAIL_ADDRS_PATH)
+        # print("You can add more critical mail recipients in", CRITICAL_MAIL_ADDRS_PATH)
         return emails
 
 

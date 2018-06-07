@@ -128,7 +128,7 @@ class ChannelHandler:
             LOG.debug(err)
 
     @staticmethod
-    def record_stream(ip_addr, addr, duration_secs):
+    def record_stream(ip_addr, addr, duration_secs, test=False):
         """
         Function to record stream from the ip address for the given duration,
         and in the given addr.
@@ -144,25 +144,38 @@ class ChannelHandler:
         duration_secs
             type: int
             duration to record the show in seconds
+        test
+            type: bool
+            True if run by channel online check test, False otherwise
 
         Returns
         -------
+        type: bool
+        True if successful, False otherwise
 
         """
-        if not _is_up(ip_addr):
-            return
+        if not test:
+            addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
+            if not _is_up(ip_addr):
+                return False
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)
-        addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
 
         cmd = "multicat {duration} -u @{channel_ip} {out_file}".format(
             duration=timeout_str, channel_ip=ip_addr, out_file=addr)
         try:
-            subprocess.check_call(cmd, shell=False)
-        except subprocess.CalledProcessError as err:
+            record_process = subprocess.Popen(cmd,
+                                              shell=True,
+                                              stdout=subprocess.PIPE,
+                                              stderr=subprocess.STDOUT)
+            process_output, _ = record_process.communicate()
+            LOG.info(process_output)
+            return True
+        except (OSError, subprocess.CalledProcessError) as err:
             LOG.warning("Recording for channel with ip %s, failed!", ip_addr)
             LOG.debug(err)
+            return False
 
 
 def _is_up(ip_addr):
@@ -183,8 +196,8 @@ def _is_up(ip_addr):
     """
     command = """SELECT status FROM channels WHERE ip=?"""
     with DBHandler.connect() as db_cur:
-        status = db_cur.execute(command, (ip_addr, ))
-
-    if status == "up":
+        db_cur.execute(command, (ip_addr, ))
+        status = db_cur.fetchall()
+    if status[0][0] == "up":
         return True
     return False

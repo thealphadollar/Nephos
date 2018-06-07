@@ -14,8 +14,6 @@ class Checker(ABC):
     Derive all maintenance jobs from this and direct their result to
     _handler function.
 
-    Compulsory method for
-
     Compulsory method for the derived classes:
         _execute()
     """

@@ -149,7 +149,7 @@ class DBHandler:
 
         """
         try:
-            conn = sqlite3.connect(DB_PATH)
+            conn = sqlite3.connect(DB_PATH, check_same_thread=False)
             yield conn.cursor()
             conn.commit()
             conn.close()
