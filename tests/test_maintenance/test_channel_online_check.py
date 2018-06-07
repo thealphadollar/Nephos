@@ -52,8 +52,6 @@ class TestChannelOnlineCheck(TestCase):
         self.assertTrue(mock_channel_checker._extract_ips.called)
         self.assertTrue(mock_db.connect.called)
         mock_pool.map.assert_called_with(mock.ANY, mock.ANY)
-        self.assertTrue(mock_pool.close.called)
-        self.assertTrue(mock_pool.join.called)
 
     @mock.patch('nephos.maintenance.channel_online_check.DBHandler')
     @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
@@ -65,7 +63,7 @@ class TestChannelOnlineCheck(TestCase):
         with mock_db.connect() as db_cur:
             ChannelOnlineCheck._check_ip(ip_addr, db_cur, 'test')
 
-            mock_ch.record_stream.assert_called_with(mock.ANY, mock.ANY, mock.ANY)
+            mock_ch.record_stream.assert_called_with(mock.ANY, mock.ANY, mock.ANY, test=True)
             self.assertTrue(mock_stat.called)
             db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
             mock_log.debug.assert_called_with("Channel with ip: %s down", ip_addr)
@@ -102,7 +100,7 @@ class TestChannelOnlineCheck(TestCase):
         report = ChannelOnlineCheck._formulate_report(MOCK_PREV_STATS, MOCK_NEW_STATS)
 
         self.assertTrue(report[0])
-        self.assertIn("Following 2 channels are down:", report[1])
+        self.assertIn("Following 2 channel(s) are down:", report[1])
 
     def test__pool_args(self, mock_channel_checker):
         """

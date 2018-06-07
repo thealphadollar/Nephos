@@ -110,23 +110,13 @@ class TestChannelHandler(TestCase):
 
     @mock.patch('nephos.recorder.channels.subprocess')
     @mock.patch('nephos.recorder.channels.LOG')
-    def test_record_stream(self, mock_log, mock_subprocess, _):
-        with mock.patch('nephos.recorder.channels._is_up', return_value=True):
-            ChannelHandler.record_stream('0.0.0.0', 'test', 0)
-
-            self.assertTrue(mock_subprocess.check_call.called)
-            self.assertFalse(mock_log.warning.called)
-            self.assertFalse(mock_log.debug.called)
-
-    @mock.patch('nephos.recorder.channels.subprocess')
-    @mock.patch('nephos.recorder.channels.LOG')
     def test_record_stream_error(self, mock_log, mock_subprocess, _):
-        mock_subprocess.check_call.side_effect = subprocess.CalledProcessError
+        mock_subprocess.Popen.side_effect = subprocess.CalledProcessError
         mock_subprocess.CalledProcessError = Exception
         with mock.patch('nephos.recorder.channels._is_up', return_value=True):
             ChannelHandler.record_stream('0.0.0.0', 'test', 0)
 
-            self.assertTrue(mock_subprocess.check_call.called)
+            self.assertTrue(mock_subprocess.Popen.called)
             self.assertTrue(mock_log.warning.called)
             self.assertTrue(mock_log.debug.called)
 

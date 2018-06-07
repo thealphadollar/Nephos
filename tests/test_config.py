@@ -240,9 +240,7 @@ class TestConfig(TestCase):
                     expected_output = [
                         "No critical mail list file found!",
                         "Following emails removed from critical mail list due to wrong format!",
-                        "['shiv']",
-                        "You can add more critical mail recipients in {path}\n".format(
-                            path=temp_file)
+                        "['shiv']\n"
                     ]
                     self.assertEqual(output, "\n".join(expected_output))
 
@@ -251,11 +249,8 @@ class TestConfig(TestCase):
                     self.TestConfig.load_mail_list()
                     output = mock_out.getvalue()
                     expected_output = [
-                        "Critical mail recipients loaded from {path}".format(path=temp_file),
                         "Following emails removed from critical mail list due to wrong format!",
-                        "['shiv']",
-                        "You can add more critical mail recipients in {path}\n".format
-                        (path=temp_file)
+                        "['shiv']\n"
                     ]
                     self.assertEqual(output, "\n".join(expected_output))
 
