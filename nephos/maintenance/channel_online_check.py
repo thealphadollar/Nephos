@@ -99,9 +99,13 @@ class ChannelOnlineCheck(Checker):
         path = os.path.join(path, "test_{ip}.ts".format(ip=ip_addr))
         is_down = False
         if ChannelHandler.record_stream(ip_addr, path, 5, test=True):
-            if os.stat(path).st_size < MIN_BYTES:
+            try:
+                if os.stat(path).st_size < MIN_BYTES:
+                    is_down = True
+                    LOG.debug("Channel with ip: %s down", ip_addr)
+            except FileNotFoundError:
                 is_down = True
-                LOG.debug("Channel with ip: %s down", ip_addr)
+                LOG.debug("Failed to bind to multicat; wrong channel address")
         else:
             is_down = True
             LOG.debug("IP:%s check failed", ip_addr)

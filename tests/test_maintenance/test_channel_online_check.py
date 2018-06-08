@@ -68,6 +68,37 @@ class TestChannelOnlineCheck(TestCase):
             db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
             mock_log.debug.assert_called_with("Channel with ip: %s down", ip_addr)
 
+    @mock.patch('nephos.maintenance.channel_online_check.DBHandler')
+    @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
+    @mock.patch('os.stat')
+    @mock.patch('nephos.maintenance.channel_online_check.LOG')
+    def test__check_ip_record_error(self, mock_log, mock_stat, mock_ch, mock_db, _):
+        mock_stat.return_value = MockOSReturn(0)
+        ip_addr = '0.0.0.0:8080'
+        with mock_db.connect() as db_cur:
+            mock_ch.record_stream.return_value = False
+            ChannelOnlineCheck._check_ip(ip_addr, db_cur, 'test')
+
+            self.assertFalse(mock_stat.called)
+            db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
+            mock_log.debug.assert_called_with("IP:%s check failed", ip_addr)
+
+    @mock.patch('nephos.maintenance.channel_online_check.DBHandler')
+    @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
+    @mock.patch('os.stat')
+    @mock.patch('nephos.maintenance.channel_online_check.LOG')
+    def test__check_ip_FileNotFound_Error(self, mock_log, mock_stat, mock_ch, mock_db, _):
+        mock_stat.return_value = MockOSReturn(0)
+        ip_addr = '0.0.0.0:8080'
+        with mock_db.connect() as db_cur:
+            mock_stat.side_effect = FileNotFoundError
+            ChannelOnlineCheck._check_ip(ip_addr, db_cur, 'test')
+
+            mock_ch.record_stream.assert_called_with(mock.ANY, mock.ANY, mock.ANY, test=True)
+            self.assertTrue(mock_stat.called)
+            db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
+            self.assertTrue(mock_log.debug.called)
+
     def test__channel_stats(self, mock_channel_checker):
         with mock.patch('nephos.maintenance.channel_online_check.ChannelOnlineCheck.channel_list',
                         new=MOCK_CH_LIST), \
