@@ -103,7 +103,7 @@ class JobHandler:
             out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
                                     job_data[job_key]["name"])
             duration = job_data[job_key]["duration"]
-            job_time = job_data[job_key]["start_time"]
+            job_time = str(job_data[job_key]["start_time"])
             week_str = self._to_weekday(job_data[job_key]["repetition"])
             job_name = job_data[job_key]["name"]
 

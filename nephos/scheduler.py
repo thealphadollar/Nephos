@@ -6,7 +6,7 @@ import os
 from logging import getLogger
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from apscheduler.jobstores.base import JobLookupError
+from apscheduler.jobstores.base import JobLookupError, ConflictingIdError
 from apscheduler.executors.pool import ThreadPoolExecutor
 from pytz.exceptions import UnknownTimeZoneError
 from tzlocal import get_localzone
@@ -92,10 +92,14 @@ class Scheduler:
         """
         hour, minute = job_time.split(":")
         duration_secs = 60 * duration
-        job = self._scheduler.add_job(ChannelHandler.record_stream, trigger='cron', hour=hour,
-                                      minute=minute, day_of_week=week_days, id=job_name,
-                                      max_instances=1, args=[ip_addr, out_path, duration_secs])
-        LOG.info("Recording job added: %s", job)
+        try:
+            job = self._scheduler.add_job(ChannelHandler.record_stream, trigger='cron', hour=hour,
+                                          minute=minute, day_of_week=week_days, id=job_name,
+                                          max_instances=1, args=[ip_addr, out_path, duration_secs])
+            LOG.info("Recording job added: %s", job)
+        except ConflictingIdError as error:
+            LOG.warning("Job insertion failed: name should be unique!")
+            LOG.debug(error)
 
     def add_maintenance_jobs(self, func, main_id, interval):
         """

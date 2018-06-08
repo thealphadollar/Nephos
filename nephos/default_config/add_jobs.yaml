@@ -3,7 +3,7 @@
 # Nephos. Use a modification of the file with the
 # `load batch jobs` argument to insert batch data to the schedule.
 # To add more data, create new dictionary elements with incrementing indexes.
-# "0"  has been created for understanding and should NOT BE altered.
+# "0"  has been created for understanding.
 # Multiple values can be entered for single dict key by separation through
 # space. Hence do not use space otherwise.
 0:

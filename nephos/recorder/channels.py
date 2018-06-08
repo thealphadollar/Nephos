@@ -86,8 +86,6 @@ class ChannelHandler:
 
                 ch_dir = os.path.join(__recording_dir__, ch_data[key]["name"])
                 os.makedirs(ch_dir, exist_ok=True)
-            else:
-                LOG.warning("%s not created!", ch_data[key]["name"])
 
     @staticmethod
     def delete_channel():

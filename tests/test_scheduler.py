@@ -1,12 +1,16 @@
 from unittest import TestCase, mock
 import os
 import tempfile
-from io import StringIO
+from apscheduler.jobstores.base import ConflictingIdError
 from nephos.scheduler import Scheduler
 
 TEMP_DIR = tempfile.TemporaryDirectory()
 DB_JOBS_PATH = os.path.join(TEMP_DIR.name, "jobs.db")
 MOCK_JOB_ID = 'xyz'
+
+
+def mock_unique_id_error(*args, **kwargs):
+        raise ConflictingIdError(MOCK_JOB_ID)
 
 
 @mock.patch('nephos.scheduler.PATH_JOB_DB', DB_JOBS_PATH)
@@ -44,6 +48,19 @@ class TestScheduler(TestCase):
         expected = 'Recording job added: %s'
         self.assertTrue(mock_scheduler._scheduler.add_job.called)
         self.assertIn(expected, mock_log.info.call_args[0])
+        self.assertFalse(mock_log.warning.called)
+        self.assertFalse(mock_log.debug.called)
+
+    @mock.patch('nephos.scheduler.Scheduler')
+    def test_add_recording_job_error(self, mock_scheduler, mock_log):
+        mock_scheduler._scheduler.add_job.side_effect = mock_unique_id_error
+        Scheduler.add_recording_job(mock_scheduler, mock.ANY, mock.ANY, 0, '00:00',
+                                    mock.ANY, mock.ANY)
+
+        self.assertTrue(mock_scheduler._scheduler.add_job.called)
+        self.assertFalse(mock_log.info.called)
+        self.assertTrue(mock_log.warning.called)
+        self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.scheduler.Scheduler')
     def test_add_maintenance_jobs(self, mock_scheduler, mock_log):

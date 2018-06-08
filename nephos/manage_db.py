@@ -53,8 +53,8 @@ class DBHandler:
             # country channels to be shared
             db_cur.execute("""CREATE TABLE IF NOT EXISTS channels (
                                     channel_id integer PRIMARY KEY,
-                                    name text NOT NULL,
-                                    ip text NOT NULL,
+                                    name text NOT NULL UNIQUE,
+                                    ip text NOT NULL UNIQUE,
                                     country_code text,
                                     lang text,
                                     timezone text NOT NULL,
@@ -65,7 +65,7 @@ class DBHandler:
 
             db_cur.execute("""CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
-                                    email text,
+                                    email text UNIQUE,
                                     channel_name text,
                                     country_code text,
                                     lang text,
@@ -118,7 +118,7 @@ class DBHandler:
             db_cur.execute(command)
             return db_cur.lastrowid
         except Error as err:
-            LOG.warning("Failed to insert %s into %s", row_data, table_name)
+            LOG.warning("Insertion failed: %s into %s", row_data, table_name)
             LOG.debug(err)
 
     @staticmethod
