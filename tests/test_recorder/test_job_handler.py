@@ -96,8 +96,8 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_job_handler._scheduler.rm_recording_job.called)
 
     def test__to_weekday(self, _):
-        entry = '0100101'
-        expected_output = 'tue fri sun'
+        entry = '1111110'
+        expected_output = 'mon,tue,wed,thu,fri,sat'
         output = JobHandler._to_weekday(entry)
 
         self.assertEqual(output, expected_output)

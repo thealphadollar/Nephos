@@ -133,7 +133,6 @@ class Scheduler:
         """
         return self._scheduler.get_jobs()
 
-
     def rm_recording_job(self, job_id):
         """
         delete a recording job from schedule

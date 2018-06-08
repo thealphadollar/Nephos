@@ -154,11 +154,11 @@ class JobHandler:
             string containing short forms of weekdays
 
         """
-        week_list = ["mon", "tue", "wed", "thurs", "fri", "sat", "sun"]
+        week_list = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
         week_str = []
         int_list = [int(x) for x in entry]
         for index, value in enumerate(int_list):
             if value:
                 week_str.append(week_list[index])
 
-        return " ".join(week_str)
+        return ",".join(week_str)
