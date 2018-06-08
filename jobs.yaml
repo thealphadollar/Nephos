@@ -1,8 +1,0 @@
----
-0:
-  name: test4
-  channel_name: test2
-  start_time: 15:42
-  duration: 10
-  repetition: "0010011"
-...

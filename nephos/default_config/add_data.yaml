@@ -10,9 +10,9 @@
 channels:
   0:
     name: [NAME]  # name, mandatory
-    ip: [HOST:PORT]  # address eg. "0.0.0.0:8080", mandatory
+    ip: [HOST:PORT]  # address eg. "0.0.0.0:8080", mandatory, WITHIN QUOTES
     country_code: [COUNTRY CODE]  # country code. eg "IND", optional
-    language: [LANGUAGE CODE(S)]  # language codes eg. [ENG RUS], optional
+    lang: [LANGUAGE CODE(S)]  # language codes eg. [ENG RUS], optional
     timezone: [TIMEZONE CODE]  # timezone, mandatory
 # At least one of the last four parameters should be filled.
 sharing_entity:
@@ -20,6 +20,6 @@ sharing_entity:
     email: [EMAIL ADDRESS(ES)]  # email address of the entities, mandatory, multiple values separated by space
     channels: [CHANNEL NAME(S)]  # channels to be shared, optional
     country_code: [COUNTRY CODE(S)]  # channels from these countries, optional
-    language: [LANGUAGE CODE(S)]  # recording with these languages, optional
+    lang: [LANGUAGE CODE(S)]  # recording with these languages, optional
     timezone: [TIMEZONE CODE]  # recordings from this timezone, optional
 ...

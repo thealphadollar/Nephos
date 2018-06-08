@@ -81,7 +81,7 @@ New data can be entered in Nephos, at runtime only, using the CLI.
 
 As soon as a new channel is added in Nephos, a directory for the channel is created in the `recordings` subdirectory of Nephos folder. This directory is used to store jobs concerning the channel. 
 
-When a job is launched, it checks the status of the associated channel. If the channel is "up", the job executes. Once the recording has started, the data received is stored in a file named `[JOB_NAME][DATE-TIME].ts` in the channel's folder. 
+When a job is launched, it checks the status of the associated channel. If the channel is "up" (was online at the time of last test), the job executes. Once the recording has started, the data received is stored in a file named `[JOB_NAME][DATE-TIME].ts` in the channel's folder. 
 
 The entry in sharing entities is used by the uploader to add them to the share list of the file during upload.
 

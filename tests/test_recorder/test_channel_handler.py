@@ -60,7 +60,6 @@ class TestChannelHandler(TestCase):
             self.assertTrue(mock_db_handler.insert_data.called)
             self.assertFalse(mock_log.info.called)
             self.assertFalse(mock_os.makedirs.called)
-            self.assertTrue(mock_log.warning.called)
 
     @mock.patch('nephos.recorder.channels.input')
     @mock.patch('nephos.recorder.channels.LOG')

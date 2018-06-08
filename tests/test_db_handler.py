@@ -30,8 +30,7 @@ class TestDBHandler(TestCase):
             table_name = "test"
             self.db_handler.insert_data(db_cur, table_name, MOCK_DATA)
 
-            mock_log.warning.assert_called_with("Failed to insert %s into %s",
-                                                MOCK_DATA, table_name)
+            self.assertTrue(mock_log.warning.called)
             self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.manage_db.DB_JOBS_PATH', new=TEMP_DIR.name)

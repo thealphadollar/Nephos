@@ -41,9 +41,9 @@ class JobHandler:
         # accepting inputs
         name = input("Job name: ").lower()
         channel_name = input("Channel name: ").lower()
-        start_time = input("Start time [HH:MM]: ")
+        start_time = str(input("Start time [HH:MM]: "))
         duration = int(input("Duration [in minutes]: "))
-        rep = input("Run on [eg. 1010000 for monday and wednesday]: ")
+        rep = str(input("Run on [eg. 1010000 for monday and wednesday]: "))
         job_data = {
             0: {
                 "name": name,
