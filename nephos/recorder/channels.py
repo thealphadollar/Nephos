@@ -159,9 +159,11 @@ class ChannelHandler:
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)
+        path_to_multicat = 'libs/multicat-2.2/multicat'
 
-        cmd = "multicat {duration} -u @{channel_ip} {out_file}".format(
-            duration=timeout_str, channel_ip=ip_addr, out_file=addr)
+        cmd = "{multicat_path} {duration} -u @{channel_ip} {out_file}".format(
+            multicat_path=path_to_multicat, duration=timeout_str, channel_ip=ip_addr,
+            out_file=addr)
         try:
             record_process = subprocess.Popen(cmd,
                                               shell=True,
