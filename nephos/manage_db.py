@@ -63,6 +63,18 @@ class DBHandler:
 
             """)
 
+            db_cur.execute("""CREATE TABLE IF NOT EXISTS tasks (
+                                    task_id integer PRIMARY KEY,
+                                    original_path text UNIQUE,
+                                    store_path text UNIQUE,
+                                    chan_id text,
+                                    lang text,
+                                    status text DEFAULT "not processed",
+                                    fail_count integer DEFAULT "0",
+                                    FOREIGN KEY (chan_id) REFERENCES channels(channel_id)
+                                    );
+                        """)
+
             db_cur.execute("""CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text UNIQUE,
