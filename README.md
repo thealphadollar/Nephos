@@ -29,6 +29,8 @@ later:
         - In case of any email address fails at RegEx match, it'll be listed in info
   logs, ignored by config handler and you can correct it in the same file
 
+NOTE: If the modules do not function properly, it is advised to modify the default configuration in `~/Nephos/config/modules.yaml` and restart afterwards.
+
 ### Install Using PyPI package
 #### NOTE: This method is compromised at the moment!
 4. 1) Install Nephos, `pip install nephos`<br/>

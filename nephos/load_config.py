@@ -11,6 +11,9 @@ import yaml.error
 import pydash
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 from . import REGEX_CHECK
+from .recorder import set_recorder_config
+from .preprocessor import set_preprocessor_config
+from .uploader import set_uploader_config
 
 LOG = getLogger(__name__)
 
@@ -24,8 +27,7 @@ class Config:
     """
     logging_config = None
     maintenance_config = None
-    preprocess_config = None
-    uploader_config = None
+    modules_config = None
 
     def load_config(self):
         """
@@ -39,14 +41,12 @@ class Config:
         # loading configuration
         self.logging_config = self.load_data("logging.yaml", True)
         self.maintenance_config = self.load_data("maintenance.yaml", True)
-        self.preprocess_config = self.load_data("preprocess.yaml", True)
-        self.uploader_config = self.load_data("uploader.yaml", True)
+        self.modules_config = self.load_data("modules.yaml", True)
 
         # updating configuration as needed with manual data / environment variables
         config_update = list(self._config_update())
         pydash.merge(self.logging_config, config_update[0])
-        pydash.merge(self.preprocess_config, config_update[1])
-        pydash.merge(self.uploader_config, config_update[2])
+        pydash.merge(self.modules_config, config_update[1])
 
     def initialise(self):
         """
@@ -58,6 +58,18 @@ class Config:
         # Initialise logger
         logging.config.dictConfig(self.logging_config)
         LOG.info("** LOGGER CONFIGURED")
+
+    def configure_modules(self):
+        """
+        Loads configuration into each module
+
+        Returns
+        -------
+
+        """
+        set_recorder_config(self.modules_config['recording'])
+        set_preprocessor_config(self.modules_config['preprocess'])
+        set_uploader_config(self.modules_config['upload'])
 
     @staticmethod
     def load_data(file_name, is_config):
@@ -167,15 +179,11 @@ class Config:
                         }
                 }
         }
-        preprocess_config_update = {
-
-        }
-        uploader_config_update = {
+        modules_config_update = {
 
         }
 
-        config_list = [logging_config_update, preprocess_config_update,
-                       uploader_config_update]
+        config_list = [logging_config_update, modules_config_update]
         return config_list
 
     @staticmethod

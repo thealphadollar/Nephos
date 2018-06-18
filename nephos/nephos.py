@@ -48,6 +48,7 @@ class Nephos(ABC):
         self.config_handler = Config()
         self.config_handler.load_config()
         self.config_handler.initialise()
+        self.config_handler.configure_modules()
         LOG.info("Configuration completed!")
 
         LOG.info("Loading database, scheduler, maintenance modules...")

@@ -35,11 +35,7 @@ def mock_load(to_load, _=True):
             {
                 "version": 1
             },
-        "preprocess.yaml":
-            {
-                "version": 1
-            },
-        "uploader.yaml":
+        "modules.yaml":
             {
                 "version": 1
             }
@@ -99,8 +95,7 @@ class TestConfig(TestCase):
 
         self.assertIsNone(self.TestConfig.logging_config)
         self.assertIsNone(self.TestConfig.maintenance_config)
-        self.assertIsNone(self.TestConfig.preprocess_config)
-        self.assertIsNone(self.TestConfig.uploader_config)
+        self.assertIsNone(self.TestConfig.modules_config)
 
     def test_load_config(self):
         with mock.patch('nephos.load_config.Config.load_data', side_effect=mock_load), \
@@ -113,20 +108,17 @@ class TestConfig(TestCase):
 
             self.assertIsInstance(self.TestConfig.logging_config, dict)
             self.assertIsInstance(self.TestConfig.maintenance_config, dict)
-            self.assertIsInstance(self.TestConfig.preprocess_config, dict)
-            self.assertIsInstance(self.TestConfig.uploader_config, dict)
+            self.assertIsInstance(self.TestConfig.modules_config, dict)
 
             # =============================================
             # below tests check for the correction of input
             log_version = pydash.get(self.TestConfig.logging_config, "version")
             maintainer_version = pydash.get(self.TestConfig.maintenance_config, "version")
-            preprocessor_version = pydash.get(self.TestConfig.preprocess_config, "version")
-            uploader_version = pydash.get(self.TestConfig.uploader_config, "version")
+            modules_version = pydash.get(self.TestConfig.modules_config, "version")
 
             self.assertEqual(log_version, 1)
             self.assertEqual(maintainer_version, 1)
-            self.assertEqual(preprocessor_version, 1)
-            self.assertEqual(uploader_version, 1)
+            self.assertEqual(modules_version, 1)
             # =============================================
 
             # =============================================

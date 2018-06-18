@@ -84,6 +84,7 @@ class JobHandler:
     def insert_jobs(self, db_cur, job_data):
         """
         passes job data to add_recording_job method of Scheduler class.
+
         Parameters
         ----------
         db_cur

@@ -14,6 +14,11 @@ MOCK_CH_DATA = {
     }
 }
 
+MOCK_RECORDER_CONFIG = {
+    'path_to_multicat': 'path',
+    'ifaddr': ''
+}
+
 
 @mock.patch('nephos.recorder.channels.ChannelHandler')
 class TestChannelHandler(TestCase):
@@ -112,7 +117,8 @@ class TestChannelHandler(TestCase):
     def test_record_stream_error(self, mock_log, mock_subprocess, _):
         mock_subprocess.Popen.side_effect = subprocess.CalledProcessError
         mock_subprocess.CalledProcessError = Exception
-        with mock.patch('nephos.recorder.channels._is_up', return_value=True):
+        with mock.patch('nephos.recorder.channels._is_up', return_value=True), \
+                mock.patch('nephos.recorder.channels.config', return_value=MOCK_RECORDER_CONFIG):
             ChannelHandler.record_stream('0.0.0.0', 'test', 0)
 
             self.assertTrue(mock_subprocess.Popen.called)

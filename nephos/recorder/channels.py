@@ -6,6 +6,7 @@ from sqlite3 import Error
 import subprocess
 import os
 from datetime import datetime
+from . import config
 from ..manage_db import DBHandler
 from ..exceptions import DBException
 from .. import __recording_dir__
@@ -159,11 +160,14 @@ class ChannelHandler:
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)
-        path_to_multicat = 'libs/multicat-2.2/multicat'
+        path_to_multicat = config['path_to_multicat']
+        ifaddr = config['ifaddr']
+        if ifaddr:
+            ifaddr = '/ifaddr=' + ifaddr
 
-        cmd = "{multicat_path} {duration} -u @{channel_ip} {out_file}".format(
+        cmd = "{multicat_path} {duration} -u @{channel_ip}{ifaddr} {out_file}".format(
             multicat_path=path_to_multicat, duration=timeout_str, channel_ip=ip_addr,
-            out_file=addr)
+            ifaddr=ifaddr, out_file=addr)
         try:
             record_process = subprocess.Popen(cmd,
                                               shell=True,

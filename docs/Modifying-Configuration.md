@@ -11,7 +11,7 @@ The configuration file concerns logging of the entire Nephos and should be modif
 ### Set Up Email Handler
 The below fields are **compulsory** to fill for the working of Critical mailing service. 
 - fromaddr: Address from which the mail should appear to be coming
-- toaddrs: List of email addresses the mail is to be sent
+- toaddrs: Set at the first run of Nephos
 - subject: Subject of the mail, default is "[Nephos] Critical Notification"
 
 Secondly, you need to instantiate following environment variables (before starting Nephos) for connecting and authenticating with the mailing service. **Without these, the emails won't be sent, though no exception will be raised.**
@@ -21,16 +21,6 @@ Secondly, you need to instantiate following environment variables (before starti
 - CRED_PASS: Password of the sender
 
 **NOTE:** If you are using GMail, you need to [enable access to Less Secure Apps](https://support.google.com/accounts/answer/6010255).
-### Create Unified Logs
-By default, Nephos creates separate logs for different modules. If you wish to have a unified log, give the name of the same unified logs' text file in the following attributes in the configuration file:
-- handlers.nephos_file.filename
-- handlers.recorder_file.filename
-- handlers.preprocess_file.filename
-- handlers.uploader_file.filename
-
-It is recommended to set all of these to "logs/nephos.log"<br/>
-
-**NOTE:** File path is relative to the Nephos directory.
 ***
 ## maintenance.yaml
 The configuration file concerns all the maintenance tasks and most of the options can be changed without an issue.
@@ -54,3 +44,27 @@ For the job "disk_space_check", size to provide an alert can be set using the fo
 - min_percent: The minimum free percent on disk at which to give a critical mail notice. Default is 10%.
 
 **NOTE:** The email alert depends on correctly setting up logger's emailer.
+## modules.yaml
+### Proper Stream Recording
+Recording monitor provides two configuration options.
+
+#### ifaddr
+For the proper working of multicat, ifaddr argument should be supplied if there is a specific network interface to which it should bind.<br/>
+
+For more info, [read here](https://github.com/mmalecki/multicat/blob/master/trunk/README).
+
+#### path_to_multicat
+Multicat is the recording client we use and it can be found [here](https://github.com/mmalecki/multicat/).<br/>
+A version of multicat is bundled with the program but module can be set to use custom multicat binary by modifying this parameter.
+
+### Proper Subtitles Extractor
+For proper subtitles extraction, latest CCExtractor version should be used with appropriate arguments. The user can modify
+the path to CCExtractor binary as well as the arguments to be used while extracting file using the below parameters:
+
+- path_to_CCEx: (default is system-wide installed 'ccextractor')
+- ccextractor_args: (default is '-autoprogram')
+
+### Modifying Frequency
+Preprocessing and uploading operations are launched periodicially with set intervals. These intervals can be set by modifying the paramter, `interval`
+available under particular module options.
+
