@@ -11,7 +11,7 @@ formatters:
   colored:
     "()": coloredlogs.ColoredFormatter
     format: "%(asctime)s [%(name)s] [%(levelname)-8s] %(message)s"
-    datefmt: '%m/%d/%Y %I:%M:%S %p'
+    datefmt: '%m/%d/%Y %H:%M:%S'
 handlers:
   console:
     class: logging.StreamHandler

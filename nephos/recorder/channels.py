@@ -6,7 +6,7 @@ from sqlite3 import Error
 import subprocess
 import os
 from datetime import datetime
-from . import config
+from . import recorder_config
 from ..manage_db import DBHandler
 from ..exceptions import DBException
 from .. import __recording_dir__
@@ -58,7 +58,7 @@ class ChannelHandler:
 
         """
         channels = self.grab_ch_list()
-        LOG.info("\nid\tname\tip\t\tcountry\tlang\ttmz\tstatus")
+        LOG.info("\nid\tname\tip\t\t\tcountry\tlang\ttmz\tstatus")
         for channel in channels:
             print("\t".join(str(x) for x in channel))
 
@@ -157,6 +157,8 @@ class ChannelHandler:
             addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
             if not _is_up(ip_addr):
                 return False
+
+        config = recorder_config()
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)

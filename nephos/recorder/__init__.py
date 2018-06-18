@@ -1,23 +1,16 @@
 """
 Stores all the code concerning the stream recorder
 """
+from ..load_config import Config
 
-config = None
 
-
-def set_recorder_config(recorder_config):
+def recorder_config():
     """
-    sets config for the module
-
-    Parameters
-    ----------
-    recorder_config
-        type: dict
-        configuration for the recorder
+    Loads and returns the configuration for the recording module
 
     Returns
     -------
 
     """
-    global config
-    config = recorder_config
+    modules_config = Config.load_data('modules.yaml', True)
+    return modules_config['recording']

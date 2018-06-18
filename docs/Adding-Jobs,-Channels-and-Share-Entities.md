@@ -4,6 +4,7 @@ The page provides details on how to add data (namely jobs, channels, and share e
 For batch operations to be performed, sample files are provided in the `config` subdirectory of Nephos directory. These should be duplicated, modified and then fed as the data file when asked for, by the CLI.
 ***
 ## Adding Jobs
+**It must be kept in mind that Jobs can only be added for existing channels!**
 ### Adding Multiple Jobs
 Multiple jobs can be added using the `add_jobs.yaml` file as an example. Follow the below steps in the Nephos CLI.
 - `load batch jobs`
