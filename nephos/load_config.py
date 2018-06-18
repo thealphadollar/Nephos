@@ -70,6 +70,7 @@ class Config:
         set_recorder_config(self.modules_config['recording'])
         set_preprocessor_config(self.modules_config['preprocess'])
         set_uploader_config(self.modules_config['upload'])
+        LOG.info('Modules configured')
 
     @staticmethod
     def load_data(file_name, is_config):
