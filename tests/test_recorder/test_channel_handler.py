@@ -118,7 +118,7 @@ class TestChannelHandler(TestCase):
         mock_subprocess.Popen.side_effect = subprocess.CalledProcessError
         mock_subprocess.CalledProcessError = Exception
         with mock.patch('nephos.recorder.channels._is_up', return_value=True), \
-                mock.patch('nephos.recorder.channels.config', return_value=MOCK_RECORDER_CONFIG):
+                mock.patch('nephos.recorder.channels.recorder_config', return_value=MOCK_RECORDER_CONFIG):
             ChannelHandler.record_stream('0.0.0.0', 'test', 0)
 
             self.assertTrue(mock_subprocess.Popen.called)

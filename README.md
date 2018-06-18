@@ -29,18 +29,27 @@ later:
         - In case of any email address fails at RegEx match, it'll be listed in info
   logs, ignored by config handler and you can correct it in the same file
 
-NOTE: If the modules do not function properly, it is advised to modify the default configuration in `~/Nephos/config/modules.yaml` and restart afterwards.
 
 ### Install Using PyPI package
 #### NOTE: This method is compromised at the moment!
 4. 1) Install Nephos, `pip install nephos`<br/>
    2) Check if the install was successful, `nephos version`<br/>
-5. Run Nephos, `nephos start`
+5. 1) Initialise nephos directory, `nephos init`<br/>
+   2) Observer and modify configurations available in `~/Nephos/config` (especially maintenance and module configurations)<br/>
+   3) In the modules configuration, update multicat path since no multicat is bundled in this method.
+   4) Run Nephos, `nephos start`
 ### Install Using Git Clone
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/Nephos.git && cd Nephos`<br/>
    2) Install Pipenv, `pip install pipenv`<br/>
    3) Install nephos' requirements (this step also creates a virtual environment to run nephos), `pipenv install`
-5. Run Nephos `python3 -m nephos start`
+   4) Make the bundled multicat for your system
+      ```
+      cd libs/<multicat_folder>
+      make
+      ```
+5. 1) Initialise nephos directory, `python -m nephos init`<br/>
+   2) Observer and modify configurations available in `~/Nephos/config` (especially maintenance and module configurations)<br/>
+   3) Run Nephos, `python -m nephos start`
 
 ## More Info
 For more information regarding using Nephos and how it works, [visit the wiki](https://www.github.com/thealphadollar/Nephos/wiki)
