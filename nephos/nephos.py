@@ -4,7 +4,7 @@ The pipeline for the working of nephos
 from abc import ABC
 from logging import getLogger
 import sys
-from . import first_time
+from . import first_time, __nephos_dir__
 from .exceptions import DBException
 from .load_config import Config
 from .manage_db import DBHandler
@@ -39,10 +39,6 @@ class Nephos(ABC):
         """
         initiates Nephos with basic configuration, modules and makes it ready to be started.
         """
-        first_time_init = None
-        if first_time():
-            print("This is the first time Nephos is being run; copied necessary files.")
-            first_time_init = True
 
         # loading and setting configuration
         self.config_handler = Config()
@@ -58,11 +54,6 @@ class Nephos(ABC):
         self.job_handler = JobHandler(self.scheduler)
         self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
 
-        if first_time_init:
-            self.db_handler.first_time()
-            self.db_handler.init_jobs_db()
-            self.maintenance_handler.add_maintenance_to_scheduler(self.scheduler)
-
         LOG.info("Nephos is all set to launch")
 
     def start(self):
@@ -75,6 +66,7 @@ class Nephos(ABC):
         """
 
         self.scheduler.start()
+        self.maintenance_handler.add_maintenance_to_scheduler(self.scheduler)
 
     def load_channels_sharelist(self):
         """
@@ -100,3 +92,22 @@ class Nephos(ABC):
         except DBException as error:
             LOG.warning("Data addition failed")
             LOG.debug(error)
+
+    @staticmethod
+    def first_time():
+        """
+        Copies files from install directory to home nephos directory
+
+        Returns
+        -------
+
+        """
+        if first_time():
+            print("This is the first time Nephos is being run...\nInitialised nephos at " + __nephos_dir__)
+            db_handler = DBHandler()
+            db_handler.first_time()
+            db_handler.init_jobs_db()
+            return
+
+        print("Nephos has already been initialised at " + __nephos_dir__)
+

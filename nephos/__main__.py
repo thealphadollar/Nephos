@@ -95,6 +95,18 @@ def main():
     pass
 
 
+@main.command("init", help="initialise nephos home directory and config files")
+def initialise():
+    """
+    initialise nephos home directory and config files
+
+    Returns
+    -------
+
+    """
+    Nephos.first_time()
+
+
 @main.command("start", help="run nephos in the terminal")
 def start():
     """

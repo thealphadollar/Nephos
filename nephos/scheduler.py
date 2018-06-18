@@ -121,6 +121,11 @@ class Scheduler:
         -------
 
         """
+        try:
+            self._scheduler.remove_job(main_id)
+        except JobLookupError as _:
+            pass
+
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.debug("Maintenance job added: %s", job)
