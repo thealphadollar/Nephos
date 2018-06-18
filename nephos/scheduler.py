@@ -153,7 +153,6 @@ class Scheduler:
         """
         try:
             self._scheduler.remove_job(job_id)
-            LOG.info("%s job removed from schedule", job_id)
         except JobLookupError as error:
             LOG.warning('Job %s not found', job_id)
             LOG.debug(error)

@@ -80,7 +80,6 @@ class TestScheduler(TestCase):
         Scheduler.rm_recording_job(mock_scheduler, MOCK_JOB_ID)
 
         mock_scheduler._scheduler.remove_job.assert_called_with(MOCK_JOB_ID)
-        mock_log.info.assert_called_with("%s job removed from schedule", MOCK_JOB_ID)
 
     def test_rm_non_existing_recording_job(self, mock_log):
         Scheduler().rm_recording_job(MOCK_JOB_ID)

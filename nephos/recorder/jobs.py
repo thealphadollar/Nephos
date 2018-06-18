@@ -4,6 +4,7 @@ Stores all code related to recording jobs
 
 import os
 from logging import getLogger
+from sqlite3 import InterfaceError
 from ..manage_db import DBHandler
 from ..exceptions import DBException
 from ..load_config import Config
@@ -92,7 +93,7 @@ class JobHandler:
             cursor to the database of channels
         job_data
             type: dict
-            dict containing channel with data as in the above function
+            dict containing channel with data as in the add_job function
 
         Returns
         -------
@@ -100,17 +101,21 @@ class JobHandler:
         """
         sq_command = "SELECT ip FROM channels WHERE name=?"
         for job_key in job_data.keys():
-            ip_addr = db_cur.execute(sq_command, (job_data[job_key]["channel_name"], ))
-            out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
-                                    job_data[job_key]["name"])
-            duration = job_data[job_key]["duration"]
-            job_time = str(job_data[job_key]["start_time"])
-            week_str = self._to_weekday(job_data[job_key]["repetition"])
-            job_name = job_data[job_key]["name"]
+            try:
+                ip_addr = db_cur.execute(sq_command, (job_data[job_key]["channel_name"].lower(), ))
+                out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
+                                        job_data[job_key]["name"])
+                duration = job_data[job_key]["duration"]
+                job_time = str(job_data[job_key]["start_time"])
+                week_str = self._to_weekday(job_data[job_key]["repetition"])
+                job_name = job_data[job_key]["name"].lower()
 
-            self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
-                                              job_time=job_time, week_days=week_str,
-                                              job_name=job_name)
+                self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
+                                                  job_time=job_time, week_days=week_str,
+                                                  job_name=job_name)
+            except InterfaceError as error:
+                LOG.warning('No channel %s in database!', job_data[job_key]["channel_name"])
+                LOG.debug(error)
 
     def display_jobs(self):
         """
