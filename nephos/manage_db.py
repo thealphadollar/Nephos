@@ -15,13 +15,18 @@ DB_PATH = os.path.join(__nephos_dir__, "databases/storage.db")
 DB_JOBS_PATH = os.path.join(__nephos_dir__, "databases/jobs.db")
 
 
-# indexes for channel and share list
+# indexes for channel, tasks and share list
 CH_NAME_INDEX = 1
 CH_IP_INDEX = 2
 CH_COUN_INDEX = 3
 CH_LANG_INDEX = 4
 CH_TMZ_INDEX = 5
 CH_STAT_INDEX = 6
+TSK_ID_INDEX = 0
+TSK_PATH_INDEX = 1
+TSK_STORE_INDEX = 2
+TSK_STAT_INDEX = 6
+TSK_FAIL_INDEX = 7
 SL_MAIL_INDEX = 1
 SL_CH_INDEX = 2
 SL_COUN_INDEX = 3
@@ -65,13 +70,14 @@ class DBHandler:
 
             db_cur.execute("""CREATE TABLE IF NOT EXISTS tasks (
                                     task_id integer PRIMARY KEY,
-                                    original_path text UNIQUE,
+                                    orig_path text UNIQUE,
                                     store_path text UNIQUE,
-                                    chan_id text,
+                                    ch_name text,
                                     lang text,
+                                    sub_lang text,
                                     status text DEFAULT "not processed",
                                     fail_count integer DEFAULT "0",
-                                    FOREIGN KEY (chan_id) REFERENCES channels(channel_id)
+                                    FOREIGN KEY (chan_name) REFERENCES channels(name)
                                     );
                         """)
 

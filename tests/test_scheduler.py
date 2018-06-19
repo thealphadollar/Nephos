@@ -63,10 +63,10 @@ class TestScheduler(TestCase):
         self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.scheduler.Scheduler')
-    def test_add_maintenance_jobs(self, mock_scheduler, mock_log):
-        Scheduler.add_maintenance_jobs(mock_scheduler, mock.ANY, mock.ANY, 0)
+    def test_add_necessary_jobs(self, mock_scheduler, mock_log):
+        Scheduler.add_necessary_jobs(mock_scheduler, mock.ANY, mock.ANY, 0)
 
-        expected = 'Maintenance job added: %s'
+        expected = 'Default job added: %s'
         self.assertTrue(mock_scheduler._scheduler.add_job.called)
         self.assertIn(expected, mock_log.debug.call_args[0])
 

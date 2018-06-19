@@ -60,8 +60,8 @@ class Maintenance:
 
         for job in jobs:
             LOG.debug("Adding %s maintenance job to scheduler...", job)
-            scheduler.add_maintenance_jobs(job_funcs[job], job,
-                                           self._get_maintenance_data(job))
+            scheduler.add_necessary_jobs(job_funcs[job], job,
+                                         self._get_maintenance_data(job))
 
     @staticmethod
     def call_disk_space_check():

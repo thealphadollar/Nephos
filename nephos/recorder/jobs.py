@@ -99,10 +99,10 @@ class JobHandler:
         -------
 
         """
-        sq_command = "SELECT ip FROM channels WHERE name=?"
+        sql_command = "SELECT ip FROM channels WHERE name=?"
         for job_key in job_data.keys():
             try:
-                db_cur.execute(sq_command, (job_data[job_key]["channel_name"].lower(), ))
+                db_cur.execute(sql_command, (job_data[job_key]["channel_name"].lower(), ))
                 ip_addr = db_cur.fetchall()[0][0]
                 out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
                                         job_data[job_key]["name"])

@@ -101,9 +101,9 @@ class Scheduler:
             LOG.warning("Job insertion failed: name should be unique!")
             LOG.debug(error)
 
-    def add_maintenance_jobs(self, func, main_id, interval):
+    def add_necessary_jobs(self, func, main_id, interval):
         """
-        Add maintenance jobs to the scheduler
+        Add necessary jobs to the scheduler
 
         Parameters
         ----------
@@ -128,7 +128,7 @@ class Scheduler:
 
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
-        LOG.debug("Maintenance job added: %s", job)
+        LOG.debug("Default job added: %s", job)
 
     def get_jobs(self):
         """
