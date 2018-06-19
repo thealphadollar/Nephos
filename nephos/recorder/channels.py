@@ -6,7 +6,7 @@ from sqlite3 import Error
 import subprocess
 import os
 from datetime import datetime
-from . import recorder_config
+from . import get_recorder_config
 from ..manage_db import DBHandler
 from ..exceptions import DBException
 from .. import __recording_dir__
@@ -158,7 +158,7 @@ class ChannelHandler:
             if not _is_up(ip_addr):
                 return False
 
-        config = recorder_config()
+        config = get_recorder_config()
 
         duration_27khz = int(duration_secs * 27000000)
         timeout_str = '-d {:d}'.format(duration_27khz)

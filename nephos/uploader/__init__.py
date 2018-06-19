@@ -1,7 +1,6 @@
 """
-Stores all the code concerning the uploader
+Stores all the code concerning the stream recorder
 """
-
 config = None
 
 
@@ -13,7 +12,7 @@ def set_uploader_config(uploader_config):
     ----------
     uploader_config
         type: dict
-        configuration for the uploader
+        configuration for the recorder
 
     Returns
     -------
@@ -21,3 +20,15 @@ def set_uploader_config(uploader_config):
     """
     global config
     config = uploader_config
+
+
+def get_uploader_config():
+    """
+    Returns
+    -------
+    type: dict
+    configuration for the uploading module
+
+    """
+    global config
+    return config
