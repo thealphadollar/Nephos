@@ -4,13 +4,15 @@ Contains the main preprocess class
 import os
 from logging import getLogger
 from sqlite3 import Error
+from multiprocessing import Pool, cpu_count
 from . import get_preprocessor_config
 from .methods import ApplyProcessMethods, get_lang
 from ..manage_db import DBHandler, DBException, TSK_ID_INDEX, \
-    TSK_PATH_INDEX, TSK_STAT_INDEX, TSK_FAIL_INDEX
+    TSK_PATH_INDEX, TSK_STORE_INDEX, TSK_STAT_INDEX, TSK_FAIL_INDEX
 from .. import __upload_dir__
 
 LOG = getLogger(__name__)
+POOL = Pool(processes=cpu_count())
 
 
 class PreprocessHandler:
@@ -32,6 +34,23 @@ class PreprocessHandler:
         self.config = get_preprocessor_config()
         self.scheduler = scheduler
         self._add_to_scheduler()
+
+    @staticmethod
+    def init_preprocess_pipe():
+        """
+        Loads data from the database and passes it into the preprocessing pipe
+
+        Returns
+        -------
+
+        """
+        sql_command = 'SELECT * FROM tasks where status = "not processed"'
+        # TODO: Test above command
+        tasks_pool = []
+        for task in _query_tasks(sql_command):
+            tasks_pool.append((task[TSK_PATH_INDEX], task[TSK_STORE_INDEX]))
+
+        POOL.starmap(ApplyProcessMethods, tasks_pool)
 
     @staticmethod
     def insert_task(orig_path, ip_addr):
@@ -64,7 +83,8 @@ class PreprocessHandler:
             LOG.warning("Failed to insert task for recording: %s", orig_path)
             LOG.debug(err)
 
-    def display_tasks(self):
+    @staticmethod
+    def display_tasks():
         """
         Prints the list of pending tasks
 
@@ -73,7 +93,7 @@ class PreprocessHandler:
 
         """
         sql_command = "SELECT * FROM tasks"
-        tasks = self._query_tasks(sql_command)
+        tasks = _query_tasks(sql_command)
 
         LOG.info("\nID\tStatus\t\tFail Count\tFile")
         for task in tasks:
@@ -105,41 +125,6 @@ class PreprocessHandler:
             LOG.warning("Failed to remove task!")
             LOG.debug(err)
 
-    @staticmethod
-    def init_preprocess_pipe():
-        """
-        Loads data from the database and passes it into the preprocessing pipe
-
-        Returns
-        -------
-
-        """
-        pass
-        # TODO: Use query_tasks to bring in tasks list
-
-    @staticmethod
-    def _query_tasks(sql_cmd):
-        """
-        Queries the tasks table using the given command
-
-        Parameters
-        -------
-        sql_cmd
-            type: str
-            sql command to be queried
-
-        Returns
-        -------
-
-        """
-        try:
-            with DBHandler.connect() as db_cur:
-                db_cur.execute(sql_cmd)
-                return db_cur.fetchall()
-        except DBException as err:
-            LOG.warning("Failed to query tasks table!")
-            LOG.debug(err)
-
     def _add_to_scheduler(self):
         """
         Adds preprocessing job to class' scheduler.
@@ -157,6 +142,29 @@ class PreprocessHandler:
             LOG.debug("Adding %s maintenance job to scheduler...", job)
             self.scheduler.add_necessary_jobs(job_funcs[job], job,
                                               self.config['interval'])
+
+
+def _query_tasks(sql_cmd):
+    """
+    Queries the tasks table using the given command
+
+    Parameters
+    -------
+    sql_cmd
+        type: str
+        sql command to be queried
+
+    Returns
+    -------
+
+    """
+    try:
+        with DBHandler.connect() as db_cur:
+            db_cur.execute(sql_cmd)
+            return db_cur.fetchall()
+    except DBException as err:
+        LOG.warning("Failed to query tasks table!")
+        LOG.debug(err)
 
 
 def _get_channel_name(ip_addr, db_cur):

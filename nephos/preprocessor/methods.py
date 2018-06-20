@@ -5,13 +5,17 @@ import subprocess
 import json
 from logging import getLogger
 from . import get_preprocessor_config
+from ..manage_db import DBHandler, DBException
 
 LOG = getLogger(__name__)
+SET_PROCESSING_COMMAND = """UPDATE tasks
+                    SET status = "processing"
+                    WHERE orig_path = ?"""
 
 
 class ApplyProcessMethods:
 
-    def __init__(self, path_to_file):
+    def __init__(self, path_to_file, store_path):
         """
         Loads the file to be processed and applies all the methods till new file output.
 
@@ -20,10 +24,23 @@ class ApplyProcessMethods:
         path_to_file
             type: str
             path to file to be processed
+        store_path
+            type: str
+            path to directory to store the files, post-processing
 
         """
         self.addr = path_to_file
-        # TODO: Complete this
+        self.store = store_path
+        self.config = get_preprocessor_config()
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(SET_PROCESSING_COMMAND, (path_to_file,))
+        except DBException as error:
+            LOG.warning("Couldn't connect to database for %s", path_to_file)
+            LOG.debug(error)
+
+        # TODO: Create a custom exception which on call will erase all work done and revert the
+        # TODO: status to "not processed"
 
 
 def get_lang(path_to_file):
