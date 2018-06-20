@@ -5,7 +5,7 @@ import os
 from logging import getLogger
 from sqlite3 import Error
 from . import get_preprocessor_config
-from .methods import ApplyProcessMethods
+from .methods import ApplyProcessMethods, get_lang
 from ..manage_db import DBHandler, DBException, TSK_ID_INDEX, \
     TSK_PATH_INDEX, TSK_STAT_INDEX, TSK_FAIL_INDEX
 from .. import __upload_dir__
@@ -46,7 +46,7 @@ class PreprocessHandler:
             with DBHandler.connect() as db_cur:
                 ch_name = _get_channel_name(ip_addr, db_cur)
                 store_path = os.path.join(__upload_dir__, ch_name, orig_path)
-                lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
+                lang, sub_lang = get_lang(orig_path)
 
             data = {
                 "orig_path": orig_path,
