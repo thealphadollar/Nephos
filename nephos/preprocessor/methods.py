@@ -17,7 +17,7 @@ class ApplyProcessMethods:
 
     def __init__(self, path_to_file, store_path):
         """
-        Loads the file to be processed and applies all the methods till new file output.
+        Loads the file to be processed, modifies status to "processing" and calls apply_methods on it.
 
         Parameters
         ----------
@@ -38,6 +38,16 @@ class ApplyProcessMethods:
         except DBException as error:
             LOG.warning("Couldn't connect to database for %s", path_to_file)
             LOG.debug(error)
+
+    def _apply_methods(self):
+        """
+        Applies the following functions over the input file:
+        Extract subtitles using
+
+        Returns
+        -------
+
+        """
 
         # TODO: Create a custom exception which on call will erase all work done and revert the
         # TODO: status to "not processed"
