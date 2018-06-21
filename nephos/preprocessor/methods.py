@@ -1,16 +1,22 @@
 """
 Contains all the methods applied in preprocessing
 """
+import os
 import subprocess
 import json
 from logging import getLogger
 from . import get_preprocessor_config
-from ..manage_db import DBHandler, DBException
+from ..manage_db import DBHandler
+from ..exceptions import DBException, ProcessFailedException
 
 LOG = getLogger(__name__)
 SET_PROCESSING_COMMAND = """UPDATE tasks
                     SET status = "processing"
                     WHERE orig_path = ?"""
+SET_PROCESSED_COMMAND = """UPDATE tasks
+                    SET status = "processed"
+                    WHERE orig_path = ?"""
+MIN_BYTES = 1024  # 1KB
 
 
 class ApplyProcessMethods:
@@ -30,27 +36,120 @@ class ApplyProcessMethods:
 
         """
         self.addr = path_to_file
-        self.store = store_path
+        self.name = self._get_name()
+        self.store_dir = store_path
         self.config = get_preprocessor_config()
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(SET_PROCESSING_COMMAND, (path_to_file,))
+                self.db_cur = db_cur
+                self._apply_methods()
         except DBException as error:
             LOG.warning("Couldn't connect to database for %s", path_to_file)
             LOG.debug(error)
 
     def _apply_methods(self):
         """
-        Applies the following functions over the input file:
-        Extract subtitles using
+        Applies the required methods over the provided file.
 
         Returns
         -------
 
         """
+        try:
+            self._extract_subtitles()
+            self._convert_to_mp4()
+            os.remove(self.addr)
+            self.db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
+        except ProcessFailedException as _:
+            pass
 
-        # TODO: Create a custom exception which on call will erase all work done and revert the
-        # TODO: status to "not processed"
+    def _extract_subtitles(self):
+        """
+        Extracts subtitles using provided CCExtractor
+        Returns
+        -------
+
+        """
+        path_ccextractor = self.config["path_to_CCEx"]
+        ccex_args = self.config["CCEx_args"]
+        # TODO: Extract subtitles for all present language
+        # TODO: Test CCEx commands
+        out_file = os.path.join(self.store_dir, self.name, ".srt")
+
+        cmd = "{path_ccextractor} {input} {args} -o {output}".format(
+            path_ccextractor=path_ccextractor,
+            input=self.addr,
+            args=ccex_args,
+            output=out_file
+        )
+        self._execute(cmd, out_file)
+
+    def _convert_to_mp4(self):
+        """
+        Converts the video to mp4 format using ffmpeg
+        Returns
+        -------
+
+        """
+        path_ffmpeg = self.config["path_to_ffmpeg"]
+        ffmpeg_args = self.config["ffmpeg_args"]
+        # TODO: implement dual pass
+        # TODO: implement the correct arguments for conversion
+        out_file = os.path.join(self.store_dir, self.name, ".mp4")
+
+        cmd = "{path_ffmpeg} -i {input} {args} {output}".format(
+            path_ffmpeg=path_ffmpeg,
+            input=self.addr,
+            args=ffmpeg_args,
+            output=out_file
+        )
+        self._execute(cmd, out_file)
+
+    def _get_name(self):
+        """
+        Returns
+        -------
+        type: str
+        file name without extension from an absolute path
+
+        """
+        filename = os.path.basename(self.addr)
+        filename_without_extension = os.path.splitext(filename)[0]
+        return filename_without_extension
+
+    def _execute(self, cmd, out_file):
+        """
+        Executes a command as a subprocess.
+
+        Parameters
+        -------
+        cmd
+            type: str
+            command to be run
+        out_file
+            type: str
+            absolute path to the outfile produced
+
+        Raises
+        -------
+        ProcessFailedException
+            In case of exit code not 0 from command or output file not appropriate
+        """
+        failed = False
+        try:
+            conversion_process = subprocess.Popen(cmd,
+                                                  shell=True,
+                                                  stdout=subprocess.PIPE,
+                                                  stderr=subprocess.STDOUT)
+            output, _ = conversion_process.communicate()
+            LOG.debug(output)
+        except subprocess.CalledProcessError as err:
+            LOG.debug(err)
+            failed = True
+
+        if os.stat(out_file).st_size < MIN_BYTES or failed:
+            raise ProcessFailedException(self.addr, self.store_dir, self.db_cur)
 
 
 def get_lang(path_to_file):

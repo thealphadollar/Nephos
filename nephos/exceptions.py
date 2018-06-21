@@ -80,3 +80,5 @@ class ProcessFailedException(Exception):
             self.db_cur.execute(INCREMENT_FAIL_COUNT, (self.path_file, ))
             for file in os.listdir(self.to_clr_dir):
                 os.remove(os.path.join(self.to_clr_dir, file))
+            LOG.warning("Following file reverted due to error in preprocessing, "
+                        "%d tries remaining before removal", 2-fail_count)
