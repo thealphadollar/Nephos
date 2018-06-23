@@ -81,6 +81,7 @@ class ChannelHandler:
 
         """
         for key in ch_data.keys():
+            ch_data["name"] = "_".join(ch_data["name"].split())  # replace whitespace with underscore in name
             ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:
                 LOG.info("Channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
@@ -100,7 +101,7 @@ class ChannelHandler:
         -------
 
         """
-        ch_ip_name = input("Channel name or ip: ").lower()
+        ch_ip_name = "_".join(input("Channel name or ip: ").lower().split())
         command = "DELETE FROM channels WHERE name=? OR ip=?"
         try:
             with DBHandler.connect() as db_cur:
