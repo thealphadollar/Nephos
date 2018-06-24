@@ -102,3 +102,4 @@ ENV/
 .idea/
 .pytest_cache/
 coverage.xml
+test_samples

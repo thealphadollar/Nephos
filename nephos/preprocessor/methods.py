@@ -59,6 +59,7 @@ class ApplyProcessMethods:
         try:
             self._extract_subtitles()
             self._convert_to_mp4()
+            self._add_share_entities()
             os.remove(self.addr)
             self.db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
         except ProcessFailedException as _:
@@ -105,6 +106,17 @@ class ApplyProcessMethods:
             output=out_file
         )
         self._execute(cmd, out_file)
+
+    def _add_share_entities(self):
+        """
+        Appends share entities to the file querying share_list database.
+
+        Returns
+        -------
+
+        """
+        # TODO: Add method
+        pass
 
     def _get_name(self):
         """

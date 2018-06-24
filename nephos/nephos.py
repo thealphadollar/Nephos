@@ -1,7 +1,6 @@
 """
 The pipeline for the working of nephos
 """
-from abc import ABC
 from logging import getLogger
 import sys
 from . import first_time, __nephos_dir__
@@ -28,7 +27,7 @@ except SingleInstanceException as err:
     sys.exit(-1)
 
 
-class Nephos(ABC):
+class Nephos:
     """
     The abstract base class from which new derived classes can be created to support varying
     online storage platforms.
@@ -110,4 +109,3 @@ class Nephos(ABC):
             return
 
         print("Nephos has already been initialised at " + __nephos_dir__)
-

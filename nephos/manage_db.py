@@ -27,6 +27,7 @@ TSK_PATH_INDEX = 1
 TSK_STORE_INDEX = 2
 TSK_STAT_INDEX = 6
 TSK_FAIL_INDEX = 7
+TSK_SHR_INDEX = 8
 SL_MAIL_INDEX = 1
 SL_CH_INDEX = 2
 SL_COUN_INDEX = 3
@@ -77,6 +78,7 @@ class DBHandler:
                                     sub_lang text,
                                     status text DEFAULT "not processed",
                                     fail_count integer DEFAULT "0",
+                                    share_with test,
                                     FOREIGN KEY (chan_name) REFERENCES channels(name)
                                     );
                         """)

@@ -13,5 +13,6 @@ preprocess:
   CCEx_args: '-autoprogram'  # arguments to be used with CCExtractor
   interval: 60  # minutes,
 upload:
+  
   interval: 60  # minutes
 ...
