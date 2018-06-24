@@ -50,7 +50,8 @@ class PreprocessHandler:
         for task in _query_tasks(sql_command):
             tasks_pool.append((task[TSK_PATH_INDEX], task[TSK_STORE_INDEX]))
 
-        POOL.starmap(ApplyProcessMethods, tasks_pool)
+        if tasks_pool:
+            POOL.starmap(ApplyProcessMethods, tasks_pool)
 
     @staticmethod
     def insert_task(orig_path, ip_addr):
@@ -139,7 +140,7 @@ class PreprocessHandler:
         }
 
         for job in jobs:
-            LOG.debug("Adding %s maintenance job to scheduler...", job)
+            LOG.debug("Adding %s default job to scheduler...", job)
             self.scheduler.add_necessary_jobs(job_funcs[job], job,
                                               self.config['interval'])
 

@@ -80,7 +80,7 @@ class TestJobHandler(TestCase):
             JobHandler.insert_jobs(mock_job_handler, db_cur, MOCK_JOB_DATA)
 
             db_cur.execute.assert_called_with(mock.ANY, mock.ANY)
-            mock_job_handler._to_weekday.assert_called_with('0000000')
+            mock_job_handler.to_weekday.assert_called_with('0000000')
             self.assertTrue(mock_job_handler._scheduler.add_recording_job.called)
 
     def test_display_jobs(self, mock_job_handler):
@@ -95,9 +95,9 @@ class TestJobHandler(TestCase):
         mock_input.assert_called_with("Job name: ")
         self.assertTrue(mock_job_handler._scheduler.rm_recording_job.called)
 
-    def test__to_weekday(self, _):
+    def test_to_weekday(self, _):
         entry = '1111110'
         expected_output = 'mon,tue,wed,thu,fri,sat'
-        output = JobHandler._to_weekday(entry)
+        output = JobHandler.to_weekday(entry)
 
         self.assertEqual(output, expected_output)

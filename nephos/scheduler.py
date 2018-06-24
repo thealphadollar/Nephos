@@ -10,6 +10,7 @@ from apscheduler.jobstores.base import JobLookupError, ConflictingIdError
 from apscheduler.executors.pool import ThreadPoolExecutor
 from pytz.exceptions import UnknownTimeZoneError
 from tzlocal import get_localzone
+from .recorder.jobs import JobHandler
 from . import __nephos_dir__
 from .recorder.channels import ChannelHandler
 
@@ -129,6 +130,43 @@ class Scheduler:
         job = self._scheduler.add_job(func=func, trigger='interval',
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.debug("Default job added: %s", job)
+
+    def add_cron_necessary_job(self, func, main_id, job_time, repetition, args):
+        """
+
+        Parameters
+        ----------
+        func
+            type: callable
+            maintenance function to be run at the execution of the job
+        main_id
+            type: str
+            unique id to be associated with the job
+        job_time
+            type: str
+            time at which job is to be executed, eg "15:45"
+        repetition
+            type: str
+            days of week on which uploading is to take place
+        args
+            type: list
+            list of arguments for the function
+
+        Returns
+        -------
+
+        """
+        try:
+            self._scheduler.remove_job(main_id)
+        except JobLookupError as _:
+            pass
+
+        hour, minute = job_time.split(":")
+        week_days = JobHandler.to_weekday(repetition)
+        job = self._scheduler.add_job(func, trigger='cron', hour=hour,
+                                      minute=minute, day_of_week=week_days, id=main_id,
+                                      max_instances=1, args=args)
+        LOG.info("Default job added: %s", job)
 
     def get_jobs(self):
         """

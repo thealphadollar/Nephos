@@ -14,6 +14,7 @@ from .. import validate_entries
 from ..preprocessor.preprocess import PreprocessHandler
 
 LOG = getLogger(__name__)
+CMD_GET_CHANNELS = "SELECT * FROM channels"
 
 
 class ChannelHandler:
@@ -124,7 +125,7 @@ class ChannelHandler:
         """
         try:
             with DBHandler.connect() as db_cur:
-                db_cur.execute("SELECT * FROM channels")
+                db_cur.execute(CMD_GET_CHANNELS)
                 return db_cur.fetchall()
         except DBException as err:
             LOG.warning("Failed to get channel list.")

@@ -109,7 +109,7 @@ class JobHandler:
                                         job_data[job_key]["name"])
                 duration = job_data[job_key]["duration"]
                 job_time = str(job_data[job_key]["start_time"])
-                week_str = self._to_weekday(job_data[job_key]["repetition"])
+                week_str = self.to_weekday(job_data[job_key]["repetition"])
                 job_name = job_data[job_key]["name"].lower()
 
                 self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
@@ -146,7 +146,7 @@ class JobHandler:
         self._scheduler.rm_recording_job(job_name)
 
     @staticmethod
-    def _to_weekday(entry):
+    def to_weekday(entry):
         """
         converts the integer group to weekday string
 

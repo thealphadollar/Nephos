@@ -13,6 +13,6 @@ preprocess:
   CCEx_args: '-autoprogram'  # arguments to be used with CCExtractor
   interval: 60  # minutes,
 upload:
-  
-  interval: 60  # minutes
+  start_time: "22:00"  # "HH:MM" eg. "15:45", WITHIN QUOTES
+  repetition: [0000000]  # eg. "1000000" for every monday, WITHIN QUOTES
 ...
