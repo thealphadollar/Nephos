@@ -107,6 +107,24 @@ class Uploader(ABC):
         pass
 
     @staticmethod
+    def _set_uploading(folder):
+        """
+        Sets the status of the entry with corresponding folder to "uploading"
+
+        Parameters
+        ----------
+        folder
+            type: str
+            path to the folder being uploaded
+
+        Returns
+        -------
+
+        """
+        with DBHandler.connect() as db_cur:
+            db_cur.execute(CMD_SET_UPLOADING, (folder, ))
+
+    @staticmethod
     def _remove(folder):
         """
         Removes the corresponding folder and it's entry from tasks table post-upload.

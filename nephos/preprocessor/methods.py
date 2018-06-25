@@ -155,7 +155,7 @@ class ApplyProcessMethods:
         tags.append(task_info[TSK_LANG_INDEX])
         tags.append(task_info[TSK_SUBLANG_INDEX])
 
-        # gettings data from channels table
+        # getting data from channels table
         self.db_cur.execute(GET_CH_INFO, (task_info[TSK_CHNAME_INDEX], ))
         ch_info = self.db_cur.fetchall()[0]
         tags.append(ch_info[CH_COUN_INDEX])

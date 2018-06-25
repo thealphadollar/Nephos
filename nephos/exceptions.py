@@ -9,6 +9,9 @@ LOG = getLogger(__name__)
 UNSET_PROCESSING_COMMAND = """UPDATE tasks
                             SET status = "not processed"
                             WHERE orig_path = ?"""
+UNSET_UPLOADING_COMMAND = """UPDATE tasks
+                            SET status = "processed"
+                            WHERE store_path = ?"""
 REMOVE_ENTRY = """DELETE
             FROM tasks
             WHERE orig_path = ?"""
@@ -44,7 +47,11 @@ class ProcessFailedException(Exception):
         Parameters
         ----------
         path_to_file
+            type: str
+            path to the original file
         store_path
+            type: str
+            path to the folder for storing processed files
         db_cur
             sqlite database cursor
         """
@@ -82,3 +89,12 @@ class ProcessFailedException(Exception):
                 os.remove(os.path.join(self.to_clr_dir, file))
             LOG.warning("Following file reverted due to error in preprocessing, "
                         "%d tries remaining before removal", 2-fail_count)
+
+
+class UploadingFailed(Exception):
+    """
+    Handles failure of uploading and reverts the status back to processed.
+    """
+    def __init__(self, store_path, db_cur):
+        db_cur.execute(UNSET_UPLOADING_COMMAND, (store_path, ))
+        super(UploadingFailed, self).__init__()
