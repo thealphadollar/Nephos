@@ -7,7 +7,7 @@ import subprocess
 import os
 from datetime import datetime
 from . import get_recorder_config
-from ..manage_db import DBHandler
+from ..manage_db import DBHandler, CH_STAT_INDEX
 from ..exceptions import DBException
 from .. import __recording_dir__, __upload_dir__
 from .. import validate_entries
@@ -206,10 +206,10 @@ def _is_up(ip_addr):
         True, if the channel was up, False otherwise.
 
     """
-    command = """SELECT status FROM channels WHERE ip=?"""
+    command = """SELECT * FROM channels WHERE ip=?"""
     with DBHandler.connect() as db_cur:
         db_cur.execute(command, (ip_addr, ))
-        status = db_cur.fetchall()
-    if status[0][0] == "up":
+        ch_data = db_cur.fetchall()[0]
+    if ch_data[CH_STAT_INDEX] == "up":
         return True
     return False
