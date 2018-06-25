@@ -86,10 +86,7 @@ class DBHandler:
             db_cur.execute("""CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text UNIQUE,
-                                    channel_name text,
-                                    country_code text,
-                                    lang text,
-                                    timezone text,
+                                    tags text,
                                     FOREIGN KEY (channel_name) REFERENCES channels(name)
                                     );
             """)

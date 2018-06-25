@@ -17,9 +17,7 @@ channels:
 # At least one of the last four parameters should be filled.
 sharing_entity:
   0:
-    email: [EMAIL ADDRESS(ES)]  # email address of the entities, mandatory, multiple values separated by space
-    channels: [CHANNEL NAME(S)]  # channels to be shared, optional
-    country_code: [COUNTRY CODE(S)]  # channels from these countries, optional
-    lang: [LANGUAGE CODE(S)]  # recording with these languages, optional
-    timezone: [TIMEZONE CODE]  # recordings from this timezone, optional
+    email: "<email addresses>"  # email address of the entities inside quotes, mandatory, multiple values separated by space
+    tags: "<tags here>"  # add tags inside quotes, separating multiple by space. Any tags can be used, channel name (
+                         # replace whitespace in channel name by '_'), languages, timezone etc.
 ...
