@@ -98,3 +98,11 @@ class UploadingFailed(Exception):
     def __init__(self, store_path, db_cur):
         db_cur.execute(UNSET_UPLOADING_COMMAND, (store_path, ))
         super(UploadingFailed, self).__init__()
+
+
+class OAuthFailure(Exception):
+    """
+    Handles all authentication failure
+    """
+    def __init__(self):
+        super(OAuthFailure, self).__init__()

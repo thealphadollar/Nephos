@@ -3,6 +3,7 @@ Contains the uploader abstract base class.
 All uploading clients should be derived class Uploader and implement the necessary methods.
 """
 from abc import ABC, abstractmethod
+import ntpath
 import shutil
 from functools import partial
 from logging import getLogger
@@ -27,9 +28,11 @@ class Uploader(ABC):
         self._config = get_uploader_config()
         self._scheduler = scheduler
         self._add_to_scheduler()
+        self.service = None  # uploading client service
 
+    @staticmethod
     @abstractmethod
-    def auth(self):
+    def auth():
         """
         Authorise the module.
 
@@ -39,8 +42,9 @@ class Uploader(ABC):
         """
         pass
 
+    @staticmethod
     @abstractmethod
-    def _get_client(self):
+    def _get_upload_service():
         """
         Returns
         -------
@@ -84,13 +88,13 @@ class Uploader(ABC):
 
     @staticmethod
     @abstractmethod
-    def _upload(client, folder, share_list):
+    def _upload(service, folder, share_list):
         """
-        Uploads the folder.
+        Uploads the folder and appends share entities
 
         Parameters
         -------
-        client
+        service
             uploading client of the cloud platform
         folder
             type: str
@@ -103,7 +107,6 @@ class Uploader(ABC):
         -------
 
         """
-        # TODO: incorporate how to add "uploading" tag
         pass
 
     @staticmethod
@@ -157,9 +160,30 @@ class Uploader(ABC):
             "run_uploader": self.begin_uploads,
         }
 
-        args = [self._get_client(), self._upload]
+        args = [self._get_upload_service(), self._upload]
 
         for job in jobs:
             LOG.debug("Adding %s default job to scheduler...", job)
             self._scheduler.add_cron_necessary_job(job_funcs[job], job, self._config['start_time'],
                                                    self._config['repetition'], args)
+
+    @staticmethod
+    def _get_name(path):
+        """
+        Parses name from the absolute path.
+
+        Parameters
+        ----------
+        path
+            type: str
+            absolute path to the file
+
+        Returns
+        ---------
+            type: str
+            name of the folder or file with extension
+        -------
+
+        """
+        head, tail = ntpath.split(path)
+        return tail or ntpath.basename(head)  # return tail when file, otherwise other one for folder
