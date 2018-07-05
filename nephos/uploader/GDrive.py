@@ -43,7 +43,7 @@ class GDrive(Uploader):
 
         try:
             http = credentials.authorize(Http())
-            self.service = discovery.build("drive", "v3", http=http)
+            self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
         except HttpError as error:
             LOG.error("Authentication request failed!")
             LOG.debug(error)
@@ -116,10 +116,14 @@ class GDrive(Uploader):
         """
         credentials = store.get()
 
-        if not credentials or credentials.invalid:
-            if credentials.invalid:
-                LOG.warning("Authentication using credentials file failed!")
+        def raise_error():
+            LOG.warning("Authentication using credentials file failed!")
             raise OAuthFailure
+
+        if not credentials:
+            raise_error()
+        elif credentials.invalid:
+            raise_error()
 
         return credentials
 

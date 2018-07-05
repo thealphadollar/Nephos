@@ -27,10 +27,10 @@ class Uploader(ABC):
     def __init__(self, scheduler):
         self._config = get_uploader_config()
         self._scheduler = scheduler
-        self._add_to_scheduler()
         self.service = None  # uploading client service
-
         self.auth()
+
+        self._add_to_scheduler()
 
     @staticmethod
     @abstractmethod

@@ -79,15 +79,14 @@ class DBHandler:
                                     status text DEFAULT "not processed",
                                     fail_count integer DEFAULT "0",
                                     share_with test,
-                                    FOREIGN KEY (chan_name) REFERENCES channels(name)
+                                    FOREIGN KEY (ch_name) REFERENCES channels(name)
                                     );
                         """)
 
             db_cur.execute("""CREATE TABLE IF NOT EXISTS share_list (
                                     share_id integer PRIMARY KEY,
                                     email text UNIQUE,
-                                    tags text,
-                                    FOREIGN KEY (channel_name) REFERENCES channels(name)
+                                    tags text
                                     );
             """)
 

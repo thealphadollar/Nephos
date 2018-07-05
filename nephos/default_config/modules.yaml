@@ -14,5 +14,5 @@ preprocess:
   interval: 60  # minutes,
 upload:
   start_time: "22:00"  # "HH:MM" eg. "15:45", WITHIN QUOTES
-  repetition: [0000000]  # eg. "1000000" for every monday, WITHIN QUOTES
+  repetition: "1000000"  # eg. "1000000" for every monday, WITHIN QUOTES
 ...
