@@ -13,6 +13,8 @@ from .recorder.jobs import JobHandler
 from .maintenance.main import Maintenance
 from .maintenance.single_instance import SingleInstance
 from .exceptions import SingleInstanceException
+from .preprocessor.preprocess import PreprocessHandler
+from .uploader.GDrive import GDrive
 
 
 LOG = getLogger(__name__)
@@ -51,6 +53,8 @@ class Nephos:
         self.scheduler = Scheduler()
         self.channel_handler = ChannelHandler()
         self.job_handler = JobHandler(self.scheduler)
+        self.preprocessor = PreprocessHandler(self.scheduler)
+        self.uploader = GDrive(self.scheduler)
         self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
 
         LOG.info("Nephos is all set to launch")

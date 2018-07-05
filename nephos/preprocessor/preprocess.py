@@ -6,10 +6,11 @@ from logging import getLogger
 from sqlite3 import Error
 from multiprocessing import Pool, cpu_count
 from . import get_preprocessor_config
-from .methods import ApplyProcessMethods, get_lang
+from .methods import ApplyProcessMethods
 from ..manage_db import DBHandler, DBException, TSK_ID_INDEX, \
     TSK_PATH_INDEX, TSK_STORE_INDEX, TSK_STAT_INDEX, TSK_FAIL_INDEX
 from .. import __upload_dir__
+
 
 LOG = getLogger(__name__)
 POOL = Pool(processes=cpu_count())
@@ -47,7 +48,7 @@ class PreprocessHandler:
         sql_command = 'SELECT * FROM tasks where status = "not processed"'
         # TODO: Test above command
         tasks_pool = []
-        for task in _query_tasks(sql_command):
+        for task in PreprocessHandler._query_tasks(sql_command):
             tasks_pool.append((task[TSK_PATH_INDEX], task[TSK_STORE_INDEX]))
 
         if tasks_pool:
@@ -64,9 +65,9 @@ class PreprocessHandler:
         """
         try:
             with DBHandler.connect() as db_cur:
-                ch_name = _get_channel_name(ip_addr, db_cur)
+                ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
                 store_path = os.path.join(__upload_dir__, ch_name, orig_path)
-                lang, sub_lang = get_lang(orig_path)
+                lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
             data = {
                 "orig_path": orig_path,
@@ -78,7 +79,7 @@ class PreprocessHandler:
 
             task_id = DBHandler.insert_data(db_cur, "tasks", data)
             if task_id is not None:
-                LOG.info("Task (id = %s) added with following data:\n%s", task_id, data)
+                LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
 
         except DBException as err:
             LOG.warning("Failed to insert task for recording: %s", orig_path)
@@ -94,7 +95,7 @@ class PreprocessHandler:
 
         """
         sql_command = "SELECT * FROM tasks"
-        tasks = _query_tasks(sql_command)
+        tasks = PreprocessHandler._query_tasks(sql_command)
 
         LOG.info("\nID\tStatus\t\tFail Count\tFile")
         for task in tasks:
@@ -144,48 +145,48 @@ class PreprocessHandler:
             self.scheduler.add_necessary_jobs(job_funcs[job], job,
                                               self.config['interval'])
 
+    @staticmethod
+    def _query_tasks(sql_cmd):
+        """
+        Queries the tasks table using the given command
 
-def _query_tasks(sql_cmd):
-    """
-    Queries the tasks table using the given command
+        Parameters
+        -------
+        sql_cmd
+            type: str
+            sql command to be queried
 
-    Parameters
-    -------
-    sql_cmd
-        type: str
-        sql command to be queried
+        Returns
+        -------
 
-    Returns
-    -------
+        """
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(sql_cmd)
+                return db_cur.fetchall()
+        except DBException as err:
+            LOG.warning("Failed to query tasks table!")
+            LOG.debug(err)
 
-    """
-    try:
-        with DBHandler.connect() as db_cur:
-            db_cur.execute(sql_cmd)
-            return db_cur.fetchall()
-    except DBException as err:
-        LOG.warning("Failed to query tasks table!")
-        LOG.debug(err)
+    @staticmethod
+    def _get_channel_name(ip_addr, db_cur):
+        """
 
+        Parameters
+        ----------
+        ip_addr
+            type: str
+            ip address of a channel
+        db_cur
+            type: sqlite database cursor
+            cursor to the database of channels
 
-def _get_channel_name(ip_addr, db_cur):
-    """
+        Returns
+        -------
+            type: str
+            name of the channel to which the ip address belongs
 
-    Parameters
-    ----------
-    ip_addr
-        type: str
-        ip address of a channel
-    db_cur
-        type: sqlite database cursor
-        cursor to the database of channels
-
-    Returns
-    -------
-        type: str
-        name of the channel to which the ip address belongs
-
-    """
-    sql_command = "SELECT name FROM channels WHERE ip=?"
-    db_cur.execute(sql_command, (ip_addr,))
-    return db_cur.fetchall()[0][0]
+        """
+        sql_command = "SELECT name FROM channels WHERE ip=?"
+        db_cur.execute(sql_command, (ip_addr,))
+        return db_cur.fetchall()[0][0]

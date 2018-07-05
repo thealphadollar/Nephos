@@ -30,6 +30,8 @@ class Uploader(ABC):
         self._add_to_scheduler()
         self.service = None  # uploading client service
 
+        self.auth()
+
     @staticmethod
     @abstractmethod
     def auth():
