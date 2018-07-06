@@ -30,8 +30,6 @@ class Uploader(ABC):
         self.service = None  # uploading client service
         self.auth()
 
-        self._add_to_scheduler()
-
     @staticmethod
     @abstractmethod
     def auth():
@@ -149,7 +147,7 @@ class Uploader(ABC):
 
         shutil.rmtree(folder)
 
-    def _add_to_scheduler(self):
+    def add_to_scheduler(self):
         """
         Adds uploading job to class' scheduler.
 

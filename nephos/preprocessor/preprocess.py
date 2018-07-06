@@ -34,7 +34,6 @@ class PreprocessHandler:
         """
         self.config = get_preprocessor_config()
         self.scheduler = scheduler
-        self._add_to_scheduler()
 
     @staticmethod
     def init_preprocess_pipe():
@@ -127,7 +126,7 @@ class PreprocessHandler:
             LOG.warning("Failed to remove task!")
             LOG.debug(err)
 
-    def _add_to_scheduler(self):
+    def add_to_scheduler(self):
         """
         Adds preprocessing job to class' scheduler.
 

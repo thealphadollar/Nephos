@@ -54,6 +54,7 @@ class Nephos:
         self.channel_handler = ChannelHandler()
         self.job_handler = JobHandler(self.scheduler)
         self.preprocessor = PreprocessHandler(self.scheduler)
+        # TODO: Allow multiple options for uploader
         self.uploader = GDrive(self.scheduler)
         self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
 
@@ -70,6 +71,8 @@ class Nephos:
 
         self.scheduler.start()
         self.maintenance_handler.add_maintenance_to_scheduler(self.scheduler)
+        self.preprocessor.add_to_scheduler()
+        self.uploader.add_to_scheduler()
 
     def load_channels_sharelist(self):
         """
