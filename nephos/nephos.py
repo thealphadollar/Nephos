@@ -14,6 +14,7 @@ from .maintenance.main import Maintenance
 from .maintenance.single_instance import SingleInstance
 from .exceptions import SingleInstanceException
 from .preprocessor.preprocess import PreprocessHandler
+from .preprocessor.share_handler import ShareHandler
 from .uploader.GDrive import GDrive
 
 
@@ -52,6 +53,7 @@ class Nephos:
         self.db_handler = DBHandler()
         self.scheduler = Scheduler()
         self.channel_handler = ChannelHandler()
+        self.share_handler = ShareHandler()
         self.job_handler = JobHandler(self.scheduler)
         self.preprocessor = PreprocessHandler(self.scheduler)
         # TODO: Allow multiple options for uploader

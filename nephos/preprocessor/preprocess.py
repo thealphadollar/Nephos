@@ -5,6 +5,7 @@ import os
 from logging import getLogger
 from sqlite3 import Error
 from multiprocessing import Pool, cpu_count
+from datetime import datetime
 from . import get_preprocessor_config
 from .methods import ApplyProcessMethods
 from ..manage_db import DBHandler, DBException, TSK_ID_INDEX, \
@@ -58,6 +59,15 @@ class PreprocessHandler:
         """
         Insert a new task into the "tasks" table
 
+        Parameters
+        -------
+        orig_path
+            type: str
+            original path to the recorded file
+        ip_addr
+            type: str
+            ip address of the channel of the recorded video
+
         Returns
         -------
 
@@ -65,7 +75,7 @@ class PreprocessHandler:
         try:
             with DBHandler.connect() as db_cur:
                 ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
-                store_path = os.path.join(__upload_dir__, ch_name, orig_path)
+                store_path = os.path.join(__upload_dir__, ch_name, str(datetime.now().strftime("%Y-%m-%d_%H%M")))
                 lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
             data = {

@@ -2,11 +2,13 @@
 Class and methods required to handle sharing
 """
 from logging import getLogger
+from sqlite3 import Error
 from ..manage_db import DBHandler, DBException
 from .. import validate_entries
 
 LOG = getLogger(__name__)
 CMD_GET_SHRS = "SELECT * FROM share_list"
+CMD_DEL_SHRS = "DELETE FROM share_list WHERE email=?"
 
 
 class ShareHandler:
@@ -32,7 +34,7 @@ class ShareHandler:
             }
         }
         with DBHandler.connect() as db_cur:
-            self.insert_share_entities(db_cur, validate_entries("share-entity", shr_data))
+            self.insert_share_entities(db_cur, shr_data)
 
     @staticmethod
     def insert_share_entities(db_cur, shr_data):
@@ -51,6 +53,7 @@ class ShareHandler:
         -------
 
         """
+        shr_data = validate_entries("share-entity", shr_data)
         for key in shr_data.keys():
             shr_id = DBHandler.insert_data(db_cur, "share_list", shr_data[key])
             if shr_id is not None:
@@ -68,6 +71,25 @@ class ShareHandler:
         LOG.info("\nid\temail\t\ttags")
         for entity in shr_entities:
             print("\t".join(str(x) for x in entity))
+
+    @staticmethod
+    def delete_entity():
+        """
+        Deletes share entity from the database
+
+        Returns
+        -------
+
+        """
+        sh_en_mail = input("Email: ").lower()
+
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(CMD_DEL_SHRS, (sh_en_mail, ))
+                LOG.info("Share entity with email = %s removed from database", sh_en_mail)
+        except Error as err:
+            LOG.warning("Failed to remove channel!")
+            LOG.debug(err)
 
     @staticmethod
     def grab_shr_list():

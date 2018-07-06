@@ -49,7 +49,7 @@ class ChannelHandler:
             }
         }
         with DBHandler.connect() as db_cur:
-            self.insert_channels(db_cur, validate_entries("channel", ch_data))
+            self.insert_channels(db_cur, ch_data)
 
     def display_channel(self):
         """
@@ -81,6 +81,7 @@ class ChannelHandler:
         -------
 
         """
+        ch_data = validate_entries("channel", ch_data)
         for key in ch_data.keys():
             ch_data["name"] = "_".join(ch_data["name"].split())  # replace whitespace with underscore in name
             ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
