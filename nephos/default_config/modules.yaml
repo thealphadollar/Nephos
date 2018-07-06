@@ -8,7 +8,7 @@ recording:
 preprocess:
   path_to_ffprobe: 'ffprobe'  # absolute path to ffprobe binary, or leave default for using system wide install
   path_to_ffmpeg: 'ffmpeg' # absolute path to ffmpeg binary, or leave default for using system wide install
-  ffmpeg_args: ''  # arguments to be used with ffmpeg  # TODO: Add arguments here for ffmpeg
+  ffmpeg_args: '-c:v libx264 -c:a copy -preset veryfast'  # arguments to be used with ffmpeg  # TODO: Add arguments here for ffmpeg
   path_to_CCEx: 'ccextractor'  # absolute path to CCExtractor binary, or leave default for using system wide install
   CCEx_args: '-autoprogram'  # arguments to be used with CCExtractor
   interval: 60  # minutes,

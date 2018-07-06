@@ -166,7 +166,7 @@ class Scheduler:
         job = self._scheduler.add_job(func, trigger='cron', hour=hour,
                                       minute=minute, day_of_week=week_days, id=main_id,
                                       max_instances=1, args=args)
-        LOG.info("Default job added: %s", job)
+        LOG.debug("Default job added: %s", job)
 
     def get_jobs(self):
         """
