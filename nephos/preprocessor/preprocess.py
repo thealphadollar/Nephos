@@ -112,7 +112,7 @@ class PreprocessHandler:
                 task[TSK_ID_INDEX],
                 task[TSK_STAT_INDEX],
                 task[TSK_FAIL_INDEX],
-                task[TSK_PATH_INDEX]
+                "\t"+task[TSK_PATH_INDEX]
             ]
             print("\t".join(str(x) for x in to_print_data))
 
