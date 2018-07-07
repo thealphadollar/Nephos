@@ -261,6 +261,7 @@ class ApplyProcessMethods:
             path_ffprobe=path_ffprobe,
             path_to_file=path_to_file
         )
+        LOG.info(cmd)  # TODO: remove
         try:
             lang_data = json.loads(subprocess.check_output(cmd, shell=True))
             for data in lang_data["streams"]:

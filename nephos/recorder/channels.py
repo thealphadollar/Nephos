@@ -83,7 +83,7 @@ class ChannelHandler:
         """
         ch_data = validate_entries("channel", ch_data)
         for key in ch_data.keys():
-            ch_data["name"] = "_".join(ch_data["name"].split())  # replace whitespace with underscore in name
+            ch_data[key]["name"] = "_".join(ch_data[key]["name"].split())  # replace whitespace with underscore in name
             ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:
                 LOG.info("Channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])

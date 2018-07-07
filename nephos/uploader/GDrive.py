@@ -3,7 +3,6 @@ Derived class from uploader which manages uploading to Google Drive account.
 """
 import os
 from logging import getLogger
-from json import JSONDecodeError
 from oauth2client import client, file
 from oauth2client.clientsecrets import InvalidClientSecretsError
 from googleapiclient.http import HttpError, MediaFileUpload, UnexpectedMethodError, \
@@ -36,6 +35,7 @@ class GDrive(Uploader):
         store = file.Storage(CRED_PATH)
         try:
             credentials = self._auth_from_file(store)
+            LOG.info("Drive API authenticated using saved credentials!")
         except OAuthFailure:
             credentials = self._init_auth_flow()
 
@@ -148,7 +148,7 @@ class GDrive(Uploader):
                 scope=SCOPES,
                 redirect_uri="urn:ietf:wg:oauth:2.0:oob"  # GUI is not opened
             )
-        except (InvalidClientSecretsError, JSONDecodeError) as error:
+        except (InvalidClientSecretsError, ValueError) as error:
             LOG.error("Invalid client secrets file provided at {filepath}".format(
                 filepath=CLI_SECRET_PATH
             ))
