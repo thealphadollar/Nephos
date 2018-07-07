@@ -4,6 +4,7 @@ Contains all the methods applied in preprocessing
 import os
 import subprocess
 import json
+import codecs
 from logging import getLogger
 from . import get_preprocessor_config
 from .share_handler import ShareHandler
@@ -29,6 +30,7 @@ GET_CH_INFO = """SELECT *
                 FROM channels
                 WHERE name = ?"""
 MIN_BYTES = 1024  # 1KB
+READER = codecs.getreader('utf-8')
 
 
 class ApplyProcessMethods:
@@ -261,9 +263,11 @@ class ApplyProcessMethods:
             path_ffprobe=path_ffprobe,
             path_to_file=path_to_file
         )
-        LOG.info(cmd)  # TODO: remove
+        LOG.info(cmd)
         try:
-            lang_data = json.loads(subprocess.check_output(cmd, shell=True))
+            raw_json = subprocess.check_output(cmd, shell=True).decode('utf-8')
+            print(raw_json)
+            lang_data = json.loads(raw_json)
             for data in lang_data["streams"]:
                 if data["codec_type"] == "audio":
                     lang = data["tags"]["language"].lower()

@@ -4,7 +4,7 @@
 # for more info on ifaddr, https://github.com/mmalecki/multicat/blob/master/trunk/README
 recording:
   ifaddr: '159.237.36.240'  # bind to the specific network interface, by link number, leave empty for no 'ifaddr' argument
-  path_to_multicat: 'libs/multicat-2.2/multicat'  # path to multicat binary, default to bundled
+  path_to_multicat: '/home/redhen/multicat-2.1/multicat'  # path to multicat binary
 preprocess:
   path_to_ffprobe: 'ffprobe'  # absolute path to ffprobe binary, or leave default for using system wide install
   path_to_ffmpeg: 'ffmpeg' # absolute path to ffmpeg binary, or leave default for using system wide install
