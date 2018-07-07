@@ -263,10 +263,8 @@ class ApplyProcessMethods:
             path_ffprobe=path_ffprobe,
             path_to_file=path_to_file
         )
-        LOG.info(cmd)
         try:
             raw_json = subprocess.check_output(cmd, shell=True).decode('utf-8')
-            print(raw_json)
             lang_data = json.loads(raw_json)
             for data in lang_data["streams"]:
                 if data["codec_type"] == "audio":

@@ -78,17 +78,17 @@ class PreprocessHandler:
                 store_path = os.path.join(__upload_dir__, ch_name, str(datetime.now().strftime("%Y-%m-%d_%H%M")))
                 lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
-            data = {
-                "orig_path": orig_path,
-                "store_path": store_path,
-                "ch_name": ch_name,
-                "lang": lang,
-                "sub_lang": sub_lang
-            }
+                data = {
+                    "orig_path": orig_path,
+                    "store_path": store_path,
+                    "ch_name": ch_name,
+                    "lang": lang,
+                    "sub_lang": sub_lang
+                }
 
-            task_id = DBHandler.insert_data(db_cur, "tasks", data)
-            if task_id is not None:
-                LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
+                task_id = DBHandler.insert_data(db_cur, "tasks", data)
+                if task_id is not None:
+                    LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
 
         except DBException as err:
             LOG.warning("Failed to insert task for recording: %s", orig_path)
@@ -114,7 +114,7 @@ class PreprocessHandler:
                 task[TSK_FAIL_INDEX],
                 task[TSK_PATH_INDEX]
             ]
-            print("\t".join(to_print_data))
+            print("\t".join(str(x) for x in to_print_data))
 
     @staticmethod
     def rm_task():
