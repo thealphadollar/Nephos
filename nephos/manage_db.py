@@ -96,12 +96,12 @@ class DBHandler:
                                     );                             
             """)
 
-            db_cur.execute("""CREATE UNIQUE INDEX indexed_status ON tasks(
+            db_cur.execute("""CREATE INDEX indexed_status ON tasks(
                                                 status
                                                 );                             
                         """)
 
-            db_cur.execute("""CREATE UNIQUE INDEX indexed_email ON share_list(
+            db_cur.execute("""CREATE INDEX indexed_email ON share_list(
                                     email
                                     );   
             """)
