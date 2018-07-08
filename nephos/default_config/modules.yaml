@@ -11,8 +11,8 @@ preprocess:
   ffmpeg_args: '-c:v libx264 -c:a copy -preset veryfast'  # arguments to be used with ffmpeg  # TODO: Add arguments here for ffmpeg
   path_to_CCEx: '/home/redhen/ccextractor.0.77/linux/ccextractor'  # absolute path to CCExtractor binary, or leave default for using system wide install
   CCEx_args: '-autoprogram'  # arguments to be used with CCExtractor
-  interval: 60  # minutes,
+  interval: 5  # minutes,
 upload:
-  start_time: "22:00"  # "HH:MM" eg. "15:45", WITHIN QUOTES
-  repetition: "1000000"  # eg. "1000000" for every monday, WITHIN QUOTES
+  start_time: "08:25"  # "HH:MM" eg. "15:45", WITHIN QUOTES
+  repetition: "1111111"  # eg. "1000000" for every monday, WITHIN QUOTES
 ...
