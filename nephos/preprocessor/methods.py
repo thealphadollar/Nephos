@@ -90,7 +90,7 @@ class ApplyProcessMethods:
         ccex_args = self.config["CCEx_args"]
         # TODO: Extract subtitles for all present language
         # TODO: Test CCEx commands
-        out_file = os.path.join(self.store_dir, self.name, ".srt")
+        out_file = os.path.join(self.store_dir, self.name + ".srt")
 
         cmd = "{path_ccextractor} {input} {args} -o {output}".format(
             path_ccextractor=path_ccextractor,
@@ -111,7 +111,7 @@ class ApplyProcessMethods:
         ffmpeg_args = self.config["ffmpeg_args"]
         # TODO: implement dual pass
         # TODO: implement the correct arguments for conversion
-        out_file = os.path.join(self.store_dir, self.name, ".mp4")
+        out_file = os.path.join(self.store_dir, self.name + ".mp4")
 
         cmd = "{path_ffmpeg} -i {input} {args} {output}".format(
             path_ffmpeg=path_ffmpeg,
@@ -232,7 +232,14 @@ class ApplyProcessMethods:
             LOG.debug(err)
             failed = True
 
-        if os.stat(out_file).st_size < MIN_BYTES or failed:
+        try:
+            if os.stat(out_file).st_size < MIN_BYTES:
+                failed = True
+        except FileNotFoundError as err:
+            LOG.debug(err)
+            failed = True
+
+        if failed:
             raise ProcessFailedException(self.addr, self.store_dir, self.db_cur)
 
     @staticmethod

@@ -12,7 +12,7 @@ import pydash
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 from . import REGEX_CHECK
 from .recorder import set_recorder_config
-from .preprocessor import set_preprocessor_config
+# from .preprocessor import set_preprocessor_config
 from .uploader import set_uploader_config
 
 LOG = getLogger(__name__)
@@ -68,7 +68,7 @@ class Config:
 
         """
         set_recorder_config(self.modules_config['recording'])
-        set_preprocessor_config(self.modules_config['preprocess'])
+        # set_preprocessor_config(self.modules_config['preprocess'])
         set_uploader_config(self.modules_config['upload'])
         LOG.info('Modules configured')
 
@@ -180,6 +180,7 @@ class Config:
                         }
                 }
         }
+        # TODO: below dict not needed
         modules_config_update = {
 
         }

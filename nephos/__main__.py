@@ -136,7 +136,8 @@ def start():
         ("list share", "lssh"): client.share_handler.display_shr_entities,
         ("remove share", "rmsh"): client.share_handler.delete_entity,
         ("list tasks", "lstk"): client.preprocessor.display_tasks,
-        ("remove task", "rmtk"): client.preprocessor.rm_task
+        ("remove task", "rmtk"): client.preprocessor.rm_task,
+        ("adtk", "add task"): client.preprocessor.add_task
     }
 
     LOG.info("NOTE: enter commands during runtime to perform operations over nephos, try \"help\"!")

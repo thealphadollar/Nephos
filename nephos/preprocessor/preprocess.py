@@ -54,6 +54,20 @@ class PreprocessHandler:
         if tasks_pool:
             POOL.starmap(ApplyProcessMethods, tasks_pool)
 
+    # TODO: remove this
+    @staticmethod
+    def add_task():
+        """
+        this is for testing the preprocessor
+
+        Returns
+        -------
+
+        """
+        orig_path = input("Orig_path: ")
+        ip_addr = input("IP_Addr: ")
+        PreprocessHandler.insert_task(orig_path, ip_addr)
+
     @staticmethod
     def insert_task(orig_path, ip_addr):
         """
@@ -76,6 +90,7 @@ class PreprocessHandler:
             with DBHandler.connect() as db_cur:
                 ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
                 store_path = os.path.join(__upload_dir__, ch_name, str(datetime.now().strftime("%Y-%m-%d_%H%M")))
+                os.makedirs(store_path, exist_ok=True)
                 lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
                 data = {

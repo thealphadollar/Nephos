@@ -84,7 +84,7 @@ class Uploader(ABC):
             upload_pool.append((task[TSK_STORE_INDEX], task[TSK_SHR_INDEX]))
 
         if upload_pool:
-            POOL.starmap(partial(up_func, client=client), upload_pool)
+            POOL.starmap(partial(up_func, service=client), upload_pool)
 
     @staticmethod
     @abstractmethod
