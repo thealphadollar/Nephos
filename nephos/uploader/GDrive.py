@@ -84,12 +84,13 @@ class GDrive(Uploader):
         service = GDrive._get_upload_service()
         file_service = service.files()
         permissions_service = service.permissions()
+        batch_service = service.new_batch_http_request(callback=GDrive._share_callback)
         try:
             try:
                 GDrive._set_uploading(folder)
                 folder_id = GDrive._create_folder(file_service, folder)
                 GDrive._upload_files(file_service, folder, folder_id)
-                GDrive._share(permissions_service, folder_id, share_list)
+                GDrive._share(batch_service, permissions_service, folder_id, share_list)
                 GDrive._remove(folder)
                 LOG.debug("%s uploaded successfully!")
             except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
@@ -201,7 +202,7 @@ class GDrive(Uploader):
             body=file_metadata,
             fields='id'
         ).execute().get('id')
-        LOG.debug("%s folder upload, folder id: %s", folder, folder_id)
+        LOG.debug("%s folder created, id: %s", folder, folder_id)
         return folder_id
 
     @staticmethod
@@ -225,15 +226,15 @@ class GDrive(Uploader):
         -------
 
         """
-        files = [os.path.abspath(x) for x in os.listdir(folder)]
+        files = [os.path.join(folder, x) for x in os.listdir(folder)]
         for file_path in files:
             file_metadata = {
                 'name': GDrive._get_name(file_path),
-                'parents': folder_id
+                'parents': [folder_id]
             }
             media = MediaFileUpload(
                 file_path,
-                mimetype=GDrive._get_mimetype(GDrive._get_name(file)),
+                mimetype=GDrive._get_mimetype(GDrive._get_name(file_path)),
                 resumable=True
             )
             file_id = file_service.create(
@@ -244,7 +245,7 @@ class GDrive(Uploader):
             LOG.debug("%s uploaded to file ID: %s", file_path, file_id)
 
     @staticmethod
-    def _share(perm_service, folder_id, share_list):
+    def _share(batch_service, perm_service, folder_id, share_list):
         """
         Share a given folderid with some other entity.
         Role defines the level of access the entity can have.
@@ -254,6 +255,8 @@ class GDrive(Uploader):
 
         Parameters
         ----------
+        batch_service
+            batch http requests managing service for google drive
         perm_service
             permissions managing service for google drive
         folder_id
@@ -274,12 +277,13 @@ class GDrive(Uploader):
                 "role": "reader",
                 "emailAddress": email
             }
-            perm_metadata = perm_service.create(
+            batch_service.add(perm_service.create(
                 fileid=folder_id,
-                body=permission
-            ).execute()
+                body=permission,
+                fields='id',
+            ))
 
-            LOG.debug(perm_metadata)
+        batch_service.execute()
 
     @staticmethod
     def _get_mimetype(filename):
@@ -303,9 +307,18 @@ class GDrive(Uploader):
         extension = name_parts[len(name_parts)-1]
 
         mimetype = {
-            "mp4": 'application/vnd.google-apps.video',
-            "txt": 'application/vnd.google-apps.document',
-            "srt": 'application/vnd.google-apps.document'
+            "mp4": 'video/mp4',
+            "txt": 'text/plain',
+            "srt": 'text/plain'
         }
 
         return mimetype[extension]
+
+    @staticmethod
+    def _share_callback(request_id, response, exception):
+        if exception:
+            # Handle error
+            LOG.debug(exception)
+        else:
+            LOG.debug("Permission Id: %s", response.get('id'))
+

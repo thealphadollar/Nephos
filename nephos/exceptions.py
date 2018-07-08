@@ -96,6 +96,7 @@ class UploadingFailed(Exception):
     Handles failure of uploading and reverts the status back to processed.
     """
     def __init__(self, store_path, db_cur):
+        # TODO: this is not working
         db_cur.execute(UNSET_UPLOADING_COMMAND, (store_path, ))
         super(UploadingFailed, self).__init__()
 

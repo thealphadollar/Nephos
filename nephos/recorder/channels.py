@@ -9,7 +9,7 @@ from datetime import datetime
 from . import get_recorder_config
 from ..manage_db import DBHandler, CH_STAT_INDEX
 from ..exceptions import DBException
-from .. import __recording_dir__, __upload_dir__
+from .. import __recording_dir__
 from .. import validate_entries
 from ..preprocessor.preprocess import PreprocessHandler
 
@@ -90,9 +90,7 @@ class ChannelHandler:
 
                 # create directory for channel recordings and putting processed files
                 ch_dir = os.path.join(__recording_dir__, ch_data[key]["name"])
-                processed_ch_dir = os.path.join(__upload_dir__, ch_data[key]["name"])
                 os.makedirs(ch_dir, exist_ok=True)
-                os.makedirs(processed_ch_dir, exist_ok=True)
 
     @staticmethod
     def delete_channel():
