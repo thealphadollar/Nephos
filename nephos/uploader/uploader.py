@@ -5,7 +5,6 @@ All uploading clients should be derived class Uploader and implement the necessa
 from abc import ABC, abstractmethod
 import ntpath
 import shutil
-from functools import partial
 from logging import getLogger
 from multiprocessing import pool, cpu_count
 from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
@@ -28,7 +27,7 @@ class Uploader(ABC):
         self._config = get_uploader_config()
         self._scheduler = scheduler
         self.service = None  # uploading client service
-        # self.auth()
+        self.auth()
 
     @staticmethod
     @abstractmethod
@@ -55,14 +54,12 @@ class Uploader(ABC):
         pass
 
     @staticmethod
-    def begin_uploads(client, up_func):
+    def begin_uploads(up_func):
         """
         Parse folders to be uploaded from the database
 
         Parameters
         -------
-        client
-            the authenticated client to be used for uploading folders.
         up_func
             type: callable
             upload function to be called
@@ -84,11 +81,11 @@ class Uploader(ABC):
             upload_pool.append((task[TSK_STORE_INDEX], task[TSK_SHR_INDEX]))
 
         if upload_pool:
-            POOL.starmap(partial(up_func, service=client), upload_pool)
+            POOL.starmap(up_func, upload_pool)
 
     @staticmethod
     @abstractmethod
-    def _upload(folder, share_list, service):
+    def _upload(folder, share_list):
         """
         Uploads the folder and appends share entities
 
@@ -101,8 +98,7 @@ class Uploader(ABC):
             type: str
             str of entities the file is to be shared with,
             multiple values separated by space
-        service
-            uploading client of the cloud platform
+
         Returns
         -------
 
@@ -160,7 +156,7 @@ class Uploader(ABC):
             "run_uploader": self.begin_uploads,
         }
 
-        args = [self.auth(), self._upload]
+        args = [self._upload]
 
         for job in jobs:
             LOG.debug("Adding %s default job to scheduler...", job)

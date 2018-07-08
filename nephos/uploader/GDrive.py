@@ -16,7 +16,7 @@ from ..manage_db import DBHandler
 
 
 LOG = getLogger(__name__)
-SCOPES = "https://www.googleapis.com/auth/drive.file"
+SCOPES = "https://www.googleapis.com/auth/drive"
 APPLICATION_NAME = "Project Nephos"
 CRED_PATH = os.path.join(__nephos_dir__, ".up_cred")
 CLI_SECRET_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".client_secrets")
@@ -44,13 +44,14 @@ class GDrive(Uploader):
         try:
             http = credentials.authorize(Http())
             self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
-            return self.service
+            LOG.info("Authenticated successfully!")
         except HttpError as error:
             LOG.error("Authentication request failed!")
             LOG.debug(error)
             raise OAuthFailure
 
-    def _get_upload_service(self):
+    @staticmethod
+    def _get_upload_service():
         """
         Returns
         -------
@@ -58,11 +59,11 @@ class GDrive(Uploader):
             type: googleapiclient.discovery.build
             service to handle uploading and adding permissions for user
         """
-        print("\nservice is taken\n")
-        return self.service
+        http = GDrive._auth_from_file(file.Storage(CRED_PATH)).authorize(Http())
+        return discovery.build("drive", "v3", http=http, cache_discovery=False)
 
     @staticmethod
-    def _upload(folder, share_list, service):
+    def _upload(folder, share_list):
         """
         Uploads the folder and appends share entities
 
@@ -75,12 +76,12 @@ class GDrive(Uploader):
             type: str
             str of entities the file is to be shared with,
             multiple values separated by space
-        service
-            uploading client of the cloud platform
+
         Returns
         -------
 
         """
+        service = GDrive._get_upload_service()
         file_service = service.files()
         permissions_service = service.permissions()
         try:
