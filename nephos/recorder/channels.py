@@ -181,7 +181,8 @@ class ChannelHandler:
                                               stderr=subprocess.STDOUT)
             process_output, _ = record_process.communicate()
             LOG.debug(process_output)
-            PreprocessHandler.insert_task(addr, ip_addr)
+            if not test:
+                PreprocessHandler.insert_task(addr, ip_addr)
             return True
         except (OSError, subprocess.CalledProcessError) as err:
             LOG.warning("Recording for channel with ip %s, failed!", ip_addr)
