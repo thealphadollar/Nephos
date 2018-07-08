@@ -28,7 +28,7 @@ class Uploader(ABC):
         self._config = get_uploader_config()
         self._scheduler = scheduler
         self.service = None  # uploading client service
-        self.auth()
+        # self.auth()
 
     @staticmethod
     @abstractmethod
@@ -88,21 +88,21 @@ class Uploader(ABC):
 
     @staticmethod
     @abstractmethod
-    def _upload(service, folder, share_list):
+    def _upload(folder, share_list, service):
         """
         Uploads the folder and appends share entities
 
         Parameters
         -------
-        service
-            uploading client of the cloud platform
         folder
             type: str
             path to folder to be uploaded
         share_list
-            type: list
-            list of entities the file is to be shared with
-
+            type: str
+            str of entities the file is to be shared with,
+            multiple values separated by space
+        service
+            uploading client of the cloud platform
         Returns
         -------
 
@@ -160,7 +160,7 @@ class Uploader(ABC):
             "run_uploader": self.begin_uploads,
         }
 
-        args = [self._get_upload_service(), self._upload]
+        args = [self.auth(), self._upload]
 
         for job in jobs:
             LOG.debug("Adding %s default job to scheduler...", job)

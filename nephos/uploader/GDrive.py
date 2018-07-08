@@ -16,8 +16,8 @@ from ..manage_db import DBHandler
 
 
 LOG = getLogger(__name__)
-SCOPES = "https://www.googleapis.com/auth/drive"
-APPLICATION_NAME = "Nephos"
+SCOPES = "https://www.googleapis.com/auth/drive.file"
+APPLICATION_NAME = "Project Nephos"
 CRED_PATH = os.path.join(__nephos_dir__, ".up_cred")
 CLI_SECRET_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".client_secrets")
 
@@ -44,6 +44,7 @@ class GDrive(Uploader):
         try:
             http = credentials.authorize(Http())
             self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
+            return self.service
         except HttpError as error:
             LOG.error("Authentication request failed!")
             LOG.debug(error)
@@ -57,17 +58,16 @@ class GDrive(Uploader):
             type: googleapiclient.discovery.build
             service to handle uploading and adding permissions for user
         """
+        print("\nservice is taken\n")
         return self.service
 
     @staticmethod
-    def _upload(service, folder, share_list):
+    def _upload(folder, share_list, service):
         """
         Uploads the folder and appends share entities
 
         Parameters
         -------
-        service
-            uploading client of the cloud platform
         folder
             type: str
             path to folder to be uploaded
@@ -75,7 +75,8 @@ class GDrive(Uploader):
             type: str
             str of entities the file is to be shared with,
             multiple values separated by space
-
+        service
+            uploading client of the cloud platform
         Returns
         -------
 
@@ -90,8 +91,10 @@ class GDrive(Uploader):
                 GDrive._share(permissions_service, folder_id, share_list)
                 GDrive._remove(folder)
                 LOG.debug("%s uploaded successfully!")
-            except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError):
+            except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
+                    HttpError) as error:
                 LOG.warning("Uploading %s failed! Will retry later", folder)
+                LOG.debug(error)
                 with DBHandler.connect() as db_cur:
                     raise UploadingFailed(folder, db_cur)
         except UploadingFailed:

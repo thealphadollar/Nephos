@@ -4,7 +4,7 @@ Contains the main preprocess class
 import os
 from logging import getLogger
 from sqlite3 import Error
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, pool
 from datetime import datetime
 from . import get_preprocessor_config
 from .methods import ApplyProcessMethods
@@ -52,7 +52,10 @@ class PreprocessHandler:
             tasks_pool.append((task[TSK_PATH_INDEX], task[TSK_STORE_INDEX]))
 
         if tasks_pool:
-            POOL.starmap(ApplyProcessMethods, tasks_pool)
+            try:
+                POOL.starmap(ApplyProcessMethods, tasks_pool)
+            except pool.MaybeEncodingError as _:
+                pass
 
     # TODO: remove this
     @staticmethod
