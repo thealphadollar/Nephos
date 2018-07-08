@@ -44,7 +44,6 @@ class GDrive(Uploader):
         try:
             http = credentials.authorize(Http())
             self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
-            LOG.info("Authenticated successfully!")
         except HttpError as error:
             LOG.error("Authentication request failed!")
             LOG.debug(error)
