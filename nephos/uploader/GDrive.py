@@ -162,7 +162,7 @@ class GDrive(Uploader):
         flow.user_agent = APPLICATION_NAME
         url = flow.step1_get_authorize_url()
 
-        LOG.info("Please visit the following URL: {auth_url}".format(
+        LOG.critical("Please visit the following URL: {auth_url}".format(
             auth_url=url
         ))
         code = input("Enter the code: ")
