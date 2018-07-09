@@ -103,3 +103,4 @@ ENV/
 .pytest_cache/
 coverage.xml
 test_samples
+*.swp
