@@ -4,7 +4,6 @@ Contains all the methods applied in preprocessing
 import os
 import subprocess
 import json
-import codecs
 from logging import getLogger
 from . import get_preprocessor_config
 from .share_handler import ShareHandler
@@ -30,7 +29,6 @@ GET_CH_INFO = """SELECT *
                 FROM channels
                 WHERE name = ?"""
 MIN_BYTES = 1024  # 1KB
-READER = codecs.getreader('utf-8')
 
 
 class ApplyProcessMethods:
@@ -222,6 +220,7 @@ class ApplyProcessMethods:
         """
         failed = False
         try:
+            LOG.debug("running command: %s", cmd)
             conversion_process = subprocess.Popen(cmd,
                                                   shell=True,
                                                   stdout=subprocess.PIPE,

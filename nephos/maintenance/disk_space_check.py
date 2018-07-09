@@ -35,7 +35,7 @@ class DiskSpaceCheck(Checker):
         min_percent = self._get_data(job_type, "min_percent")
 
         total, _, free = shutil.disk_usage(__nephos_dir__)  # provides data in bytes
-        result_msg = [""]
+        result_msg = []
         critical_flag = False  # flag is true if error is critical
 
         # evaluate for free space left
@@ -59,7 +59,7 @@ class DiskSpaceCheck(Checker):
             result_msg.append("Free Disk Percentage:  The free space on disk is {value:0.2f}%"
                               .format(value=((free/total) * 100)))
 
-        self._handle(critical_flag, "\n".join(result_msg))
+        self._handle(critical_flag, " ".join(result_msg))
 
     @staticmethod
     def _gb_to_bytes(in_gbs):

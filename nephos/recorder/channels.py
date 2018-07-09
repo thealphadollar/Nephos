@@ -175,6 +175,7 @@ class ChannelHandler:
             multicat_path=path_to_multicat, duration=timeout_str, channel_ip=ip_addr,
             ifaddr=ifaddr, out_file=addr)
         try:
+            LOG.debug("running '%s' command", cmd)
             record_process = subprocess.Popen(cmd,
                                               shell=True,
                                               stdout=subprocess.PIPE,
