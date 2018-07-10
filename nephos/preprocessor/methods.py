@@ -10,6 +10,7 @@ from .share_handler import ShareHandler
 from ..manage_db import DBHandler, SL_MAIL_INDEX, SL_TAG_INDEX, \
     TSK_CHNAME_INDEX, TSK_LANG_INDEX, TSK_SUBLANG_INDEX, CH_COUN_INDEX, \
     CH_LANG_INDEX, CH_TMZ_INDEX
+from .. import __config_dir__
 from ..exceptions import DBException, ProcessFailedException
 
 LOG = getLogger(__name__)
@@ -28,6 +29,7 @@ GET_TASK_INFO = """SELECT *
 GET_CH_INFO = """SELECT *
                 FROM channels
                 WHERE name = ?"""
+PATH_TO_PROCESSING_SCRIPT = os.path.join(__config_dir__, "processing.sh")
 MIN_BYTES = 1024  # 1KB
 
 
@@ -50,7 +52,7 @@ class ApplyProcessMethods:
         self.addr = path_to_file
         self.name = self._get_name()
         self.store_dir = store_path
-        self.config = get_preprocessor_config()
+        # self.config = get_preprocessor_config()
         try:
             with DBHandler.connect() as db_cur:
                 self.db_cur = db_cur
@@ -69,55 +71,91 @@ class ApplyProcessMethods:
 
         """
         try:
-            self._extract_subtitles()
-            self._convert_to_mp4()
+            self._execute_processing()
             self._add_share_entities()
             os.remove(self.addr)
             self.db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
         except ProcessFailedException as _:
             pass
 
-    def _extract_subtitles(self):
+    def _execute_processing(self):
         """
-        Extracts subtitles using provided CCExtractor
-        Returns
+        Executes the script for processing of the recording
+
+        Raises
         -------
-
+        ProcessFailedException
+            In case of exit code not 0 from command or output file not appropriate
         """
-        path_ccextractor = self.config["path_to_CCEx"]
-        ccex_args = self.config["CCEx_args"]
-        # TODO: Extract subtitles for all present language
-        # TODO: Test CCEx commands
-        out_file = os.path.join(self.store_dir, self.name + ".srt")
-
-        cmd = "{path_ccextractor} {input} {args} -o {output}".format(
-            path_ccextractor=path_ccextractor,
-            input=self.addr,
-            args=ccex_args,
-            output=out_file
+        failed = False
+        out_file_ccex = os.path.join(self.store_dir, self.name + ".srt")
+        out_file_mp4 = os.path.join(self.store_dir, self.name + ".mp4")
+        cmd = "{path_script} {INPUT} {OUT_FILE_WITHOUT_EXTENSION} {OUT_FOLDER}".format(
+            path_script=PATH_TO_PROCESSING_SCRIPT,
+            INPUT=self.addr,
+            OUT_FILE_WITHOUT_EXTENSION=self.name,
+            OUT_FOLDER=self.store_dir
         )
-        self._execute(cmd, out_file)
+        try:
+            LOG.debug("running command: %s", cmd)
+            conversion_process = subprocess.Popen(cmd,
+                                                  shell=True,
+                                                  stdout=subprocess.PIPE,
+                                                  stderr=subprocess.STDOUT)
+            output, _ = conversion_process.communicate()
+            LOG.debug(output)
+        except subprocess.CalledProcessError as err:
+            LOG.debug(err)
+            failed = True
 
-    def _convert_to_mp4(self):
-        """
-        Converts the video to mp4 format using ffmpeg
-        Returns
-        -------
+        try:
+            if os.stat(out_file_ccex).st_size < MIN_BYTES or \
+             os.stat(out_file_mp4).st_size < MIN_BYTES:
+                failed = True
+        except FileNotFoundError as err:
+            LOG.debug(err)
+            failed = True
 
-        """
-        path_ffmpeg = self.config["path_to_ffmpeg"]
-        ffmpeg_args = self.config["ffmpeg_args"]
-        # TODO: implement dual pass
-        # TODO: implement the correct arguments for conversion
-        out_file = os.path.join(self.store_dir, self.name + ".mp4")
+        if failed:
+            raise ProcessFailedException(self.addr, self.store_dir, self.db_cur)
 
-        cmd = "{path_ffmpeg} -i {input} {args} {output}".format(
-            path_ffmpeg=path_ffmpeg,
-            input=self.addr,
-            args=ffmpeg_args,
-            output=out_file
-        )
-        self._execute(cmd, out_file)
+    # def _extract_subtitles(self):
+    #     """
+    #     Extracts subtitles using provided CCExtractor
+    #     Returns
+    #     -------
+    #
+    #     """
+    #     path_ccextractor = self.config["path_to_CCEx"]
+    #     ccex_args = self.config["CCEx_args"]
+    #     out_file = os.path.join(self.store_dir, self.name + ".srt")
+    #
+    #     cmd = "{path_ccextractor} {input} {args} -o {output}".format(
+    #         path_ccextractor=path_ccextractor,
+    #         input=self.addr,
+    #         args=ccex_args,
+    #         output=out_file
+    #     )
+    #     self._execute(cmd, out_file)
+    #
+    # def _convert_to_mp4(self):
+    #     """
+    #     Converts the video to mp4 format using ffmpeg
+    #     Returns
+    #     -------
+    #
+    #     """
+    #     path_ffmpeg = self.config["path_to_ffmpeg"]
+    #     ffmpeg_args = self.config["ffmpeg_args"]
+    #     out_file = os.path.join(self.store_dir, self.name + ".mp4")
+    #
+    #     cmd = "{path_ffmpeg} -i {input} {args} {output}".format(
+    #         path_ffmpeg=path_ffmpeg,
+    #         input=self.addr,
+    #         args=ffmpeg_args,
+    #         output=out_file
+    #     )
+    #     self._execute(cmd, out_file)
 
     def _add_share_entities(self):
         """
@@ -199,47 +237,6 @@ class ApplyProcessMethods:
         filename = os.path.basename(self.addr)
         filename_without_extension = os.path.splitext(filename)[0]
         return filename_without_extension
-
-    def _execute(self, cmd, out_file):
-        """
-        Executes a command as a subprocess.
-
-        Parameters
-        -------
-        cmd
-            type: str
-            command to be run
-        out_file
-            type: str
-            absolute path to the outfile produced
-
-        Raises
-        -------
-        ProcessFailedException
-            In case of exit code not 0 from command or output file not appropriate
-        """
-        failed = False
-        try:
-            LOG.debug("running command: %s", cmd)
-            conversion_process = subprocess.Popen(cmd,
-                                                  shell=True,
-                                                  stdout=subprocess.PIPE,
-                                                  stderr=subprocess.STDOUT)
-            output, _ = conversion_process.communicate()
-            LOG.debug(output)
-        except subprocess.CalledProcessError as err:
-            LOG.debug(err)
-            failed = True
-
-        try:
-            if os.stat(out_file).st_size < MIN_BYTES:
-                failed = True
-        except FileNotFoundError as err:
-            LOG.debug(err)
-            failed = True
-
-        if failed:
-            raise ProcessFailedException(self.addr, self.store_dir, self.db_cur)
 
     @staticmethod
     def get_lang(path_to_file):
