@@ -3,7 +3,7 @@
 INPUT="$1"
 OUT_FILE_WITHOUT_EXTENSION="$2"
 OUT_FOLDER="$3"
-PATH_TO_CCEx="ccextractor"
+PATH_TO_CCEx="/home/redhen/ccextractor.0.77/linux/ccextractor"
 PATH_TO_FFMPEG="ffmpeg"
 
 cd "${OUT_FOLDER}"
