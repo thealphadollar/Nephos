@@ -90,7 +90,7 @@ class ApplyProcessMethods:
         failed = False
         out_file_ccex = os.path.join(self.store_dir, self.name + ".srt")
         out_file_mp4 = os.path.join(self.store_dir, self.name + ".mp4")
-        cmd = "{path_script} {INPUT} {OUT_FILE_WITHOUT_EXTENSION} {OUT_FOLDER}".format(
+        cmd = '{path_script} "{INPUT}" "{OUT_FILE_WITHOUT_EXTENSION}" "{OUT_FOLDER}"'.format(
             path_script=PATH_TO_PROCESSING_SCRIPT,
             INPUT=self.addr,
             OUT_FILE_WITHOUT_EXTENSION=self.name,
