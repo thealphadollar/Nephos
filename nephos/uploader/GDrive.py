@@ -226,7 +226,10 @@ class GDrive(Uploader):
 
         """
         files = [os.path.join(folder, x) for x in os.listdir(folder)]
-        files.remove(os.path.join(folder, 'ffmpeg2pass-0.log.mbtree'))
+        try:
+            files.remove(os.path.join(folder, 'ffmpeg2pass-0.log.mbtree'))
+        except ValueError:
+            pass
         for file_path in files:
             file_metadata = {
                 'name': GDrive._get_name(file_path),

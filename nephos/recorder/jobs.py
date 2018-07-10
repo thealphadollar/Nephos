@@ -110,7 +110,7 @@ class JobHandler:
                 duration = job_data[job_key]["duration"]
                 job_time = str(job_data[job_key]["start_time"])
                 week_str = self.to_weekday(job_data[job_key]["repetition"])
-                job_name = job_data[job_key]["name"].lower()
+                job_name = "_".join(job_data[job_key]["name"].lower().split())
 
                 self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
                                                   job_time=job_time, week_days=week_str,

@@ -262,7 +262,7 @@ class ApplyProcessMethods:
         aud_lang = []
         sub_lang = []
         path_ffprobe = get_preprocessor_config()['path_to_ffprobe']
-        cmd = "{path_ffprobe} -v quiet -print_format json -show_streams {path_to_file}".format(
+        cmd = "{path_ffprobe} -v quiet -print_format json -show_streams '{path_to_file}'".format(
             path_ffprobe=path_ffprobe,
             path_to_file=path_to_file
         )

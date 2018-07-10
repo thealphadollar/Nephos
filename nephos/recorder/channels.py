@@ -171,7 +171,7 @@ class ChannelHandler:
         if ifaddr:
             ifaddr = '/ifaddr=' + ifaddr
 
-        cmd = "{multicat_path} {duration} -u @{channel_ip}{ifaddr} {out_file}".format(
+        cmd = "{multicat_path} {duration} -u @{channel_ip}{ifaddr} '{out_file}'".format(
             multicat_path=path_to_multicat, duration=timeout_str, channel_ip=ip_addr,
             ifaddr=ifaddr, out_file=addr)
         try:
