@@ -104,7 +104,12 @@ class JobHandler:
             try:
                 job_data[job_key]["channel_name"] = "_".join(job_data[job_key]["channel_name"].lower().split())
                 db_cur.execute(sql_command, (job_data[job_key]["channel_name"], ))
-                ip_addr = db_cur.fetchall()[0][0]
+                try:
+                    ip_addr = db_cur.fetchall()[0][0]
+                except IndexError as err:
+                    LOG.info("No such channel found!")
+                    LOG.debug(err)
+                    return 
                 out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
                                         job_data[job_key]["name"])
                 duration = job_data[job_key]["duration"]
