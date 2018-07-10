@@ -160,8 +160,10 @@ class Uploader(ABC):
 
         for job in jobs:
             LOG.debug("Adding %s default job to scheduler...", job)
-            self._scheduler.add_cron_necessary_job(job_funcs[job], job, self._config['start_time'],
-                                                   self._config['repetition'], args)
+            timings = self._config['timings']
+            for key in timings:
+                self._scheduler.add_cron_necessary_job(job_funcs[job], job+"@"+timings[key], timings[key],
+                                                       self._config['repetition'], args)
 
     @staticmethod
     def _get_name(path):
