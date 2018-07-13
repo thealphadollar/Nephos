@@ -52,7 +52,6 @@ class ApplyProcessMethods:
         self.addr = path_to_file
         self.name = self._get_name()
         self.store_dir = store_path
-        # self.config = get_preprocessor_config()
         try:
             with DBHandler.connect() as db_cur:
                 self.db_cur = db_cur
@@ -71,6 +70,7 @@ class ApplyProcessMethods:
 
         """
         try:
+            os.makedirs(self.store_dir, exist_ok=True)
             self._execute_processing()
             self._add_share_entities()
             os.remove(self.addr)

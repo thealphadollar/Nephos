@@ -109,7 +109,7 @@ class JobHandler:
                 except IndexError as err:
                     LOG.info("No such channel found!")
                     LOG.debug(err)
-                    return 
+                    return
                 out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
                                         job_data[job_key]["name"])
                 duration = job_data[job_key]["duration"]
