@@ -82,7 +82,7 @@ class ChannelOnlineCheck(Checker):
     def _check_ip(ip_addr, db_cur, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
-        in the database.
+        in the database; status set to 'down' for unreachable channels and 'up' for healthy channels.
 
         Parameters
         -------
