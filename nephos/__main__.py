@@ -1,10 +1,12 @@
 """
 The file run when Nephos is called as a module
 """
+import os
 import sys
 import logging
 import time
 import click
+from . import __nephos_dir__
 from .nephos import Nephos
 from .ver_info import VER_INFO
 
@@ -118,6 +120,10 @@ def start():
     run nephos in the terminal
 
     """
+    if not os.path.exists(__nephos_dir__):
+        print("Error: first initialise Nephos directory using 'init' argument!")
+        exit(1)
+        
     client = Nephos()
     client.start()
 
