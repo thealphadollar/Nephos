@@ -106,9 +106,14 @@ class PreprocessHandler:
                 task_id = DBHandler.insert_data(db_cur, "tasks", data)
                 if task_id is not None:
                     LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
+                else:
+                    raise DBException
 
-        except DBException as err:
+        except (DBException, KeyError) as err:
             LOG.warning("Failed to insert task for recording: %s", orig_path)
+            if KeyError:
+                LOG.debug("%s is a corrupted recording!", orig_path)
+            os.remove(orig_path)
             LOG.debug(err)
 
     @staticmethod
