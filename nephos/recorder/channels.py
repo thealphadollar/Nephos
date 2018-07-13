@@ -5,6 +5,7 @@ from logging import getLogger
 from sqlite3 import Error
 import subprocess
 import os
+import string
 from datetime import datetime
 from . import get_recorder_config
 from ..manage_db import DBHandler, CH_STAT_INDEX
@@ -15,6 +16,7 @@ from ..preprocessor.preprocess import PreprocessHandler
 
 LOG = getLogger(__name__)
 CMD_GET_CHANNELS = "SELECT * FROM channels"
+MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this
 
 
 class ChannelHandler:
@@ -159,6 +161,7 @@ class ChannelHandler:
         """
         if not test:
             addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
+            aux_addr = str.replace(addr, ".ts", ".aux")
             if not _is_up(ip_addr):
                 return False
 
@@ -183,7 +186,11 @@ class ChannelHandler:
             process_output, _ = record_process.communicate()
             LOG.debug(process_output)
             if not test:
-                PreprocessHandler.insert_task(addr, ip_addr)
+                os.remove(aux_addr)
+                if os.stat(addr).st_size <= MIN_BYTES:
+                    os.remove(addr)
+                else:
+                    PreprocessHandler.insert_task(addr, ip_addr)
             return True
         except (OSError, subprocess.CalledProcessError) as err:
             LOG.warning("Recording for channel with ip %s, failed!", ip_addr)
