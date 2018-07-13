@@ -5,7 +5,7 @@
 # You can add MULTIPLE UPLOAD TIMES by appending into the upload->timings section below!
 recording:
   ifaddr: '159.237.36.240'  # bind to the specific network interface, by link number, leave empty for no 'ifaddr' argument
-  path_to_multicat: '/home/redhen/multicat-2.1/multicat'  # path to multicat binary
+  path_to_multicat: '/home/redhen/multicat-2.3/multicat'  # path to multicat binary
 preprocess:
   path_to_ffprobe: 'ffprobe'  # absolute path to ffprobe binary, or leave default for using system wide install
   interval: 30  # minutes,

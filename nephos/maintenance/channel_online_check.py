@@ -17,6 +17,9 @@ MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than t
 CH_DOWN_COMMAND = """UPDATE channels
                     SET status = "down"
                     WHERE ip = ?"""
+CH_UP_COMMAND = """UPDATE channels
+                    SET status = "up"
+                    WHERE ip = ?"""
 
 
 class ChannelOnlineCheck(Checker):
@@ -112,6 +115,10 @@ class ChannelOnlineCheck(Checker):
 
         if is_down:
             db_cur.execute(CH_DOWN_COMMAND, (ip_addr,))
+            LOG.debug("IP:%s is down", ip_addr)
+        else:
+            db_cur.execute(CH_UP_COMMAND, (ip_addr,))
+            LOG.debug("IP:%s is up", ip_addr)
 
     def _channel_stats(self):
         """

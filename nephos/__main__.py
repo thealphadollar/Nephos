@@ -123,7 +123,7 @@ def start():
     if not os.path.exists(__nephos_dir__):
         print("Error: first initialise Nephos directory using 'init' argument!")
         exit(1)
-        
+
     client = Nephos()
     client.start()
 
