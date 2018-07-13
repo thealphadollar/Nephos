@@ -92,7 +92,7 @@ class PreprocessHandler:
         try:
             with DBHandler.connect() as db_cur:
                 ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
-                store_path = os.path.join(__upload_dir__, ch_name + "-" + str(datetime.now().strftime("%Y-%m-%d")))
+                store_path = os.path.join(__upload_dir__, ch_name + "_" + str(datetime.now().strftime("%Y-%m-%d-%H-%M")))
                 lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
                 data = {
