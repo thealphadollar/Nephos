@@ -88,7 +88,6 @@ class ApplyProcessMethods:
             In case of exit code not 0 from command or output file not appropriate
         """
         failed = False
-        out_file_ccex = os.path.join(self.store_dir, self.name + ".srt")
         out_file_mp4 = os.path.join(self.store_dir, self.name + ".mp4")
         cmd = '{path_script} "{INPUT}" "{OUT_FILE_WITHOUT_EXTENSION}" "{OUT_FOLDER}"'.format(
             path_script=PATH_TO_PROCESSING_SCRIPT,
@@ -109,8 +108,7 @@ class ApplyProcessMethods:
             failed = True
 
         try:
-            if os.stat(out_file_ccex).st_size < MIN_BYTES or \
-             os.stat(out_file_mp4).st_size < MIN_BYTES:
+            if os.stat(out_file_mp4).st_size < MIN_BYTES:
                 failed = True
         except FileNotFoundError as err:
             LOG.debug(err)
