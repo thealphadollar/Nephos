@@ -12,7 +12,7 @@ from ..recorder.channels import ChannelHandler
 from ..exceptions import DBException
 
 LOG = getLogger(__name__)
-POOL = pool.ThreadPool(cpu_count())
+POOL = pool.ThreadPool(4 * cpu_count())
 MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this
 CH_DOWN_COMMAND = """UPDATE channels
                     SET status = "down"

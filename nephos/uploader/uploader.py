@@ -18,7 +18,7 @@ CMD_SET_UPLOADING = """UPDATE tasks
 CMD_RM_TASK = """DELETE
                 FROM tasks
                 WHERE store_path = ?"""
-POOL = pool.ThreadPool(cpu_count())
+POOL = pool.ThreadPool(4 * cpu_count())
 
 
 class Uploader(ABC):
