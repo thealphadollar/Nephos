@@ -30,7 +30,7 @@ REGEX_CHECK = {
     "language": re.compile(r"[a-zA-Z ]+"),
     "timezone": re.compile(r"[a-zA-Z ]+"),
     "start_time": re.compile(r"\d{2}:\d{2}"),
-    "duration": re.compile(r"\d+"),
+    "duration": re.compile(r"[^0]\d*"),
     "repetition": re.compile(r"[01]{7}")
 }
 
