@@ -5,6 +5,7 @@ All uploading clients should be derived class Uploader and implement the necessa
 from abc import ABC, abstractmethod
 import ntpath
 import shutil
+import sqlite3
 from logging import getLogger
 from multiprocessing import pool, cpu_count
 from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
@@ -71,7 +72,7 @@ class Uploader(ABC):
             with DBHandler.connect() as db_cur:
                 db_cur.execute(CMD_GET_FOLDERS)
                 tasks_list = db_cur.fetchall()
-        except DBException as error:
+        except (DBException, sqlite3.OperationalError) as error:
             LOG.warning("Failed to connect to database")
             LOG.debug(error)
             return

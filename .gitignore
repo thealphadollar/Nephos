@@ -104,3 +104,4 @@ ENV/
 coverage.xml
 test_samples
 *.swp
+nephos/uploader/.nephos-key
