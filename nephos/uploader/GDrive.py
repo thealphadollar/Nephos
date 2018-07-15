@@ -3,23 +3,18 @@ Derived class from uploader which manages uploading to Google Drive account.
 """
 import os
 from logging import getLogger
-from oauth2client import client, file
-from oauth2client.clientsecrets import InvalidClientSecretsError
 from googleapiclient.http import HttpError, MediaFileUpload, UnexpectedMethodError, \
     ResumableUploadError, UnexpectedBodyError
 from googleapiclient import discovery
-from httplib2 import Http
+from google.oauth2 import service_account
 from .uploader import Uploader
-from .. import __nephos_dir__
 from ..exceptions import OAuthFailure, UploadingFailed
 from ..manage_db import DBHandler
 
 
 LOG = getLogger(__name__)
-SCOPES = "https://www.googleapis.com/auth/drive"
-APPLICATION_NAME = "Project Nephos"
-CRED_PATH = os.path.join(__nephos_dir__, ".up_cred")
-CLI_SECRET_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".client_secrets")
+SCOPES = ["https://www.googleapis.com/auth/drive"]
+SERVICE_KEY_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".nephos-key")
 
 
 class GDrive(Uploader):
@@ -32,18 +27,17 @@ class GDrive(Uploader):
         -------
 
         """
-        store = file.Storage(CRED_PATH)
         try:
-            credentials = self._auth_from_file(store)
-            LOG.info("Drive API authenticated using saved credentials!")
-        except OAuthFailure:
-            credentials = self._init_auth_flow()
-
-        store.put(credentials)
+            credentials = service_account.Credentials.from_service_account_file(SERVICE_KEY_PATH,
+                                                                                scopes=SCOPES)
+            LOG.info("Drive API authenticated using service account credentials!")
+        except service_account.Credentials.expired:
+            raise OAuthFailure
 
         try:
-            http = credentials.authorize(Http())
-            self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
+            self.service = discovery.build("drive", "v3", credentials=credentials,
+                                           cache_discovery=False)
+            LOG.info("Drive API authenticated using service account credentials!")
         except HttpError as error:
             LOG.error("Authentication request failed!")
             LOG.debug(error)
@@ -58,8 +52,9 @@ class GDrive(Uploader):
             type: googleapiclient.discovery.build
             service to handle uploading and adding permissions for user
         """
-        http = GDrive._auth_from_file(file.Storage(CRED_PATH)).authorize(Http())
-        return discovery.build("drive", "v3", http=http, cache_discovery=False)
+        credentials = service_account.Credentials.from_service_account_file(SERVICE_KEY_PATH,
+                                                                            scopes=SCOPES)
+        return discovery.build("drive", "v3", credentials=credentials, cache_discovery=False)
 
     @staticmethod
     def _upload(folder, share_list):
@@ -100,82 +95,6 @@ class GDrive(Uploader):
                     raise UploadingFailed(folder, db_cur)
         except UploadingFailed:
             pass
-
-    @staticmethod
-    def _auth_from_file(store):
-        """
-        Uses the stored credentials to authenticate.
-
-        Parameters
-        -------
-        store
-            type: oauth2client.file.Storage
-            link to the file containing credentials
-
-        Returns
-        -------
-        credentials
-            type: Oauth2Credentials
-            Auth credentials stored in the file.
-        """
-        credentials = store.get()
-
-        def raise_error():
-            LOG.warning("Authentication using credentials file failed!")
-            raise OAuthFailure
-
-        if not credentials:
-            raise_error()
-        elif credentials.invalid:
-            raise_error()
-
-        return credentials
-
-    @staticmethod
-    def _init_auth_flow():
-        """
-        Authenticates with the google account via OAuth2.
-
-        Runs at the first start of Nephos, and stores the authentication in a file. If the
-        file is somehow tampered, this authentication method will be called again.
-
-        Returns
-        -------
-        credentials
-            type: OAuth2Credentials
-            The credentials after the flow is successful.
-        """
-
-        try:
-            flow = client.flow_from_clientsecrets(
-                filename=CLI_SECRET_PATH,
-                scope=SCOPES,
-                redirect_uri="urn:ietf:wg:oauth:2.0:oob"  # GUI is not opened
-            )
-        except (InvalidClientSecretsError, ValueError) as error:
-            LOG.error("Invalid client secrets file provided at {filepath}".format(
-                filepath=CLI_SECRET_PATH
-            ))
-            LOG.debug(error)
-            raise OAuthFailure()
-
-        flow.user_agent = APPLICATION_NAME
-        url = flow.step1_get_authorize_url()
-
-        LOG.critical("Please visit the following URL: {auth_url}".format(
-            auth_url=url
-        ))
-        code = input("Enter the code: ")
-
-        try:
-            credentials = flow.step2_exchange(code)
-        except client.FlowExchangeError as error:
-            LOG.error("Failed to authenticate!")
-            LOG.debug(error)
-            raise OAuthFailure()
-        LOG.info("Authenticated successfully")
-
-        return credentials
 
     @staticmethod
     def _create_folder(file_service, folder):
