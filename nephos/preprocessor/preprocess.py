@@ -92,22 +92,23 @@ class PreprocessHandler:
         try:
             with DBHandler.connect() as db_cur:
                 ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
-                store_path = os.path.join(__upload_dir__, ch_name + "_" + str(datetime.now().strftime("%Y-%m-%d-%H-%M")))
-                lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
-                data = {
-                    "orig_path": orig_path,
-                    "store_path": store_path,
-                    "ch_name": ch_name,
-                    "lang": lang,
-                    "sub_lang": sub_lang
-                }
+            store_path = os.path.join(__upload_dir__, ch_name + "_" + str(datetime.now().strftime("%Y-%m-%d-%H-%M")))
+            lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
-                task_id = DBHandler.insert_data(db_cur, "tasks", data)
-                if task_id is not None:
-                    LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
-                else:
-                    raise DBException
+            data = {
+                "orig_path": orig_path,
+                "store_path": store_path,
+                "ch_name": ch_name,
+                "lang": lang,
+                "sub_lang": sub_lang
+            }
+
+            task_id = DBHandler.insert_data(db_cur, "tasks", data)
+            if task_id is not None:
+                LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
+            else:
+                raise DBException
 
         except (DBException, KeyError) as err:
             LOG.warning("Failed to insert task for recording: %s", orig_path)

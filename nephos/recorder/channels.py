@@ -5,7 +5,6 @@ from logging import getLogger
 from sqlite3 import Error
 import subprocess
 import os
-import string
 from datetime import datetime
 from . import get_recorder_config
 from ..manage_db import DBHandler, CH_STAT_INDEX

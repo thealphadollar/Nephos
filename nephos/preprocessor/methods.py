@@ -54,8 +54,7 @@ class ApplyProcessMethods:
         self.store_dir = store_path
         try:
             with DBHandler.connect() as db_cur:
-                self.db_cur = db_cur
-                self.db_cur.execute(SET_PROCESSING_COMMAND, (self.addr, ))
+                db_cur.execute(SET_PROCESSING_COMMAND, (self.addr, ))
                 self._apply_methods()
         except DBException as error:
             LOG.warning("Couldn't connect to database for %s", path_to_file)
@@ -74,7 +73,12 @@ class ApplyProcessMethods:
             self._execute_processing()
             self._add_share_entities()
             os.remove(self.addr)
-            self.db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
+            try:
+                with DBHandler.connect() as db_cur:
+                    db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
+            except DBException as err:
+                LOG.debug(err)
+
         except ProcessFailedException as _:
             pass
 
@@ -115,7 +119,11 @@ class ApplyProcessMethods:
             failed = True
 
         if failed:
-            raise ProcessFailedException(self.addr, self.store_dir, self.db_cur)
+            try:
+                with DBHandler.connect() as db_cur:
+                    raise ProcessFailedException(self.addr, self.store_dir, db_cur)
+            except DBException as err:
+                LOG.debug(err)
 
     # def _extract_subtitles(self):
     #     """

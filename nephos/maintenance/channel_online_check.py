@@ -60,12 +60,7 @@ class ChannelOnlineCheck(Checker):
             # create a list of IPs and pass it to recording
             ips = self._extract_ips()
             if ips:  # when ip is not empty
-                try:
-                    with DBHandler.connect() as db_cur:
-                        POOL.map(partial(self._check_ip, db_cur=db_cur, path=tmpdir), ips)
-                except DBException as err:
-                    LOG.warning("Couldn't update channel status")
-                    LOG.debug(err)
+                POOL.map(partial(self._check_ip, path=tmpdir), ips)
 
                 self.channel_list = ChannelHandler.grab_ch_list()
                 new_stats = self._channel_stats()
@@ -79,7 +74,7 @@ class ChannelOnlineCheck(Checker):
         LOG.debug("tmp directory removed")
 
     @staticmethod
-    def _check_ip(ip_addr, db_cur, path):
+    def _check_ip(ip_addr, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
         in the database; status set to 'down' for unreachable channels and 'up' for healthy channels.
@@ -89,8 +84,6 @@ class ChannelOnlineCheck(Checker):
         ip_addr
             type: str
             ip address of the channel to be checked
-        db_cur
-            sqlite database cursor
         path
             type: dir
             temporary directory to be used for channel checking
@@ -113,12 +106,17 @@ class ChannelOnlineCheck(Checker):
             is_down = True
             LOG.debug("IP:%s check failed", ip_addr)
 
-        if is_down:
-            db_cur.execute(CH_DOWN_COMMAND, (ip_addr,))
-            LOG.debug("IP:%s is down", ip_addr)
-        else:
-            db_cur.execute(CH_UP_COMMAND, (ip_addr,))
-            LOG.debug("IP:%s is up", ip_addr)
+        try:
+            with DBHandler.connect() as db_cur:
+                if is_down:
+                    db_cur.execute(CH_DOWN_COMMAND, (ip_addr,))
+                    LOG.debug("IP:%s is down", ip_addr)
+                else:
+                    db_cur.execute(CH_UP_COMMAND, (ip_addr,))
+                    LOG.debug("IP:%s is up", ip_addr)
+        except DBException as err:
+            LOG.warning("Couldn't update channel status")
+            LOG.debug(err)
 
     def _channel_stats(self):
         """

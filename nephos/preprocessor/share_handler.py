@@ -33,8 +33,12 @@ class ShareHandler:
                 "tags": tags
             }
         }
-        with DBHandler.connect() as db_cur:
-            self.insert_share_entities(db_cur, shr_data)
+        try:
+            with DBHandler.connect() as db_cur:
+                self.insert_share_entities(db_cur, shr_data)
+        except DBException as err:
+            LOG.info("Failed to connect to database")
+            LOG.debug(err)
 
     @staticmethod
     def insert_share_entities(db_cur, shr_data):
@@ -87,7 +91,7 @@ class ShareHandler:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(CMD_DEL_SHRS, (sh_en_mail, ))
                 LOG.info("Share entity with email = %s removed from database", sh_en_mail)
-        except Error as err:
+        except (Error, DBException) as err:
             LOG.warning("Failed to remove channel!")
             LOG.debug(err)
 
