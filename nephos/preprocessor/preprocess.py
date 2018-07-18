@@ -103,8 +103,9 @@ class PreprocessHandler:
                 "lang": lang,
                 "sub_lang": sub_lang
             }
-
-            task_id = DBHandler.insert_data(db_cur, "tasks", data)
+            with DBHandler.connect() as db_cur:
+                task_id = DBHandler.insert_data(db_cur, "tasks", data)
+                
             if task_id is not None:
                 LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
             else:
