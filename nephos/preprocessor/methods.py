@@ -178,8 +178,11 @@ class ApplyProcessMethods:
         for entity in all_entities:
             if self._tag_match(entity[SL_TAG_INDEX].split(), tags_for_file.split()):
                 valid_entities.append(entity[SL_MAIL_INDEX])
-
-        self.db_cur.execute(SET_SHARE_COMMAND, (" ".join(valid_entities), self.addr, ))
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(SET_SHARE_COMMAND, (" ".join(valid_entities), self.addr, ))
+        except DBException as err:
+            LOG.debug(err)
 
     def _assemble_tags(self):
         """
@@ -193,18 +196,27 @@ class ApplyProcessMethods:
         tags = []
 
         # getting data from tasks tables
-        self.db_cur.execute(GET_TASK_INFO, (self.addr, ))
-        task_info = self.db_cur.fetchall()[0]
-        tags.append(task_info[TSK_CHNAME_INDEX])
-        tags.append(task_info[TSK_LANG_INDEX])
-        tags.append(task_info[TSK_SUBLANG_INDEX])
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(GET_TASK_INFO, (self.addr, ))
+                task_info = db_cur.fetchall()[0]
+            tags.append(task_info[TSK_CHNAME_INDEX])
+            tags.append(task_info[TSK_LANG_INDEX])
+            tags.append(task_info[TSK_SUBLANG_INDEX])
+        except DBException as err:
+            LOG.debug(err)
 
         # getting data from channels table
-        self.db_cur.execute(GET_CH_INFO, (task_info[TSK_CHNAME_INDEX], ))
-        ch_info = self.db_cur.fetchall()[0]
-        tags.append(ch_info[CH_COUN_INDEX])
-        tags.append(ch_info[CH_TMZ_INDEX])
-        tags.append(ch_info[CH_LANG_INDEX])
+        try:
+            with DBHandler.connect() as db_cur:
+                db_cur.execute(GET_CH_INFO, (task_info[TSK_CHNAME_INDEX], ))
+                ch_info = db_cur.fetchall()[0]
+                tags.append(ch_info[CH_COUN_INDEX])
+                tags.append(ch_info[CH_TMZ_INDEX])
+                tags.append(ch_info[CH_LANG_INDEX])
+                
+        except DBException as err:
+            LOG.debug(err)
 
         return " ".join(tags)
 
