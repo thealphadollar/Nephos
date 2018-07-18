@@ -12,8 +12,11 @@ Nephos will be developed, using Python and few other open source projects, to ac
 
 ***
 ## Installation (And Setup)
-1.  [Install Python3](https://kerneltalks.com/tools/install-python-3-on-linux-redhat-centos-ubuntu/)<br/>
-2.  [Install Pip](https://www.tecmint.com/install-pip-in-linux/)<br/>
+1. 1) [Install Python3](https://kerneltalks.com/tools/install-python-3-on-linux-redhat-centos-ubuntu/)<br/>
+   2) [Install Pip](https://www.tecmint.com/install-pip-in-linux/)<br/>
+2. 1) [Install FFMPEG and FFPROBE](https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos)<br/>
+   2) [Install CCExtractor](https://github.com/CCExtractor/ccextractor/wiki/Installation)<br/>
+   3) [Install Multicat](https://github.com/mmalecki/multicat/blob/master/trunk/INSTALL)<br/>
 3. 1) [Set the following environment variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps) for email notifications to work.
         - MAIL_HOST: Host of the mailing service, eg. for GMail, "smtp.gmail.com"
         - MAIL_PORT: Port of the mailing service (for TLS connection), eg. for GMail, "587"
@@ -42,13 +45,8 @@ later:
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/Nephos.git && cd Nephos`<br/>
    2) Install Pipenv, `pip install pipenv`<br/>
    3) Install nephos' requirements (this step also creates a virtual environment to run nephos), `pipenv install`
-   4) Make the bundled multicat for your system
-      ```
-      cd libs/<multicat_folder>
-      make
-      ```
 5. 1) Initialise nephos directory, `python -m nephos init`<br/>
-   2) Observer and modify configurations available in `~/Nephos/config` (especially maintenance and module configurations)<br/>
+   2) Observe and modify configurations available in `~/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
    3) Run Nephos, `python -m nephos start`
 
 ## More Info
