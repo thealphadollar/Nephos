@@ -55,7 +55,7 @@ class ApplyProcessMethods:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(SET_PROCESSING_COMMAND, (self.addr, ))
-                self._apply_methods()
+            self._apply_methods()
         except DBException as error:
             LOG.warning("Couldn't connect to database for %s", path_to_file)
             LOG.debug(error)
