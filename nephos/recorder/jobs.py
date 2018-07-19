@@ -107,7 +107,7 @@ class JobHandler:
                 try:
                     ip_addr = db_cur.fetchall()[0][0]
                 except IndexError as err:
-                    LOG.info("No such channel found!")
+                    LOG.info("No channel %s found!", job_data[job_key]["channel_name"])
                     LOG.debug(err)
                     return
                 out_path = os.path.join(__recording_dir__, job_data[job_key]["channel_name"],
