@@ -145,7 +145,7 @@ class PreprocessHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(sql_command, (task_id, ))
-                LOG.info("Task (ID=%s) removed from database", task_id)
+            LOG.info("Task (ID=%s) removed from database", task_id)
         except Error as err:
             LOG.warning("Failed to remove task!")
             LOG.debug(err)
@@ -186,7 +186,8 @@ class PreprocessHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(sql_cmd)
-                return db_cur.fetchall()
+                result = db_cur.fetchall()
+            return result
         except DBException as err:
             LOG.warning("Failed to query tasks table!")
             LOG.debug(err)

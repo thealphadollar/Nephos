@@ -49,8 +49,7 @@ class ChannelHandler:
                 "timezone": tmz
             }
         }
-        with DBHandler.connect() as db_cur:
-            self.insert_channels(db_cur, ch_data)
+        self.insert_channels(ch_data)
 
     def display_channel(self):
         """
@@ -66,14 +65,12 @@ class ChannelHandler:
             print("\t".join(str(x) for x in channel))
 
     @staticmethod
-    def insert_channels(db_cur, ch_data):
+    def insert_channels(ch_data):
         """
         Adds channels to the database
 
         Parameters
         ----------
-        db_cur
-            sqlite cursor to the database
         ch_data
             type: dict
             dict of channels' data to be appended to the channel table
@@ -85,7 +82,8 @@ class ChannelHandler:
         ch_data = validate_entries("channel", ch_data)
         for key in ch_data.keys():
             ch_data[key]["name"] = "_".join(ch_data[key]["name"].lower().split())  # replace whitespace with underscore
-            ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
+            with DBHandler.connect() as db_cur:
+                ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:
                 LOG.info("Channel (id = %s) added with following data:\n%s", ch_id, ch_data[key])
 
@@ -107,7 +105,7 @@ class ChannelHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(command, (ch_ip_name, ch_ip_name))
-                LOG.info("Channel with name/ip = %s removed from database", ch_ip_name)
+            LOG.info("Channel with name/ip = %s removed from database", ch_ip_name)
         except Error as err:
             LOG.warning("Failed to remove channel!")
             LOG.debug(err)

@@ -90,15 +90,14 @@ class Nephos:
 
         data = self.config_handler.load_data(data_file, False)
         try:
-            with self.db_handler.connect() as db_cur:
-                try:
-                    self.channel_handler.insert_channels(db_cur, data["channels"])
-                except KeyError as error:
-                    LOG.warning("No channel data found!")
-                    LOG.debug(error)
-                # TODO: Function to manage share_lists
-        except DBException as error:
-            LOG.warning("Data addition failed")
+            self.channel_handler.insert_channels(data["channels"])
+        except KeyError as error:
+            LOG.warning("No channel data found!")
+            LOG.debug(error)
+        try:
+            self.share_handler.insert_share_entities(data["sharing_entity"])
+        except KeyError as error:
+            LOG.warning("No share entity found!")
             LOG.debug(error)
 
     @staticmethod

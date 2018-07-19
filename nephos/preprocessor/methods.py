@@ -214,9 +214,9 @@ class ApplyProcessMethods:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(GET_CH_INFO, (task_info[TSK_CHNAME_INDEX], ))
                 ch_info = db_cur.fetchall()[0]
-                tags.append(ch_info[CH_COUN_INDEX])
-                tags.append(ch_info[CH_TMZ_INDEX])
-                tags.append(ch_info[CH_LANG_INDEX])
+            tags.append(ch_info[CH_COUN_INDEX])
+            tags.append(ch_info[CH_TMZ_INDEX])
+            tags.append(ch_info[CH_LANG_INDEX])
                 
         except DBException as err:
             LOG.debug(err)

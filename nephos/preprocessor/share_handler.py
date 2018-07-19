@@ -33,22 +33,15 @@ class ShareHandler:
                 "tags": tags
             }
         }
-        try:
-            with DBHandler.connect() as db_cur:
-                self.insert_share_entities(db_cur, shr_data)
-        except DBException as err:
-            LOG.info("Failed to connect to database")
-            LOG.debug(err)
+        self.insert_share_entities(shr_data)
 
     @staticmethod
-    def insert_share_entities(db_cur, shr_data):
+    def insert_share_entities(shr_data):
         """
         Adds channels to the database
 
         Parameters
         ----------
-        db_cur
-            sqlite cursor to the database
         shr_data
             type: dict
             dict of share entities' data to be appended to the share_list table
@@ -59,9 +52,13 @@ class ShareHandler:
         """
         shr_data = validate_entries("share-entity", shr_data)
         for key in shr_data.keys():
-            shr_id = DBHandler.insert_data(db_cur, "share_list", shr_data[key])
-            if shr_id is not None:
+            try:
+                with DBHandler.connect() as db_cur:
+                    shr_id = DBHandler.insert_data(db_cur, "share_list", shr_data[key])
                 LOG.info("Share entity (id = %s) added with following data:\n%s", shr_id, shr_data[key])
+            except DBException as err:
+                LOG.info("Failed to connect to database")
+                LOG.debug(err)
 
     def display_shr_entities(self):
         """
@@ -90,7 +87,7 @@ class ShareHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(CMD_DEL_SHRS, (sh_en_mail, ))
-                LOG.info("Share entity with email = %s removed from database", sh_en_mail)
+            LOG.info("Share entity with email = %s removed from database", sh_en_mail)
         except (Error, DBException) as err:
             LOG.warning("Failed to remove channel!")
             LOG.debug(err)
@@ -109,7 +106,8 @@ class ShareHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(CMD_GET_SHRS)
-                return db_cur.fetchall()
+                shr_list = db_cur.fetchall()
+            return shr_list
         except DBException as err:
             LOG.warning("Failed to get share_entities list!")
             LOG.debug(err)
