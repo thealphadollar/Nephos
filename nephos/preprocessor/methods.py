@@ -72,7 +72,10 @@ class ApplyProcessMethods:
             os.makedirs(self.store_dir, exist_ok=True)
             self._execute_processing()
             self._add_share_entities()
-            os.remove(self.addr)
+            try:
+                os.remove(self.addr)
+            except FileNotFoundError as err:
+                LOG.debug(err)
             try:
                 with DBHandler.connect() as db_cur:
                     db_cur.execute(SET_PROCESSED_COMMAND, (self.addr, ))
