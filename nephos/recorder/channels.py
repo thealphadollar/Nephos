@@ -126,7 +126,8 @@ class ChannelHandler:
         try:
             with DBHandler.connect() as db_cur:
                 db_cur.execute(CMD_GET_CHANNELS)
-                return db_cur.fetchall()
+                channels = db_cur.fetchall()
+            return channels
         except DBException as err:
             LOG.warning("Failed to get channel list.")
             LOG.debug(err)
