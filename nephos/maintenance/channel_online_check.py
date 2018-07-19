@@ -4,7 +4,6 @@ Contains class for the checking of channel, whether online or not
 import os
 from tempfile import TemporaryDirectory
 from logging import getLogger
-from multiprocessing import pool, cpu_count
 from functools import partial
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
@@ -12,7 +11,6 @@ from ..recorder.channels import ChannelHandler
 from ..exceptions import DBException
 
 LOG = getLogger(__name__)
-POOL = pool.ThreadPool(4 * cpu_count())
 MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this
 CH_DOWN_COMMAND = """UPDATE channels
                     SET status = "down"
@@ -60,7 +58,8 @@ class ChannelOnlineCheck(Checker):
             # create a list of IPs and pass it to recording
             ips = self._extract_ips()
             if ips:  # when ip is not empty
-                POOL.map(partial(self._check_ip, path=tmpdir), ips)
+                for ip in ips:
+                    self._check_ip(ip, tmpdir)
 
                 self.channel_list = ChannelHandler.grab_ch_list()
                 new_stats = self._channel_stats()

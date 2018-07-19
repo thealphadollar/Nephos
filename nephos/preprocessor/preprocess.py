@@ -4,7 +4,6 @@ Contains the main preprocess class
 import os
 from logging import getLogger
 from sqlite3 import Error
-from multiprocessing import Pool, cpu_count, pool
 from datetime import datetime
 from . import get_preprocessor_config
 from .methods import ApplyProcessMethods
@@ -14,7 +13,6 @@ from .. import __upload_dir__
 
 
 LOG = getLogger(__name__)
-POOL = Pool(processes=cpu_count())
 
 
 class PreprocessHandler:
@@ -46,16 +44,8 @@ class PreprocessHandler:
 
         """
         sql_command = 'SELECT * FROM tasks where status = "not processed"'
-        # TODO: Test above command
-        tasks_pool = []
         for task in PreprocessHandler._query_tasks(sql_command):
-            tasks_pool.append((task[TSK_PATH_INDEX], task[TSK_STORE_INDEX]))
-
-        if tasks_pool:
-            try:
-                POOL.starmap(ApplyProcessMethods, tasks_pool)
-            except pool.MaybeEncodingError as _:
-                pass
+            ApplyProcessMethods(task[TSK_PATH_INDEX], task[TSK_STORE_INDEX])
 
     # TODO: remove this
     @staticmethod

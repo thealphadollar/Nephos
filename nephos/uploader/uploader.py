@@ -7,7 +7,6 @@ import ntpath
 import shutil
 import sqlite3
 from logging import getLogger
-from multiprocessing import pool, cpu_count
 from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
 from . import get_uploader_config
 
@@ -19,7 +18,6 @@ CMD_SET_UPLOADING = """UPDATE tasks
 CMD_RM_TASK = """DELETE
                 FROM tasks
                 WHERE store_path = ?"""
-POOL = pool.ThreadPool(4 * cpu_count())
 
 
 class Uploader(ABC):
@@ -77,12 +75,8 @@ class Uploader(ABC):
             LOG.debug(error)
             return
 
-        upload_pool = []
         for task in tasks_list:
-            upload_pool.append((task[TSK_STORE_INDEX], task[TSK_SHR_INDEX]))
-
-        if upload_pool:
-            POOL.starmap(up_func, upload_pool)
+            up_func(task[TSK_STORE_INDEX], task[TSK_SHR_INDEX])
 
     @staticmethod
     @abstractmethod
