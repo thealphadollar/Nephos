@@ -2,9 +2,7 @@
 The pipeline for the working of nephos
 """
 from logging import getLogger
-import sys
 from . import first_time, __nephos_dir__
-from .exceptions import DBException
 from .load_config import Config
 from .manage_db import DBHandler
 from .scheduler import Scheduler
@@ -16,18 +14,18 @@ from .exceptions import SingleInstanceException
 from .preprocessor.preprocess import PreprocessHandler
 from .preprocessor.share_handler import ShareHandler
 from .uploader.GDrive import GDrive
-
+import sys
 
 LOG = getLogger(__name__)
 
 
 # Creates a PID file and locks on to it so only one running instance of Nephos possible at a time.
 # https://stackoverflow.com/a/1265445
-# try:
-#     _ = SingleInstance()
-# except SingleInstanceException as err:
-#     LOG.error(err)
-#     sys.exit(-1)
+try:
+    _ = SingleInstance()
+except SingleInstanceException as err:
+    LOG.error(err)
+    sys.exit(-1)
 
 
 class Nephos:
