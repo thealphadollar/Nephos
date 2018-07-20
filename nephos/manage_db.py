@@ -91,17 +91,17 @@ class DBHandler:
             """)
 
             # indexing columns
-            db_cur.execute("""CREATE UNIQUE INDEX indexed_name ON channels(
+            db_cur.execute("""CREATE UNIQUE INDEX IF NOT EXISTS indexed_ip ON channels(
                                     ip
                                     );                             
             """)
 
-            db_cur.execute("""CREATE INDEX indexed_status ON tasks(
+            db_cur.execute("""CREATE INDEX IF NOT EXISTS indexed_status ON tasks(
                                                 status
                                                 );                             
                         """)
 
-            db_cur.execute("""CREATE INDEX indexed_email ON share_list(
+            db_cur.execute("""CREATE INDEX IF NOT EXISTS indexed_email ON share_list(
                                     email
                                     );   
             """)

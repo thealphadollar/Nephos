@@ -22,6 +22,7 @@ __docs_dir__ = os.path.join(__nephos_dir__, "docs")
 
 __default_config_dir__ = os.path.join(__package_dir__, "default_config")
 __default_docs_dir__ = os.path.join(__package_dir__, "../docs")
+__default_db_dir__ = os.path.join(__package_dir__, "databases")
 
 REGEX_CHECK = {
     "email": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
@@ -127,6 +128,7 @@ def first_time():
 
     # copy default configuration to the __config_dir__
     copy_tree(__default_config_dir__, __config_dir__)
+    copy_tree(__default_db_dir__, __db_dir__)
     copy_tree(__default_docs_dir__, __docs_dir__)
 
     return True
