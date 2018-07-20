@@ -4,6 +4,7 @@ Contains custom errors and exceptions for Nephos
 import shutil
 import os
 from logging import getLogger
+from . import send_mail
 
 LOG = getLogger(__name__)
 UNSET_PROCESSING_COMMAND = """UPDATE tasks
@@ -79,8 +80,10 @@ class ProcessFailedException(Exception):
             self.db_cur.execute(REMOVE_ENTRY, (self.path_file, ))
             shutil.rmtree(self.to_clr_dir)
             os.remove(self.path_file)
-            LOG.critical("Following file has been removed due to multiple failures in "
-                         "processing:\n%s", self.path_file)
+            msg = "Following file has been removed due to multiple failures in " \
+                  "processing:\n{file_path}".format(file_path=self.path_file)
+            LOG.critical(msg)
+            send_mail(msg, True)
 
         else:
             self.db_cur.execute(UNSET_PROCESSING_COMMAND, (self.path_file, ))

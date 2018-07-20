@@ -6,6 +6,8 @@ from logging import getLogger
 from smtplib import SMTPException
 import pydash
 
+from .. import send_mail
+
 LOG = getLogger(__name__)
 
 
@@ -69,7 +71,8 @@ class Checker(ABC):
         """
         Handles the evaluation results of the maintenance jobs
         Uses,
-            LOG.critical for sending error mail
+            LOG.critical for logging error
+            send_mail  for sending critical mail
             LOG.info for displaying information regarding exceptions
             LOG.debug for writing detailed error report to nephos.txt logs
 
@@ -87,14 +90,9 @@ class Checker(ABC):
 
         """
         if is_critical:
-
             # below line sends an email and catches exception if any
-            try:
-                LOG.critical(msg)
-            except SMTPException as error:
-                LOG.warning("Sending mail failed due to SMTPException! For details "
-                            "please check nephos logs")
-                LOG.debug(error)
+            LOG.critical(msg)
+            send_mail(msg, True)
 
         else:
             LOG.info(msg)

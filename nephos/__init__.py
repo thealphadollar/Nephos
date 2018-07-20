@@ -5,7 +5,9 @@ Used to store attributes which will be used throughout the program.
 """
 import os
 from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
+import subprocess
 import re
+import logging
 
 
 __home_dir__ = os.path.expanduser('~')
@@ -24,6 +26,8 @@ __default_config_dir__ = os.path.join(__package_dir__, "default_config")
 __default_docs_dir__ = os.path.join(__package_dir__, "../docs")
 __default_db_dir__ = os.path.join(__package_dir__, "databases")
 
+
+LOG = logging.getLogger(__name__)
 REGEX_CHECK = {
     "email": re.compile(r"[^@\s][\w\d\._\+][^\s]+@[\w\d\.]+\.[\w\d]*"),
     "ip": re.compile(r"[^\s]+:[\d]+"),
@@ -34,6 +38,93 @@ REGEX_CHECK = {
     "duration": re.compile(r"[^0]\d*"),
     "repetition": re.compile(r"[01]{7}")
 }
+
+# path to store the list of critical mail recipients
+CRITICAL_MAIL_ADDRS_PATH = os.path.join(__nephos_dir__, ".critical_mail_addrs")
+
+
+def send_mail(msg, critical):
+    """
+    Sends mail to the email addresses present in CRITICAL_MAIL_ADDRS_PATH
+
+    Parameters
+    -------
+    msg
+        type: str
+        str to be send as message
+    critical
+        type: bool
+        true if the message is critical, false otherwise
+
+    Returns
+    -------
+    type: bool
+    true if sending was successful, false otherwise
+    """
+    emails = load_mail_list()
+
+    if critical:
+        subject = "[CRITICAL] Nephos Notification"
+    else:
+        subject = "Nephos Report"
+
+    cmd = 'echo "{msg}" | mail -s "{subject}" {emails}'.format(
+        msg=msg,
+        subject=subject,
+        emails=emails
+    )
+
+    try:
+        LOG.debug("running '%s' command", cmd)
+        record_process = subprocess.Popen(cmd,
+                                          shell=True,
+                                          stdout=subprocess.PIPE,
+                                          stderr=subprocess.STDOUT)
+        process_output, _ = record_process.communicate()
+        LOG.debug(process_output)
+        return True
+    except subprocess.CalledProcessError as err:
+        LOG.warning("Sending notification mail failed!")
+        LOG.debug(err)
+        return False
+
+
+def load_mail_list():
+    """
+    Checks and removes incorrect mail addresses from toaddr parameter
+    of logger's SMTP handler
+
+    Returns
+    -------
+    type: list
+    updated list of emails
+
+    """
+
+    if os.path.exists(CRITICAL_MAIL_ADDRS_PATH):
+        # print("Critical mail recipients loaded from", CRITICAL_MAIL_ADDRS_PATH)
+        with open(CRITICAL_MAIL_ADDRS_PATH, "r") as file:
+            raw_data = file.read()
+    else:
+        print("No critical mail list file found!")
+        raw_data = input("Enter email address(es) separated by single whitespace:\n")
+        with open(CRITICAL_MAIL_ADDRS_PATH, "w+") as file:
+            file.write(raw_data)
+
+    emails = [str(email) for email in raw_data.split(" ")]
+
+    removed = []
+    for email in emails:
+        if not REGEX_CHECK["email"].match(email):
+            removed.append(email)
+            emails.remove(email)
+
+    if removed:
+        print("Following emails removed from critical mail list due to wrong format!")
+        print(removed)
+
+    # print("You can add more critical mail recipients in", CRITICAL_MAIL_ADDRS_PATH)
+    return ",".join(emails)
 
 
 def validate_entries(data_type, data):
@@ -130,6 +221,8 @@ def first_time():
     copy_tree(__default_config_dir__, __config_dir__)
     copy_tree(__default_db_dir__, __db_dir__)
     copy_tree(__default_docs_dir__, __docs_dir__)
+
+    load_mail_list()
 
     return True
 

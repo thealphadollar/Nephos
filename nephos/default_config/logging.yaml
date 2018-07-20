@@ -23,20 +23,11 @@ handlers:
     formatter: simple
     filename: logs/nephos.log
     level: DEBUG
-  email:
-    class: logging.handlers.SMTPHandler
-    formatter: simple
-    # mailhost: set using environment variables MAIL_HOST and MAIL_PORT
-    fromaddr: "no-reply@nephos"
-    # toaddrs: set at the first run, or loaded from Nephos/.critical_mail_addrs
-    subject: "[NEPHOS] Critical Notification"
-    # credentials: set using environment variables CRED_EMAIL and CRED_PASS
-    level: CRITICAL
 root:
   level: DEBUG
-  handlers: [console, nephos_file, email]
+  handlers: [console, nephos_file]
 loggers:
   nephos:
     level: DEBUG
-    handler: [console, nephos_file, email]
+    handler: [console, nephos_file]
 ...

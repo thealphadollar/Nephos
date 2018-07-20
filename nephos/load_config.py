@@ -10,15 +10,11 @@ import yaml
 import yaml.error
 import pydash
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
-from . import REGEX_CHECK
 from .recorder import set_recorder_config
 # from .preprocessor import set_preprocessor_config
 from .uploader import set_uploader_config
 
 LOG = getLogger(__name__)
-
-# path to store the list of critical mail recipients
-CRITICAL_MAIL_ADDRS_PATH = os.path.join(__nephos_dir__, ".critical_mail_addrs")
 
 
 class Config:
@@ -170,13 +166,6 @@ class Config:
                     'nephos_file':
                         {
                             'filename': self._correct_log_file_path('nephos_file')
-                        },
-                    'email':
-                        {
-                            'toaddrs': self.load_mail_list(),
-                            'credentials': (get_env_var('CRED_EMAIL'), get_env_var('CRED_PASS')),
-                            'mailhost': (get_env_var('MAIL_HOST'), get_env_var('MAIL_PORT')),
-                            'secure': ()
                         }
                 }
         }
@@ -187,44 +176,6 @@ class Config:
 
         config_list = [logging_config_update, modules_config_update]
         return config_list
-
-    @staticmethod
-    def load_mail_list():
-        """
-        Checks and removes incorrect mail addresses from toaddr parameter
-        of logger's SMTP handler
-
-        Returns
-        -------
-        type: list
-        updated list of emails
-
-        """
-
-        if os.path.exists(CRITICAL_MAIL_ADDRS_PATH):
-            # print("Critical mail recipients loaded from", CRITICAL_MAIL_ADDRS_PATH)
-            with open(CRITICAL_MAIL_ADDRS_PATH, "r") as file:
-                raw_data = file.read()
-        else:
-            print("No critical mail list file found!")
-            raw_data = input("Enter email address(es) separated by single whitespace:\n")
-            with open(CRITICAL_MAIL_ADDRS_PATH, "w+") as file:
-                file.write(raw_data)
-
-        emails = [str(email) for email in raw_data.split(" ")]
-
-        removed = []
-        for email in emails:
-            if not REGEX_CHECK["email"].match(email):
-                removed.append(email)
-                emails.remove(email)
-
-        if removed:
-            print("Following emails removed from critical mail list due to wrong format!")
-            print(removed)
-
-        # print("You can add more critical mail recipients in", CRITICAL_MAIL_ADDRS_PATH)
-        return emails
 
 
 def get_env_var(name):
