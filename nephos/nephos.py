@@ -90,12 +90,18 @@ class Nephos:
 
         data = self.config_handler.load_data(data_file, False)
         try:
-            self.channel_handler.insert_channels(data["channels"])
+            if data["channels"] is not None:
+                self.channel_handler.insert_channels(data["channels"])
+            else:
+                LOG.warning("No channels found!")
         except KeyError as error:
             LOG.warning("No channel data found!")
             LOG.debug(error)
         try:
-            self.share_handler.insert_share_entities(data["sharing_entity"])
+            if data["sharing_entity"] is not None:
+                self.share_handler.insert_share_entities(data["sharing_entity"])
+            else:
+                LOG.warning("No share entity found!")
         except KeyError as error:
             LOG.warning("No share entity found!")
             LOG.debug(error)
