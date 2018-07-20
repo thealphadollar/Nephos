@@ -1,3 +1,12 @@
+install:
+    # install python3
+    # install pip3
+    # install pipenv
+    # install multicat
+    # install FFMPEG/FFPROBE
+    # install CCEx
+    # install mail
+
 clean: ; rm -r ~/Nephos
 
 # Commands beyond this concern Travis CI and should

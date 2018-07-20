@@ -17,11 +17,7 @@ Nephos will be developed, using Python and few other open source projects, to ac
 2. 1) [Install FFMPEG and FFPROBE](https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos)<br/>
    2) [Install CCExtractor](https://github.com/CCExtractor/ccextractor/wiki/Installation)<br/>
    3) [Install Multicat](https://github.com/mmalecki/multicat/blob/master/trunk/INSTALL)<br/>
-3. 1) [Set the following environment variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps) for email notifications to work.
-        - MAIL_HOST: Host of the mailing service, eg. for GMail, "smtp.gmail.com"
-        - MAIL_PORT: Port of the mailing service (for TLS connection), eg. for GMail, "587"
-        - CRED_EMAIL: Email address of the sender
-        - CRED_PASS: Password of the sender<br/>
+3. 1) Nephos uses `mail` bash command to send email notifications, please [install](https://tecadmin.net/bash-mail-command-not-found/) and [configure](https://superuser.com/questions/351841/how-do-i-set-up-the-unix-mail-command) it.
    2) You'll be asked to enter the email address(es) of recipient(s) of critical mails
 at initialisation of Nephos. It is only asked on first launch, to edit it
 later:
