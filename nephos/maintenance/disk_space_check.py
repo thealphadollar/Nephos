@@ -59,7 +59,7 @@ class DiskSpaceCheck(Checker):
             result_msg.append("Free Disk Percentage:  The free space on disk is {value:0.2f}%"
                               .format(value=((free/total) * 100)))
 
-        self._handle(critical_flag, " ".join(result_msg))
+        self._handle(critical_flag, "critical_disk", " ".join(result_msg))
 
     @staticmethod
     def _gb_to_bytes(in_gbs):

@@ -3,10 +3,9 @@ An abstract Checker class for all checks, adding new checks made easier through 
 """
 from abc import ABC, abstractmethod
 from logging import getLogger
-from smtplib import SMTPException
 import pydash
 
-from .. import send_mail
+from ..mail_notifier import send_mail
 
 LOG = getLogger(__name__)
 
@@ -67,7 +66,7 @@ class Checker(ABC):
         pass
 
     @staticmethod
-    def _handle(is_critical, msg):
+    def _handle(is_critical, msg_type, msg):
         """
         Handles the evaluation results of the maintenance jobs
         Uses,
@@ -81,6 +80,9 @@ class Checker(ABC):
         is_critical
             type: bool
             True if the issue is critical, False otherwise
+        msg_type
+            type: str
+            states the type of message to be handled
         msg
             type: str
             message to be logged
@@ -92,7 +94,7 @@ class Checker(ABC):
         if is_critical:
             # below line sends an email and catches exception if any
             LOG.critical(msg)
-            send_mail(msg, True)
+            send_mail(msg, msg_type)
 
         else:
             LOG.info(msg)

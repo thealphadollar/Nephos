@@ -5,7 +5,6 @@ Used to store attributes which will be used throughout the program.
 """
 import os
 from distutils.dir_util import copy_tree  # pylint: disable=no-name-in-module,import-error
-import subprocess
 import re
 import logging
 
@@ -38,55 +37,8 @@ REGEX_CHECK = {
     "duration": re.compile(r"[^0]\d*"),
     "repetition": re.compile(r"[01]{7}")
 }
-
 # path to store the list of critical mail recipients
 CRITICAL_MAIL_ADDRS_PATH = os.path.join(__nephos_dir__, ".critical_mail_addrs")
-
-
-def send_mail(msg, critical):
-    """
-    Sends mail to the email addresses present in CRITICAL_MAIL_ADDRS_PATH
-
-    Parameters
-    -------
-    msg
-        type: str
-        str to be send as message
-    critical
-        type: bool
-        true if the message is critical, false otherwise
-
-    Returns
-    -------
-    type: bool
-    true if sending was successful, false otherwise
-    """
-    emails = load_mail_list()
-
-    if critical:
-        subject = "[CRITICAL] Nephos Notification"
-    else:
-        subject = "Nephos Report"
-
-    cmd = 'echo "{msg}" | mail -s "{subject}" {emails}'.format(
-        msg=msg,
-        subject=subject,
-        emails=emails
-    )
-
-    try:
-        LOG.debug("running '%s' command", cmd)
-        record_process = subprocess.Popen(cmd,
-                                          shell=True,
-                                          stdout=subprocess.PIPE,
-                                          stderr=subprocess.STDOUT)
-        process_output, _ = record_process.communicate()
-        LOG.debug(process_output)
-        return True
-    except subprocess.CalledProcessError as err:
-        LOG.warning("Sending notification mail failed!")
-        LOG.debug(err)
-        return False
 
 
 def load_mail_list():

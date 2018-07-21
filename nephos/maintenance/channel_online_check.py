@@ -66,7 +66,7 @@ class ChannelOnlineCheck(Checker):
 
                 # formulate report
                 report = self._formulate_report(prev_stats, new_stats)
-                self._handle(report[0], report[1])
+                self._handle(report[0], "ch_down", report[1])
             else:
                 LOG.warning("No channels found!")
 
