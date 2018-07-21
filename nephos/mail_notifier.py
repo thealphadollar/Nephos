@@ -33,7 +33,7 @@ def send_mail(msg, msg_type):
     emails = load_mail_list()
 
     if msg_type != "report":
-        msg = str(datetime.now().strftime("[%m/%d/%Y %I:%M:%S %p]: ")) + msg
+        msg = str(datetime.now().strftime("[%d/%m/%Y %I:%M:%S %p]: ")) + msg
 
     if msg_type == "ch_down":
         subject = "[NEPHOS] New Channels Down"
