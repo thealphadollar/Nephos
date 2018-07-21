@@ -9,6 +9,7 @@ import sqlite3
 from logging import getLogger
 from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
 from . import get_uploader_config
+from ..mail_notifier import add_to_report, send_report
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'
@@ -76,7 +77,20 @@ class Uploader(ABC):
             return
 
         for task in tasks_list:
-            up_func(task[TSK_STORE_INDEX], task[TSK_SHR_INDEX])
+            folder_id, error = up_func(task[TSK_STORE_INDEX], task[TSK_SHR_INDEX])
+            if folder_id is not None:
+                add_to_report("{folder} successfully uploaded (folderid = {folder_id}), "
+                              "and shared with {share_lists}.".format(
+                                                                    folder=task[TSK_STORE_INDEX],
+                                                                    folder_id=folder_id,
+                                                                    share_lists=task[TSK_SHR_INDEX]
+                                                                    ))
+            else:
+                add_to_report("{folder} uploading failed due to "
+                              "following error\n{error}\n".format(
+                                                                  folder=task[TSK_STORE_INDEX],
+                                                                  error=error
+                                                                  ))
 
     @staticmethod
     @abstractmethod
@@ -96,6 +110,9 @@ class Uploader(ABC):
 
         Returns
         -------
+        folder_id
+            type: str
+            unique id of the folder uploaded to GDrive
 
         """
         pass

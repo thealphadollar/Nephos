@@ -112,6 +112,7 @@ class ApplyProcessMethods:
             LOG.debug(output)
         except subprocess.CalledProcessError as err:
             LOG.debug(err)
+            error = err
             failed = True
 
         try:
@@ -119,12 +120,13 @@ class ApplyProcessMethods:
                 failed = True
         except FileNotFoundError as err:
             LOG.debug(err)
+            error = err
             failed = True
 
         if failed:
             try:
                 with DBHandler.connect() as db_cur:
-                    raise ProcessFailedException(self.addr, self.store_dir, db_cur)
+                    raise ProcessFailedException(self.addr, self.store_dir, db_cur, error)
             except DBException as err:
                 LOG.debug(err)
 

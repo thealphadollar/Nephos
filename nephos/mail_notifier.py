@@ -1,12 +1,15 @@
 """
 Contains functions for sending reports and critical log entries to the system administrator
 """
+import os
 import subprocess
+from datetime import datetime
 from logging import getLogger
-from . import load_mail_list
+from . import load_mail_list, __nephos_dir__
 
 
 LOG = getLogger(__name__)
+REPORT_FILE = os.path.join(__nephos_dir__, ".report")
 
 
 def send_mail(msg, msg_type):
@@ -36,7 +39,7 @@ def send_mail(msg, msg_type):
     elif msg_type == "corrupt_file":
         subject = "[NEPHOS] Corrupt Recording"
     elif msg_type == "report":
-        subject = "[NEPHOS] Upload Report"
+        subject = "[NEPHOS] Daily Report"
     else:
         subject = "[NEPHOS] Notification"
 
@@ -64,20 +67,31 @@ def send_mail(msg, msg_type):
 def add_to_report(msg):
     """
     Append string to the EOF of report file.
+
     Parameters
     ----------
     msg
+        type: str
+        message to be appended to the report's file.
 
     Returns
     -------
 
     """
+    msg = str(datetime.now().strftime("[%m/%d/%Y %I:%M:%S %p]: ")) + msg + "\n"
+    with open(REPORT_FILE, "a") as report_file:
+        report_file.write(msg)
 
 
 def send_report():
     """
     Reads data from report file, converts it to str message and calls send mail on it.
+
     Returns
     -------
 
     """
+    with open(REPORT_FILE, "r") as report_file:
+        msg = report_file.read()
+    send_mail(msg, "report")
+    os.remove(REPORT_FILE)

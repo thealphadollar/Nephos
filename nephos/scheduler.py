@@ -131,7 +131,7 @@ class Scheduler:
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.debug("Default job added: %s", job)
 
-    def add_cron_necessary_job(self, func, main_id, job_time, repetition, args):
+    def add_cron_necessary_job(self, func, main_id, job_time, repetition="1111111", args=None):
         """
 
         Parameters

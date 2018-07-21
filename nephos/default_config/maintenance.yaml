@@ -16,14 +16,7 @@ jobs:
     type: "channel_online_check"
     interval: 60  # minutes
 
-  uploader_auth_check:
-    enabled: True  # Bool
-    type: "uploader_auth_check"
-    interval: 120  # minutes
-
-  file_upload_check:
-    enabled: True  # Bool
-    type: "file_upload_check"
-    interval: 1440  # minutes, translates to everyday
-    at: '20:00'
+  daily_report:
+    type: "daily_report"
+    time: "00:00"  # time at which daily report is sent, "HH:MM"
 ...

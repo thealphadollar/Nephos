@@ -4,7 +4,7 @@ Contains custom errors and exceptions for Nephos
 import shutil
 import os
 from logging import getLogger
-from .mail_notifier import send_mail
+from .mail_notifier import add_to_report
 
 LOG = getLogger(__name__)
 UNSET_PROCESSING_COMMAND = """UPDATE tasks
@@ -42,7 +42,7 @@ class ProcessFailedException(Exception):
     """
     Handles exceptions concerned with failure of preprocessing
     """
-    def __init__(self, path_to_file, store_path, db_cur):
+    def __init__(self, path_to_file, store_path, db_cur, error):
         """
 
         Parameters
@@ -55,10 +55,14 @@ class ProcessFailedException(Exception):
             path to the folder for storing processed files
         db_cur
             sqlite database cursor
+        error
+            type: str
+            error causing processing to fail
         """
         self.path_file = path_to_file
         self.to_clr_dir = store_path
         self.db_cur = db_cur
+        self.error = error
         self._clear()
         super(ProcessFailedException, self).__init__()
 
@@ -83,7 +87,11 @@ class ProcessFailedException(Exception):
             msg = "Following file has been removed due to multiple failures in " \
                   "processing:\n{file_path}".format(file_path=self.path_file)
             LOG.critical(msg)
-            send_mail(msg, "corrupt_file")
+            add_to_report("{file} discarded from Nephos queue due to multiple processing"
+                          " failures with following error:\n{error}\n".format(
+                                      file=self.path_file,
+                                      error=self.error
+                                    ))
 
         else:
             self.db_cur.execute(UNSET_PROCESSING_COMMAND, (self.path_file, ))

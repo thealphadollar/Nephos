@@ -10,6 +10,7 @@ import pydash
 from .disk_space_check import DiskSpaceCheck
 from .channel_online_check import ChannelOnlineCheck
 from ..load_config import Config
+from ..mail_notifier import send_report
 
 
 LOG = getLogger(__name__)
@@ -55,13 +56,20 @@ class Maintenance:
         jobs = ["disk_space_check", "channel_online_check"]
         job_funcs = {
             "disk_space_check": self.call_disk_space_check,
-            "channel_online_check": self.call_channel_online_check
+            "channel_online_check": self.call_channel_online_check,
+            "daily_report": send_report
         }
 
         for job in jobs:
             LOG.debug("Adding %s maintenance job to scheduler...", job)
-            scheduler.add_necessary_jobs(job_funcs[job], job,
-                                         self._get_maintenance_data(job))
+            if job == "send_report":
+                scheduler.add_cron_necessary_job(job_funcs[job], job,
+                                                 self._get_maintenance_data(job)
+                                                 )
+            else:
+                scheduler.add_necessary_jobs(job_funcs[job], job,
+                                             self._get_maintenance_data(job)
+                                             )
 
     @staticmethod
     def call_disk_space_check():
@@ -123,8 +131,13 @@ class Maintenance:
         -------
         type: int
         repeating interval of the job
+
         """
-        return pydash.get(self.config, "jobs.{job}.interval".format(job=job))
+        if job == "daily_report":
+            query = "jobs.{job}.time".format(job=job)
+        else:
+            query = "jobs.{job}.interval".format(job=job)
+        return pydash.get(self.config, query)
 
 
 def _refresh_config():

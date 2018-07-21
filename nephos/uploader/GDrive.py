@@ -78,6 +78,9 @@ class GDrive(Uploader):
 
         Returns
         -------
+        folder_id
+            type: str
+            unique id of the folder uploaded to GDrive
 
         """
         service = GDrive._get_upload_service()
@@ -92,12 +95,14 @@ class GDrive(Uploader):
                 GDrive._share(batch_service, permissions_service, folder_id, share_list)
                 GDrive._remove(folder)
                 LOG.debug("%s uploaded successfully!", folder)
+                return folder_id, None
             except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
                     HttpError) as error:
                 LOG.warning("Uploading %s failed! Will retry later", folder)
                 LOG.debug(error)
                 with DBHandler.connect() as db_cur:
                     raise UploadingFailed(folder, db_cur)
+                return None, error
         except UploadingFailed:
             pass
 

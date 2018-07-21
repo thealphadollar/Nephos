@@ -9,9 +9,9 @@ from datetime import datetime
 from . import get_recorder_config
 from ..manage_db import DBHandler, CH_STAT_INDEX
 from ..exceptions import DBException
-from .. import __recording_dir__
-from .. import validate_entries
+from .. import __recording_dir__, validate_entries
 from ..preprocessor.preprocess import PreprocessHandler
+from ..mail_notifier import add_to_report
 
 LOG = getLogger(__name__)
 CMD_GET_CHANNELS = "SELECT * FROM channels"
@@ -161,6 +161,9 @@ class ChannelHandler:
             addr = addr + str(datetime.now().strftime("%Y-%m-%d_%H%M") + ".ts")
             aux_addr = str.replace(addr, ".ts", ".aux")
             if not _is_up(ip_addr):
+                add_to_report("Recording IP:{ip_addr} skipped since the channel is down.".format(
+                    ip_addr=ip_addr
+                ))
                 return False
 
         config = get_recorder_config()
@@ -192,6 +195,10 @@ class ChannelHandler:
             return True
         except (OSError, subprocess.CalledProcessError) as err:
             LOG.warning("Recording for channel with ip %s, failed!", ip_addr)
+            add_to_report("Recording IP:{ip_addr} failed due to following error:\n{error}\n".format(
+                ip_addr=ip_addr,
+                error=err
+            ))
             LOG.debug(err)
             return False
 
