@@ -94,7 +94,8 @@ class Checker(ABC):
         if is_critical:
             # below line sends an email and catches exception if any
             LOG.critical(msg)
-            send_mail(msg, msg_type)
+            if msg_type != "ch_down":
+                send_mail(msg, msg_type)
 
         else:
             LOG.info(msg)
