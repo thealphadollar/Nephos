@@ -291,7 +291,7 @@ class GDrive(Uploader):
                 "emailAddress": email
             }
             batch_service.add(perm_service.create(
-                fileid=folder_id,
+                fileId=folder_id,
                 body=permission,
                 fields='id',
             ))
