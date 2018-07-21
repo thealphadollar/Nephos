@@ -9,7 +9,7 @@ import sqlite3
 from logging import getLogger
 from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
 from . import get_uploader_config
-from ..mail_notifier import add_to_report, send_report
+from ..mail_notifier import add_to_report
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'
@@ -115,6 +115,7 @@ class Uploader(ABC):
             unique id of the folder uploaded to GDrive
 
         """
+        # make sure to add a function to upload logs to a remote folder in cloud
         pass
 
     @staticmethod

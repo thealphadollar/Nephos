@@ -2,6 +2,8 @@
 Derived class from uploader which manages uploading to Google Drive account.
 """
 import os
+import shutil
+from datetime import datetime
 from logging import getLogger
 from oauth2client import client, file
 from oauth2client.clientsecrets import InvalidClientSecretsError
@@ -10,7 +12,7 @@ from googleapiclient.http import HttpError, MediaFileUpload, UnexpectedMethodErr
 from googleapiclient import discovery
 from httplib2 import Http
 from .uploader import Uploader
-from .. import __nephos_dir__
+from .. import __nephos_dir__, __log_dir__
 from ..exceptions import OAuthFailure, UploadingFailed
 from ..manage_db import DBHandler
 from ..mail_notifier import send_mail
@@ -21,6 +23,8 @@ SCOPES = "https://www.googleapis.com/auth/drive"
 APPLICATION_NAME = "Project Nephos"
 CRED_PATH = os.path.join(__nephos_dir__, ".up_cred")
 CLI_SECRET_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), ".client_secrets")
+LOG_DRIVE_FOLDER_ID = "1M8jl0tDPoN3K6TE6KipwJZYXsMxb75Do"
+LOG_FILE_PATH = os.path.join(__log_dir__, "nephos.log")
 
 
 class GDrive(Uploader):
@@ -111,6 +115,34 @@ class GDrive(Uploader):
         except UploadingFailed:
             pass
 
+        # upload the logs till now, and truncate log file.
+
+    @staticmethod
+    def upload_log(file_service):
+        """
+        Uploads the log file and truncates the previous one to have logs only
+        reports beyond this point.
+
+        Parameters
+        -------
+        file_service
+            file managing service for google drive
+
+
+        Returns
+        -------
+
+        """
+        timestamped_log_path = os.path.join(__log_dir__, str(datetime.now().strftime("nephos_%d%m%Y_%H%M.log")))
+        shutil.copyfile(LOG_FILE_PATH, timestamped_log_path)
+        file_id = GDrive._upload_file(file_service, LOG_DRIVE_FOLDER_ID, timestamped_log_path)
+        if file_id is not None:
+            open(LOG_FILE_PATH, 'w').close()
+            LOG.debug("Logs till here uploaded to 'Nephos_Logs' drive folder (file id: %s).", file_id)
+        else:
+            LOG.warning("Uploading logs to drive (folder id: %s) failed!", LOG_DRIVE_FOLDER_ID)
+        os.remove(timestamped_log_path)
+
     @staticmethod
     def _auth_from_file(store):
         """
@@ -191,6 +223,7 @@ class GDrive(Uploader):
     def _create_folder(file_service, folder):
         """
         Creates the folder to upload the recording to.
+
         Parameters
         ----------
         file_service
@@ -241,21 +274,44 @@ class GDrive(Uploader):
         except ValueError:
             pass
         for file_path in files:
-            file_metadata = {
-                'name': GDrive._get_name(file_path),
-                'parents': [folder_id]
-            }
-            media = MediaFileUpload(
-                file_path,
-                mimetype=GDrive._get_mimetype(GDrive._get_name(file_path)),
-                resumable=True
-            )
-            file_id = file_service.create(
-                body=file_metadata,
-                media_body=media,
-                fields='id'
-            ).execute().get('id')
-            LOG.debug("%s uploaded to file ID: %s", file_path, file_id)
+            GDrive._upload_file(file_service, folder_id, file_path)
+
+    @staticmethod
+    def _upload_file(file_service, folder_id, file_path):
+        """
+        uploads a single file to the drive
+
+        Parameters
+        -------
+        file_service
+            file managing service for google drive
+        folder_id
+            type: str
+            unique folder id of the cloud parent folder
+        file_path
+            type: str
+            absolute path of the file to be uploaded
+
+        Returns
+        -------
+
+        """
+        file_metadata = {
+            'name': GDrive._get_name(file_path),
+            'parents': [folder_id]
+        }
+        media = MediaFileUpload(
+            file_path,
+            mimetype=GDrive._get_mimetype(GDrive._get_name(file_path)),
+            resumable=True
+        )
+        file_id = file_service.create(
+            body=file_metadata,
+            media_body=media,
+            fields='id'
+        ).execute().get('id')
+        LOG.debug("%s uploaded to file ID: %s", file_path, file_id)
+        return file_id
 
     @staticmethod
     def _share(batch_service, perm_service, folder_id, share_list):
