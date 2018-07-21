@@ -32,6 +32,9 @@ def send_mail(msg, msg_type):
     """
     emails = load_mail_list()
 
+    if msg_type != "report":
+        msg = str(datetime.now().strftime("[%m/%d/%Y %I:%M:%S %p]: ")) + msg
+
     if msg_type == "ch_down":
         subject = "[NEPHOS] New Channels Down"
     elif msg_type == "critical_disk":
@@ -40,8 +43,8 @@ def send_mail(msg, msg_type):
         subject = "[NEPHOS] Corrupt Recording"
     elif msg_type == "report":
         subject = "[NEPHOS] Daily Report"
-    else:
-        subject = "[NEPHOS] Notification"
+    elif msg_type == "critical":
+        subject = "[NEPHOS] Critical Notification"
 
     cmd = 'echo "{msg}" | mail -s "{subject}" {emails}'.format(
         msg=msg,

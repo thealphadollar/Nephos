@@ -13,6 +13,7 @@ from .uploader import Uploader
 from .. import __nephos_dir__
 from ..exceptions import OAuthFailure, UploadingFailed
 from ..manage_db import DBHandler
+from ..mail_notifier import send_mail
 
 
 LOG = getLogger(__name__)
@@ -45,8 +46,12 @@ class GDrive(Uploader):
             http = credentials.authorize(Http())
             self.service = discovery.build("drive", "v3", http=http, cache_discovery=False)
         except HttpError as error:
-            LOG.error("Authentication request failed!")
+            LOG.critical("Authentication request failed!")
             LOG.debug(error)
+            send_mail("Please reauthenticate Nephos, authentication attempt failed with "
+                      "error:\n{error}\n".format(
+                       error=error
+                       ), "critical")
             raise OAuthFailure
 
     @staticmethod

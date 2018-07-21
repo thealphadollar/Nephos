@@ -18,5 +18,5 @@ jobs:
 
   daily_report:
     type: "daily_report"
-    time: "00:00"  # time at which daily report is sent, "HH:MM"
+    time: "23:59"  # time at which daily report is sent, "HH:MM"
 ...
