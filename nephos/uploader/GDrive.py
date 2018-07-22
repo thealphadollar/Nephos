@@ -14,8 +14,8 @@ from httplib2 import Http
 from .uploader import Uploader
 from .. import __nephos_dir__, __log_dir__
 from ..exceptions import OAuthFailure, UploadingFailed
-from ..manage_db import DBHandler
-from ..mail_notifier import send_mail
+from ..manage_db import DBHandler, TSK_STORE_INDEX, TSK_SHR_INDEX
+from ..mail_notifier import send_mail, add_to_report
 
 
 LOG = getLogger(__name__)
@@ -52,7 +52,7 @@ class GDrive(Uploader):
         except HttpError as error:
             LOG.critical("Authentication request failed!")
             LOG.debug(error)
-            send_mail("Please reauthenticate Nephos, authentication attempt failed with "
+            send_mail("Please re-authenticate Nephos, authentication attempt failed with "
                       "error:\n{error}\n".format(
                        error=error
                        ), "critical")
@@ -71,50 +71,60 @@ class GDrive(Uploader):
         return discovery.build("drive", "v3", http=http, cache_discovery=False)
 
     @staticmethod
-    def _upload(folder, share_list):
+    def _upload(tasks_list):
         """
         Uploads the folder and appends share entities
 
         Parameters
         -------
-        folder
-            type: str
-            path to folder to be uploaded
-        share_list
-            type: str
-            str of entities the file is to be shared with,
-            multiple values separated by space
+        tasks_list
+            type:  list
+            list containing details of recordings to be uploaded.
 
         Returns
         -------
-        folder_id
-            type: str
-            unique id of the folder uploaded to GDrive
 
         """
         service = GDrive._get_upload_service()
         file_service = service.files()
         permissions_service = service.permissions()
         batch_service = service.new_batch_http_request(callback=GDrive._share_callback)
-        try:
+        for task in tasks_list:
+            folder, share_list = task[TSK_STORE_INDEX], task[TSK_SHR_INDEX]
+            folder_id, error = None, None
             try:
-                GDrive._set_uploading(folder)
-                folder_id = GDrive._create_folder(file_service, folder)
-                GDrive._upload_files(file_service, folder, folder_id)
-                GDrive._share(batch_service, permissions_service, folder_id, share_list)
-                GDrive._remove(folder)
-                LOG.debug("%s uploaded successfully!", folder)
-                return folder_id, None
-            except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
-                    HttpError) as error:
-                LOG.warning("Uploading %s failed! Will retry later", folder)
-                LOG.debug(error)
-                with DBHandler.connect() as db_cur:
-                    raise UploadingFailed(folder, db_cur)
-                return None, error
-        except UploadingFailed:
-            pass
+                try:
+                    GDrive._set_uploading(folder)
+                    folder_id = GDrive._create_folder(file_service, folder)
+                    GDrive._upload_files(file_service, folder, folder_id)
+                    GDrive._share(batch_service, permissions_service, folder_id, share_list)
+                    GDrive._remove(folder)
+                    LOG.debug("%s uploaded successfully!", folder)
+                except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
+                        HttpError) as err:
+                    LOG.warning("Uploading %s failed! Will retry later", folder)
+                    LOG.debug(err)
+                    with DBHandler.connect() as db_cur:
+                        folder_id, error = None, err
+                        raise UploadingFailed(folder, db_cur)
+            except UploadingFailed:
+                pass
 
+            if folder_id is not None:
+                add_to_report("{folder} successfully uploaded (folderid = {folder_id}), "
+                              "and shared with {share_lists}.".format(
+                                                                    folder=task[TSK_STORE_INDEX],
+                                                                    folder_id=folder_id,
+                                                                    share_lists=task[TSK_SHR_INDEX]
+                                                                    ))
+            else:
+                add_to_report("{folder} uploading failed due to "
+                              "following error\n{error}\n".format(
+                                                                  folder=task[TSK_STORE_INDEX],
+                                                                  error=error
+                                                                  ))
+
+        # uploading logs with every upload.
         GDrive.upload_log(file_service)
 
     @staticmethod
@@ -391,4 +401,3 @@ class GDrive(Uploader):
             LOG.debug(exception)
         else:
             LOG.debug("Permission Id: %s", response.get('id'))
-

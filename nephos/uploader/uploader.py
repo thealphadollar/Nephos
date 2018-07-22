@@ -7,9 +7,8 @@ import ntpath
 import shutil
 import sqlite3
 from logging import getLogger
-from ..manage_db import DBHandler, DBException, TSK_STORE_INDEX, TSK_SHR_INDEX
+from ..manage_db import DBHandler, DBException
 from . import get_uploader_config
-from ..mail_notifier import add_to_report
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'
@@ -63,6 +62,7 @@ class Uploader(ABC):
         up_func
             type: callable
             upload function to be called
+
         Returns
         -------
 
@@ -76,43 +76,23 @@ class Uploader(ABC):
             LOG.debug(error)
             return
 
-        for task in tasks_list:
-            folder_id, error = up_func(task[TSK_STORE_INDEX], task[TSK_SHR_INDEX])
-            if folder_id is not None:
-                add_to_report("{folder} successfully uploaded (folderid = {folder_id}), "
-                              "and shared with {share_lists}.".format(
-                                                                    folder=task[TSK_STORE_INDEX],
-                                                                    folder_id=folder_id,
-                                                                    share_lists=task[TSK_SHR_INDEX]
-                                                                    ))
-            else:
-                add_to_report("{folder} uploading failed due to "
-                              "following error\n{error}\n".format(
-                                                                  folder=task[TSK_STORE_INDEX],
-                                                                  error=error
-                                                                  ))
+        if tasks_list:
+            up_func(tasks_list)
 
     @staticmethod
     @abstractmethod
-    def _upload(folder, share_list):
+    def _upload(tasks_list):
         """
         Uploads the folder and appends share entities
 
         Parameters
         -------
-        folder
-            type: str
-            path to folder to be uploaded
-        share_list
-            type: str
-            str of entities the file is to be shared with,
-            multiple values separated by space
+        tasks_list
+            type:  list
+            list containing details of recordings to be uploaded.
 
         Returns
         -------
-        folder_id
-            type: str
-            unique id of the folder uploaded to GDrive
 
         """
         # make sure to add a function to upload logs to a remote folder in cloud
