@@ -115,7 +115,7 @@ class GDrive(Uploader):
         except UploadingFailed:
             pass
 
-        # upload the logs till now, and truncate log file.
+        GDrive.upload_log(file_service)
 
     @staticmethod
     def upload_log(file_service):
