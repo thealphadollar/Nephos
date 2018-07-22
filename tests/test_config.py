@@ -101,7 +101,6 @@ class TestConfig(TestCase):
         with mock.patch('nephos.load_config.Config.load_data', side_effect=mock_load), \
              mock.patch('nephos.load_config.Config._correct_log_file_path',
                         return_value="correct_path"), \
-             mock.patch('nephos.load_config.Config.load_mail_list', return_value=["abc@xyz.com"]), \
              mock.patch('nephos.load_config.get_env_var', return_value="env_value"):
 
             self.TestConfig.load_config()
@@ -125,16 +124,10 @@ class TestConfig(TestCase):
             # below tests pass if _config_updates works fine
             nephos_log_file = pydash.get(self.TestConfig.logging_config,
                                          'handlers.nephos_file.filename')
-            email_addr = pydash.get(self.TestConfig.logging_config, 'handlers.email.toaddrs')
-            credentials = pydash.get(self.TestConfig.logging_config, 'handlers.email.credentials')
 
             expected_nephos_log_file = "correct_path"
-            expected_email_addr = ["abc@xyz.com"]
-            expected_credentials = ("env_value", "env_value")
 
             self.assertEqual(nephos_log_file, expected_nephos_log_file)
-            self.assertEqual(email_addr, expected_email_addr)
-            self.assertEqual(credentials, expected_credentials)
             # =============================================
 
     @mock.patch('nephos.load_config.LOG')
@@ -144,8 +137,6 @@ class TestConfig(TestCase):
         self.TestConfig.initialise()
 
         mock_logging_config.assert_called_with(mock.ANY)
-        call_args, call_kwargs = mock_logging_config.call_args
-        self.assertIsInstance(call_args[0], dict)
 
         expected_log_info = "** LOGGER CONFIGURED"
         mock_log.info.assert_called_with(expected_log_info)
@@ -217,34 +208,6 @@ class TestConfig(TestCase):
         self.assertNotEqual(name, raw_name)
         full_name = os.path.join(__nephos_dir__, raw_name)
         self.assertEqual(name, full_name)
-
-    @mock.patch('nephos.load_config.input')
-    def test_load_mail_list(self, mock_input):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_file = os.path.join(temp_dir, "email_test")
-
-            # initially temp_file doesn't exist
-            with mock.patch('nephos.load_config.CRITICAL_MAIL_ADDRS_PATH', new=temp_file):
-                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
-                    mock_input.return_value = "shivam.cs.iit.kgp@gmail.com shiv"
-                    self.TestConfig.load_mail_list()
-                    output = mock_out.getvalue()
-                    expected_output = [
-                        "No critical mail list file found!",
-                        "Following emails removed from critical mail list due to wrong format!",
-                        "['shiv']\n"
-                    ]
-                    self.assertEqual(output, "\n".join(expected_output))
-
-                # now temp_file exists
-                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
-                    self.TestConfig.load_mail_list()
-                    output = mock_out.getvalue()
-                    expected_output = [
-                        "Following emails removed from critical mail list due to wrong format!",
-                        "['shiv']\n"
-                    ]
-                    self.assertEqual(output, "\n".join(expected_output))
 
 
 class TestGetEnvVar(TestCase):

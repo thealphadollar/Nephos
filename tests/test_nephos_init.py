@@ -1,8 +1,10 @@
 from unittest import TestCase, mock
+import os
 import tempfile
 from io import StringIO
 from nephos import __nephos_dir__, __config_dir__, __log_dir__, __db_dir__, \
-    __recording_dir__, __upload_dir__, __docs_dir__, first_time, validate_entries
+    __recording_dir__, __upload_dir__, __docs_dir__, first_time, \
+    validate_entries, load_mail_list
 
 MOCK_WRONG_DATA = {
     '0': {
@@ -38,9 +40,10 @@ class TestFirstTime(TestCase):
             with mock.patch('nephos.__nephos_dir__', new=temp_dir):
                 self.assertFalse(first_time())
 
+    @mock.patch('nephos.load_mail_list')
     @mock.patch('nephos.copy_tree')
     @mock.patch('os.makedirs')
-    def test_first_time_true(self, mock_makedir, mock_copy):
+    def test_first_time_true(self, mock_makedir, mock_copy, mock_load_mail):
         with mock.patch('os.path.exists', return_value=False):
             self.assertTrue(first_time())
 
@@ -52,6 +55,35 @@ class TestFirstTime(TestCase):
             mock_makedir.mock_calls[5] = [mock.call(__upload_dir__)]
             mock_makedir.mock_calls[6] = [mock.call(__docs_dir__)]
             self.assertTrue(mock_copy.called)
+            self.assertTrue(mock_load_mail.called)
+
+    @mock.patch('nephos.input')
+    def test_load_mail_list(self, mock_input):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file = os.path.join(temp_dir, "email_test")
+
+            # initially temp_file doesn't exist
+            with mock.patch('nephos.CRITICAL_MAIL_ADDRS_PATH', new=temp_file):
+                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
+                    mock_input.return_value = "shivam.cs.iit.kgp@gmail.com shiv"
+                    load_mail_list()
+                    output = mock_out.getvalue()
+                    expected_output = [
+                        "No critical mail list file found!",
+                        "Following emails removed from critical mail list due to wrong format!",
+                        "['shiv']\n"
+                    ]
+                    self.assertEqual(output, "\n".join(expected_output))
+
+                # now temp_file exists
+                with mock.patch('sys.stdout', new_callable=StringIO) as mock_out:
+                    load_mail_list()
+                    output = mock_out.getvalue()
+                    expected_output = [
+                        "Following emails removed from critical mail list due to wrong format!",
+                        "['shiv']\n"
+                    ]
+                    self.assertEqual(output, "\n".join(expected_output))
 
 
 class TestValidateEntries(TestCase):

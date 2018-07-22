@@ -23,14 +23,12 @@ MOCK_RECORDER_CONFIG = {
 @mock.patch('nephos.recorder.channels.ChannelHandler')
 class TestChannelHandler(TestCase):
 
-    @mock.patch('nephos.recorder.channels.DBHandler')
     @mock.patch('nephos.recorder.channels.input')
-    def test_add_channel(self, mock_input, mock_db_handler, mock_ch_handler):
+    def test_add_channel(self, mock_input, mock_ch_handler):
         with mock.patch('nephos.recorder.channels.validate_entries'):
             ChannelHandler.add_channel(mock_ch_handler)
 
             self.assertTrue(mock_input.called)
-            self.assertTrue(mock_db_handler.connect.called)
             self.assertTrue(mock_ch_handler.insert_channels.called)
 
     @mock.patch('nephos.recorder.channels.LOG')
@@ -46,25 +44,24 @@ class TestChannelHandler(TestCase):
     @mock.patch('nephos.recorder.channels.DBHandler')
     def test_insert_channels_correct(self, mock_db_handler, mock_os, mock_log, _):
         mock_db_handler.insert_data.return_value = 0
-        with mock_db_handler.connect() as db_cur:
-            ChannelHandler.insert_channels(db_cur, MOCK_CH_DATA)
+        ChannelHandler.insert_channels(MOCK_CH_DATA)
 
-            self.assertTrue(mock_db_handler.insert_data.called)
-            self.assertTrue(mock_log.info.called)
-            self.assertTrue(mock_os.makedirs.called)
-            self.assertFalse(mock_log.warning.called)
+        self.assertTrue(mock_db_handler.insert_data.called)
+        self.assertTrue(mock_log.info.called)
+        self.assertTrue(mock_os.makedirs.called)
+        self.assertFalse(mock_log.warning.called)
 
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.os')
     @mock.patch('nephos.recorder.channels.DBHandler')
     def test_insert_channels_invalid(self, mock_db_handler, mock_os, mock_log, _):
         mock_db_handler.insert_data.return_value = None
-        with mock_db_handler.connect() as db_cur:
-            ChannelHandler.insert_channels(db_cur, MOCK_CH_DATA)
 
-            self.assertTrue(mock_db_handler.insert_data.called)
-            self.assertFalse(mock_log.info.called)
-            self.assertFalse(mock_os.makedirs.called)
+        ChannelHandler.insert_channels(MOCK_CH_DATA)
+
+        self.assertTrue(mock_db_handler.insert_data.called)
+        self.assertFalse(mock_log.info.called)
+        self.assertFalse(mock_os.makedirs.called)
 
     @mock.patch('nephos.recorder.channels.input')
     @mock.patch('nephos.recorder.channels.LOG')

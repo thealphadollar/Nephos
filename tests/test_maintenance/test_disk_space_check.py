@@ -15,7 +15,7 @@ class TestDiskSpaceCheck(TestCase):
         with mock.patch('nephos.maintenance.disk_space_check.__nephos_dir__', return_value=HOME):
             DiskSpaceCheck._execute(mock_space_check)
 
-            mock_space_check._handle.assert_called_with(True, mock.ANY)
+            mock_space_check._handle.assert_called_with(True, mock.ANY, mock.ANY)
 
     def test__execute_not_critical(self, mock_space_check):
         mock_space_check._get_data.return_value = 0
@@ -24,7 +24,7 @@ class TestDiskSpaceCheck(TestCase):
         with mock.patch('nephos.maintenance.disk_space_check.__nephos_dir__', return_value=HOME):
             DiskSpaceCheck._execute(mock_space_check)
 
-            mock_space_check._handle.assert_called_with(False, mock.ANY)
+            mock_space_check._handle.assert_called_with(False, mock.ANY, mock.ANY)
 
     def test_conversion(self, _):
         in_bytes = 1024 * 1024 * 1024

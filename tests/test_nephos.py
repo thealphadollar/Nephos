@@ -1,5 +1,6 @@
 from unittest import TestCase, mock
-from nephos.nephos import Nephos, DBException
+from nephos.nephos import Nephos
+from nephos.manage_db import DBException
 
 
 @mock.patch('nephos.nephos.Nephos')
@@ -36,7 +37,6 @@ class TestNephos(TestCase):
 
         mock_input.assert_called_with("File path: ")
         mock_nephos.config_handler.load_data.asset_called_with(mock.ANY, mock.ANY)
-        self.assertTrue(mock_nephos.db_handler.connect.called)
         self.assertTrue(mock_nephos.channel_handler.insert_channels.called)
         self.assertFalse(mock_log.warning.called)
         self.assertFalse(mock_log.error.called)
@@ -48,19 +48,6 @@ class TestNephos(TestCase):
 
         mock_input.assert_called_with("File path: ")
         mock_nephos.config_handler.load_data.asset_called_with(mock.ANY, mock.ANY)
-        self.assertTrue(mock_nephos.db_handler.connect.called)
         self.assertTrue(mock_nephos.channel_handler.insert_channels.called)
-        self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.debug.called)
-
-    @mock.patch('nephos.nephos.input')
-    def test_load_channels_sharelist_DBException(self, mock_input, mock_log, mock_nephos):
-        mock_nephos.db_handler.connect.side_effect = DBException
-        Nephos.load_channels_sharelist(mock_nephos)
-
-        mock_input.assert_called_with("File path: ")
-        mock_nephos.config_handler.load_data.asset_called_with(mock.ANY, mock.ANY)
-        self.assertTrue(mock_nephos.db_handler.connect.called)
-        self.assertFalse(mock_nephos.channel_handler.insert_channels.called)
         self.assertTrue(mock_log.warning.called)
         self.assertTrue(mock_log.debug.called)

@@ -21,14 +21,14 @@ class TestChecker(TestCase):
     @mock.patch('nephos.maintenance.checker.LOG')
     def test__handle_critical(self, mock_log, _):
         msg = "msg"
-        Checker._handle(True, msg)
+        Checker._handle(True, "critical", msg)
 
         mock_log.critical.assert_called_with(msg)
 
     @mock.patch('nephos.maintenance.checker.LOG')
     def test__handle_not_critical(self, mock_log, _):
         msg = "msg"
-        Checker._handle(False, msg)
+        Checker._handle(False, "critical", msg)
 
         mock_log.info.assert_called_with(msg)
 
