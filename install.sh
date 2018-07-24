@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+NEPHOS_DIR=$(pwd)
+
 if [ `id -u` -ne 0 ]
     then echo "Error: please launch the script as sudo!"
     exit 1
@@ -14,44 +16,39 @@ yum install -y python34-setuptools
 easy_install-3.4 pip
 echo "python-pip installed"
 # install pipenv
-pip3 install --user pipenv
+pip3 install pipenv
+export PYTHON_BIN_PATH="$(python3 -m site --user-base)/bin"
+export PATH="$PATH:$PYTHON_BIN_PATH"
 echo "pipenv installed"
 # install mail
 yum install -y mailx
 echo "mail tools installed"
 
 # install dependencies for building following libraries
-yum install -y autoconf automake bzip2 cmake freetype-devel gcc gcc-c++ git libtool make mercurial pkgconfig zlib-devel x264-devel x254-devel
+yum install -y autoconf automake bzip2 cmake freetype-devel gcc gcc-c++ git libtool make mercurial pkgconfig zlib-devel x264-devel x254-devel cairo-devel pango-devel libicu-devel
 echo "dependencies for building libraries installed"
 
 # install multicat
 cd $HOME
 git clone --depth 1 https://code.videolan.org/videolan/multicat.git
 cd multicat
-make
-make install
+git clone --depth 1 https://code.videolan.org/videolan/bitstream.git
+cd bitstream
+make && make install
+cd ..
+make && make install
 echo "multicat installed"
 
-# install leptonica
-cd $HOME
-wget http://www.leptonica.org/source/leptonica-1.76.0.tar.gz
-tar xzvf leptonica-1.76.0.tar.gz
-rm leptonica-1.76.0.tar.gz
-cd leptonica-1.76.0
-./configure & make & make install
-echo "leptonica installed"
-
 # install tesseract
-cd $HOME
-wget https://github.com/tesseract-ocr/tesseract/archive/3.05.02.tar.gz
-tar xvzf 3.05.02.tar.gz
-rm 3.05.02.tar.gz
-cd tesseract-3.05.02
-./autogen.sh
-./configure
-make & make install
-ldconfig
-echo "tesseract-ocr installed"
+yum install -y leptonica-devel
+yum install -y tesseract-devel
+
+# install basic tesseract language data
+wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/fra.traineddata
+wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/eng.traineddata
+wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/spa.traineddata
+wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/rus.traineddata
+mv *.traineddata /usr/local/share/tessdata
 
 # install FFMPEG and FFPROBE (https://trac.ffmpeg.org/attachment/wiki/CompilationGuide/Centos/ffmpeg_centos7.sh)
 cd $HOME
@@ -77,7 +74,7 @@ wget http://ffmpeg.org/releases/ffmpeg-4.0.tar.gz
 
 # Unpack files
 for file in `ls ~/ffmpeg_sources/*.tar.*`; do
-tar -xvf $file
+tar -xvf ${file}
 done
 
 cd nasm-*/
@@ -136,10 +133,10 @@ echo "FFmpeg and FFprobe installed"
 cd $HOME
 git clone --depth 1 https://github.com/CCExtractor/ccextractor.git
 cd ccextractor/linux
-./autogen.sh
-./configure
+./build
 make && make install
 echo "CCExtractor installed"
 
-# install Nephos python dependencies
+cd ${NEPHOS_DIR}
 pipenv install
+pipenv run python3 -m nephos init
