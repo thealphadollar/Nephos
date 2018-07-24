@@ -12,12 +12,20 @@ Nephos will be developed, using Python and few other open source projects, to ac
 
 ***
 ## Installation (And Setup)
-1. 1) [Install Python3](https://kerneltalks.com/tools/install-python-3-on-linux-redhat-centos-ubuntu/)<br/>
-   2) [Install Pip](https://www.tecmint.com/install-pip-in-linux/)<br/>
-2. 1) [Install FFMPEG and FFPROBE](https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos)<br/>
-   2) [Install CCExtractor](https://github.com/CCExtractor/ccextractor/wiki/Installation)<br/>
-   3) [Install Multicat](https://github.com/mmalecki/multicat/blob/master/trunk/INSTALL)<br/>
-3. 1) Nephos uses `mail` bash command to send email notifications, please [install](https://tecadmin.net/bash-mail-command-not-found/) and [configure](https://superuser.com/questions/351841/how-do-i-set-up-the-unix-mail-command) it.
+1. Nephos requires following environment dependencies:
+    - Python 3
+    - Pip
+    - pipenv
+2. Nephos requires following third party libraries:
+    - FFmpeg and FFprobe
+    - Multicat
+    - CCExtractor (requires tesseract-ocr-dev and leptonica-dev)
+<!-- 1. 1) [Install Python3](https://kerneltalks.com/tools/install-python-3-on-linux-redhat-centos-ubuntu/)<br/> -->
+   <!-- 2) [Install Pip](https://www.tecmint.com/install-pip-in-linux/)<br/> -->
+<!-- 2. 1) [Install FFMPEG and FFPROBE](https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos)<br/> -->
+   <!-- 2) [Install CCExtractor](https://github.com/CCExtractor/ccextractor/wiki/Installation)<br/> -->
+   <!-- 3) [Install Multicat](https://github.com/mmalecki/multicat/blob/master/trunk/INSTALL)<br/> -->
+3. 1) Nephos uses `mail` bash command to send email notifications, please [configure](https://superuser.com/questions/351841/how-do-i-set-up-the-unix-mail-command) it before running Nephos.
    2) You'll be asked to enter the email address(es) of recipient(s) of critical mails
 at initialisation of Nephos. It is only asked on first launch, to edit it
 later:
@@ -29,21 +37,14 @@ later:
   logs, ignored by config handler and you can correct it in the same file
 
 
-### Install Using PyPI package
-#### NOTE: This method is compromised at the moment!
-4. 1) Install Nephos, `pip install nephos`<br/>
-   2) Check if the install was successful, `nephos version`<br/>
-5. 1) Initialise nephos directory, `nephos init`<br/>
-   2) Observer and modify configurations available in `~/Nephos/config` (especially maintenance and module configurations)<br/>
-   3) In the modules configuration, update multicat path since no multicat is bundled in this method.
-   4) Run Nephos, `nephos start`
 ### Install Using Git Clone
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/Nephos.git && cd Nephos`<br/>
-   2) Install Pipenv, `pip install pipenv`<br/>
-   3) Install nephos' requirements (this step also creates a virtual environment to run nephos), `pipenv install`
-5. 1) Initialise nephos directory, `python -m nephos init`<br/>
-   2) Observe and modify configurations available in `~/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
-   3) Run Nephos, `python -m nephos start`
+   2) Run the script, `./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
+5. 1) Observe and modify configurations available in `~/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
+        - Update path to various libraries, in the config file, being used; **fatal error might error** in case where the path to binaries (soft links work) is not appropriate.
+   2) Add `nephos_start.sh` as [a cron job to be executed at startup](https://www.cyberciti.biz/faq/linux-execute-cron-job-after-system-reboot/).<br/>
+        `@restart /path/to/nephos_start.sh 2&> ~/Nephos/boot_start.log`
+   3) Run nephos using `nephos_start.sh`
 
 ## More Info
 For more information regarding using Nephos and how it works, [visit the wiki](https://www.github.com/thealphadollar/Nephos/wiki)
