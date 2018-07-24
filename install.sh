@@ -20,8 +20,8 @@ pip3 install pipenv
 export PYTHON_BIN_PATH="$(python3 -m site --user-base)/bin"
 export PATH="$PATH:$PYTHON_BIN_PATH"
 echo "pipenv installed"
-# install mail
-yum install -y mailx
+# install mail and screen
+yum install -y mailx screen
 echo "mail tools installed"
 
 # install dependencies for building following libraries
@@ -134,7 +134,7 @@ cd $HOME
 git clone --depth 1 https://github.com/CCExtractor/ccextractor.git
 cd ccextractor/linux
 ./build
-make && make install
+ln ./ccextractor /usr/bin/ccextractor
 echo "CCExtractor installed"
 
 cd ${NEPHOS_DIR}
