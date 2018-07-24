@@ -41,9 +41,9 @@ later:
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/Nephos.git && cd Nephos`<br/>
    2) Run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
 5. 1) Observe and modify configurations available in `~/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
-        - Update path to various libraries, in the config file, being used; **fatal error might error** in case where the path to binaries (soft links work) is not appropriate.
+        - Update path to all libraries, in the config file, being used; **fatal error might occur** in case where the path to binaries (soft links work) are not appropriate.
    2) Add `nephos_start.sh` as [a cron job to be executed at startup](https://www.cyberciti.biz/faq/linux-execute-cron-job-after-system-reboot/) in `root` crontab.<br/>
-        `@restart /path/to/nephos_start.sh 2&> ~/Nephos/boot_start.log`
+        `@reboot /path/to/nephos_start.sh 2&> ~/Nephos/boot_start.log`
    3) Run nephos using `sudo nephos_start.sh`
 
 ## More Info
