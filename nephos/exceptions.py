@@ -117,3 +117,12 @@ class OAuthFailure(Exception):
     """
     def __init__(self):
         super(OAuthFailure, self).__init__()
+
+
+class FTPFailure(Exception):
+    """
+    Handles all FTP failures and exceptions raised
+    """
+    def __init__(self):
+        LOG.error("FTP upload failed!")
+        super(FTPFailure, self).__init__()
