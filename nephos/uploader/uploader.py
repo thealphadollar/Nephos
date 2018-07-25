@@ -9,6 +9,7 @@ import sqlite3
 from logging import getLogger
 from ..manage_db import DBHandler, DBException
 from . import get_uploader_config
+from .FTP import FTPUploader
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'
@@ -77,6 +78,9 @@ class Uploader(ABC):
             return
 
         if tasks_list:
+            LOG.info("Uploading to FTP server first...")
+            FTPUploader(tasks_list)
+            LOG.info("Beginning upload to cloud storage...")
             up_func(tasks_list)
 
     @staticmethod

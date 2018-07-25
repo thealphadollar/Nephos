@@ -98,8 +98,9 @@ class GDrive(Uploader):
                     folder_id = GDrive._create_folder(file_service, folder)
                     GDrive._upload_files(file_service, folder, folder_id)
                     GDrive._share(batch_service, permissions_service, folder_id, share_list)
-                    GDrive._remove(folder)
                     LOG.debug("%s uploaded successfully!", folder)
+                    GDrive._remove(folder)
+                    LOG.debug("%s removed from local storage successfully!", folder)
                 except (UnexpectedBodyError, ResumableUploadError, UnexpectedMethodError,
                         HttpError) as err:
                     LOG.warning("Uploading %s failed! Will retry later", folder)

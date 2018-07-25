@@ -10,6 +10,11 @@ preprocess:
   path_to_ffprobe: 'ffprobe'  # absolute path to ffprobe binary, or leave default for using system wide install
   interval: 30  # minutes,
 upload:
+  ftp:
+    host: # ftp host within parenthesis
+    port: # ftp port
+    username: # username for the server
+    password: # FTP account's password
   timings:
     0: "20:00"  # "HH:MM" eg. "15:45", WITHIN QUOTES
     1: "08:00"
