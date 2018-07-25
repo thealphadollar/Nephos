@@ -7,6 +7,7 @@ from nephos.manage_db import DBException
 @mock.patch('nephos.nephos.LOG')
 class TestNephos(TestCase):
 
+    @mock.patch('nephos.nephos.GDrive')
     @mock.patch('nephos.nephos.Config')
     @mock.patch('nephos.nephos.DBHandler')
     @mock.patch('nephos.nephos.Scheduler')
@@ -14,10 +15,11 @@ class TestNephos(TestCase):
     @mock.patch('nephos.nephos.JobHandler')
     @mock.patch('nephos.nephos.Maintenance')
     def test_init(self, mock_maintenance, mock_job, mock_ch, mock_scheduler,
-                  mock_db, mock_config, mock_log, _):
+                  mock_db, mock_config, mock_drive, mock_log, _):
         with mock.patch('nephos.nephos.first_time', return_value=True):
             Nephos()
 
+            self.assertTrue(mock_drive.called)
             self.assertTrue(mock_config.called)
             self.assertTrue(mock_db.called)
             self.assertTrue(mock_scheduler.called)

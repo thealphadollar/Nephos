@@ -43,12 +43,23 @@ class TestStart(TestCase):
     @mock.patch('nephos.__main__.Nephos')
     @mock.patch('nephos.__main__.LOG')
     def test_start(self, mock_log, mock_nephos):
-        runner = CliRunner()
-        runner.invoke(start, input='quit')
-        expected = "Nephos Stopped!"
+        with mock.patch('os.path.exists', return_value=True):
+            runner = CliRunner()
+            runner.invoke(start, input='quit')
+            expected = "Nephos Stopped!"
 
-        self.assertTrue(mock_nephos.called)
-        mock_log.warning.assert_called_with(expected)
+            self.assertTrue(mock_nephos.called)
+            mock_log.warning.assert_called_with(expected)
+
+    @mock.patch('nephos.__main__.Nephos')
+    @mock.patch('nephos.__main__.LOG')
+    def test_start_without_init(self, mock_log, mock_nephos):
+        with mock.patch('os.path.exists', return_value=False):
+            runner = CliRunner()
+            runner.invoke(start, input='quit')
+            expected = "Nephos Stopped!"
+
+            self.assertFalse(mock_nephos.called)
 
 
 class TestPrintVerInfo(TestCase):

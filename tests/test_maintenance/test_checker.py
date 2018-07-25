@@ -18,12 +18,14 @@ class TestChecker(TestCase):
 
         mock_log.warning.assert_called_with("%s maintenance job is not enabled", "test")
 
+    @mock.patch('nephos.maintenance.checker.send_mail')
     @mock.patch('nephos.maintenance.checker.LOG')
-    def test__handle_critical(self, mock_log, _):
+    def test__handle_critical(self, mock_log, mock_send_mail, _):
         msg = "msg"
         Checker._handle(True, "critical", msg)
 
         mock_log.critical.assert_called_with(msg)
+        self.assertTrue(mock_send_mail.called)
 
     @mock.patch('nephos.maintenance.checker.LOG')
     def test__handle_not_critical(self, mock_log, _):

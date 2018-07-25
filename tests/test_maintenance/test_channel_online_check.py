@@ -49,28 +49,32 @@ class TestChannelOnlineCheck(TestCase):
         self.assertTrue(mock_channel_checker._channel_stats.called)
         self.assertTrue(mock_channel_checker._extract_ips.called)
 
+    @mock.patch('nephos.manage_db.DBHandler.connect')
     @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
     @mock.patch('os.stat')
     @mock.patch('nephos.maintenance.channel_online_check.LOG')
-    def test__check_ip(self, mock_log, mock_stat, mock_ch, _):
+    def test__check_ip(self, mock_log, mock_stat, mock_ch, mock_db, _):
         mock_stat.return_value = MockOSReturn(0)
         ip_addr = '0.0.0.0:8080'
         ChannelOnlineCheck._check_ip(ip_addr, 'test')
 
         mock_ch.record_stream.assert_called_with(mock.ANY, mock.ANY, mock.ANY, test=True)
         self.assertTrue(mock_stat.called)
+        self.assertTrue(mock_db.called)
         mock_log.debug.assert_called_with(mock.ANY, ip_addr)
 
+    @mock.patch('nephos.manage_db.DBHandler.connect')
     @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
     @mock.patch('os.stat')
     @mock.patch('nephos.maintenance.channel_online_check.LOG')
-    def test__check_ip_record_error(self, mock_log, mock_stat, mock_ch, _):
+    def test__check_ip_record_error(self, mock_log, mock_stat, mock_ch, mock_db, _):
         mock_stat.return_value = MockOSReturn(0)
         ip_addr = '0.0.0.0:8080'
         mock_ch.record_stream.return_value = False
         ChannelOnlineCheck._check_ip(ip_addr, 'test')
 
         self.assertFalse(mock_stat.called)
+        self.assertTrue(mock_db.called)
         mock_log.debug.assert_called_with(mock.ANY, ip_addr)
 
     @mock.patch('nephos.maintenance.channel_online_check.ChannelHandler')
