@@ -152,6 +152,8 @@ class Uploader(ABC):
         -------
 
         """
+        self._rm_old_jobs()
+
         jobs = ["run_uploader"]
         job_funcs = {
             "run_uploader": self.begin_uploads,
@@ -166,6 +168,21 @@ class Uploader(ABC):
                 self._scheduler.add_cron_necessary_job(job_funcs[job], job+"@"+timings[key],
                                                        timings[key],
                                                        self._config['repetition'], args)
+
+    def _rm_old_jobs(self):
+        """
+        Removes old uploader jobs by fetching them with
+        job list function.
+
+        Returns
+        -------
+
+        """
+        job_list = self._scheduler.get_jobs()
+        for job in job_list:
+            if "run_uploader@" in job.id:
+                self._scheduler.rm_recording_job(job.id)
+
 
     @staticmethod
     def _get_name(path):
