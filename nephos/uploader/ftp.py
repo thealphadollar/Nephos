@@ -15,6 +15,10 @@ LOG = getLogger(__name__)
 
 
 class FTPUploader:
+    """
+    A separate uploader from cloud account that uses FTP details to upload
+    processed recordings.
+    """
 
     def __init__(self, tasks_list):
         """
@@ -29,7 +33,8 @@ class FTPUploader:
         """
         self.ftp = ftplib.FTP()
         host, port, username, password = self._get_ftp_config()
-        if (host is not None) and (port is not None) and (username is not None) and (password is not None):
+        if (host is not None) and (port is not None) and \
+                (username is not None) and (password is not None):
             try:
                 self._auth(host, port, username, password)
                 self.nephos_ftp_path = self._create_folder("Nephos")
@@ -103,7 +108,8 @@ class FTPUploader:
             LOG.error("couldn't establish connection to ftp server")
             LOG.debug(err)
             raise FTPFailure
-        LOG.debug("Connection to FTP (host: %s, port: %s) established, trying to authenticate...", host, port)
+        LOG.debug("Connection to FTP (host: %s, port: %s) established, "
+                  "trying to authenticate...", host, port)
 
         try:
             self.ftp.login(username, password)
@@ -189,4 +195,4 @@ class FTPUploader:
 
         """
         head, tail = ntpath.split(path)
-        return tail or ntpath.basename(head)  # return tail when file, otherwise other one for folder
+        return tail or ntpath.basename(head)  # return tail when file, otherwise head for folder

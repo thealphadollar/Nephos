@@ -55,7 +55,8 @@ class ShareHandler:
             try:
                 with DBHandler.connect() as db_cur:
                     shr_id = DBHandler.insert_data(db_cur, "share_list", shr_data[key])
-                LOG.info("Share entity (id = %s) added with following data:\n%s", shr_id, shr_data[key])
+                LOG.info("Share entity (id = %s) added with following data:\n%s", shr_id,
+                         shr_data[key])
             except DBException as err:
                 LOG.info("Failed to connect to database")
                 LOG.debug(err)

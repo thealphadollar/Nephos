@@ -89,9 +89,9 @@ class ProcessFailedException(Exception):
             LOG.critical(msg)
             add_to_report("{file} discarded from Nephos queue due to multiple processing"
                           " failures with following error:\n{error}\n".format(
-                                      file=self.path_file,
-                                      error=self.error
-                                    ))
+                              file=self.path_file,
+                              error=self.error
+                          ))
 
         else:
             self.db_cur.execute(UNSET_PROCESSING_COMMAND, (self.path_file, ))
@@ -115,8 +115,7 @@ class OAuthFailure(Exception):
     """
     Handles all authentication failure
     """
-    def __init__(self):
-        super(OAuthFailure, self).__init__()
+    pass
 
 
 class FTPFailure(Exception):

@@ -9,7 +9,7 @@ import sqlite3
 from logging import getLogger
 from ..manage_db import DBHandler, DBException
 from . import get_uploader_config
-from .FTP import FTPUploader
+from .ftp import FTPUploader
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'
@@ -22,6 +22,10 @@ CMD_RM_TASK = """DELETE
 
 
 class Uploader(ABC):
+    """
+    Handles basic and necessary functions of an uploader,
+    all uploading modules need to derive from this class
+    """
 
     def __init__(self, scheduler):
         self._config = get_uploader_config()
@@ -159,7 +163,8 @@ class Uploader(ABC):
             LOG.debug("Adding %s default job to scheduler...", job)
             timings = self._config['timings']
             for key in timings:
-                self._scheduler.add_cron_necessary_job(job_funcs[job], job+"@"+timings[key], timings[key],
+                self._scheduler.add_cron_necessary_job(job_funcs[job], job+"@"+timings[key],
+                                                       timings[key],
                                                        self._config['repetition'], args)
 
     @staticmethod
@@ -181,4 +186,4 @@ class Uploader(ABC):
 
         """
         head, tail = ntpath.split(path)
-        return tail or ntpath.basename(head)  # return tail when file, otherwise other one for folder
+        return tail or ntpath.basename(head)  # return tail when file, otherwise head for folder

@@ -102,7 +102,9 @@ class JobHandler:
         sql_command = "SELECT ip FROM channels WHERE name=?"
         for job_key in job_data.keys():
             try:
-                job_data[job_key]["channel_name"] = "_".join(job_data[job_key]["channel_name"].lower().split())
+                job_data[job_key]["channel_name"] = "_".join(
+                    job_data[job_key]["channel_name"].lower().split()
+                )
                 db_cur.execute(sql_command, (job_data[job_key]["channel_name"], ))
                 try:
                     ip_addr = db_cur.fetchall()[0][0]
@@ -117,7 +119,8 @@ class JobHandler:
                 week_str = self.to_weekday(job_data[job_key]["repetition"])
                 job_name = "_".join(job_data[job_key]["name"].lower().split())
 
-                self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path, duration=duration,
+                self._scheduler.add_recording_job(ip_addr=ip_addr, out_path=out_path,
+                                                  duration=duration,
                                                   job_time=job_time, week_days=week_str,
                                                   job_name=job_name)
             except InterfaceError as error:
@@ -135,7 +138,7 @@ class JobHandler:
         """
         job_list = self._scheduler.get_jobs()
         for job in job_list:
-            print("Name: " + job.id, "\tNextRun: ",  job.next_run_time)
+            print("Name: " + job.id, "\tNextRun: ", job.next_run_time)
 
     def rm_job(self):
         """

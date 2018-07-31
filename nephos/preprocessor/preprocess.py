@@ -83,7 +83,8 @@ class PreprocessHandler:
             with DBHandler.connect() as db_cur:
                 ch_name = PreprocessHandler._get_channel_name(ip_addr, db_cur)
 
-            store_path = os.path.join(__upload_dir__, ch_name + "_" + str(datetime.now().strftime("%Y-%m-%d-%H-%M")))
+            store_path = os.path.join(__upload_dir__, ch_name + "_" +
+                                      str(datetime.now().strftime("%Y-%m-%d-%H-%M")))
             lang, sub_lang = ApplyProcessMethods.get_lang(orig_path)
 
             data = {
@@ -95,7 +96,7 @@ class PreprocessHandler:
             }
             with DBHandler.connect() as db_cur:
                 task_id = DBHandler.insert_data(db_cur, "tasks", data)
-                
+
             if task_id is not None:
                 LOG.debug("Task (id = %s) added with following data:\n%s", task_id, data)
             else:
@@ -103,7 +104,7 @@ class PreprocessHandler:
 
         except (DBException, KeyError) as err:
             LOG.warning("Failed to insert task for recording: %s", orig_path)
-            if KeyError:
+            if err == KeyError:
                 LOG.debug("%s is a corrupted recording!", orig_path)
             os.remove(orig_path)
             LOG.debug(err)

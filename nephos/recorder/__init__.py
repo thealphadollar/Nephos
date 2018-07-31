@@ -1,12 +1,12 @@
 """
 Stores all the code concerning the stream recorder
 """
-config = None
+CONFIG = None
 
 
 def set_recorder_config(recorder_config):
     """
-    sets config for the module
+    sets CONFIG for the module
 
     Parameters
     ----------
@@ -18,8 +18,8 @@ def set_recorder_config(recorder_config):
     -------
 
     """
-    global config
-    config = recorder_config
+    global CONFIG
+    CONFIG = recorder_config
 
 
 def get_recorder_config():
@@ -30,5 +30,5 @@ def get_recorder_config():
     configuration for the recording module
 
     """
-    global config
-    return config
+    global CONFIG
+    return CONFIG

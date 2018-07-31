@@ -81,7 +81,9 @@ class ChannelHandler:
         """
         ch_data = validate_entries("channel", ch_data)
         for key in ch_data.keys():
-            ch_data[key]["name"] = "_".join(ch_data[key]["name"].lower().split())  # replace whitespace with underscore
+            ch_data[key]["name"] = "_".join(
+                ch_data[key]["name"].lower().split()
+            )  # replace whitespace with underscore
             with DBHandler.connect() as db_cur:
                 ch_id = DBHandler.insert_data(db_cur, "channels", ch_data[key])
             if ch_id is not None:

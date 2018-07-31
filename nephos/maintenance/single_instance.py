@@ -12,7 +12,7 @@ from ..exceptions import SingleInstanceException
 LOG = getLogger(__name__)
 
 
-class SingleInstance(object):
+class SingleInstance:
     """
     Class that can be instantiated only once per machine.
     If is there another instance already running it will throw a `SingleInstanceException`.

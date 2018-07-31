@@ -1,6 +1,7 @@
 """
 The pipeline for the working of nephos
 """
+import sys
 from logging import getLogger
 from . import first_time, __nephos_dir__
 from .load_config import Config
@@ -13,8 +14,7 @@ from .maintenance.single_instance import SingleInstance
 from .exceptions import SingleInstanceException
 from .preprocessor.preprocess import PreprocessHandler
 from .preprocessor.share_handler import ShareHandler
-from .uploader.GDrive import GDrive
-import sys
+from .uploader.gdrive import GDrive
 
 LOG = getLogger(__name__)
 
@@ -114,7 +114,8 @@ class Nephos:
 
         """
         if first_time():
-            print("This is the first time Nephos is being run...\nInitialised nephos at " + __nephos_dir__)
+            print("This is the first time Nephos is being run...\n"
+                  "Initialised nephos at " + __nephos_dir__)
             db_handler = DBHandler()
             db_handler.first_time()
             db_handler.init_jobs_db()

@@ -28,7 +28,10 @@ LOG_FILE_PATH = os.path.join(__log_dir__, "nephos.log")
 
 
 class GDrive(Uploader):
-
+    """
+    Derived from uploader and handles uploading recordings
+    to Google drive.
+    """
     def auth(self):
         """
         Runs authentication pipeline.
@@ -54,8 +57,8 @@ class GDrive(Uploader):
             LOG.debug(error)
             send_mail("Please re-authenticate Nephos, authentication attempt failed with "
                       "error:\n{error}\n".format(
-                       error=error
-                       ), "critical")
+                          error=error
+                          ), "critical")
             raise OAuthFailure
 
     @staticmethod
@@ -86,9 +89,9 @@ class GDrive(Uploader):
 
         """
         service = GDrive._get_upload_service()
-        file_service = service.files()
-        permissions_service = service.permissions()
-        batch_service = service.new_batch_http_request(callback=GDrive._share_callback)
+        file_service = service.files()  # pylint: disable=no-member
+        permissions_service = service.permissions()  # pylint: disable=no-member
+        batch_service = service.new_batch_http_request(callback=GDrive._share_callback)  # pylint: disable=no-member
         for task in tasks_list:
             folder, share_list = task[TSK_STORE_INDEX], task[TSK_SHR_INDEX]
             folder_id, error = None, None
@@ -114,16 +117,16 @@ class GDrive(Uploader):
             if folder_id is not None:
                 add_to_report("{folder} successfully uploaded (folderid = {folder_id}), "
                               "and shared with {share_lists}.".format(
-                                                                    folder=task[TSK_STORE_INDEX],
-                                                                    folder_id=folder_id,
-                                                                    share_lists=task[TSK_SHR_INDEX]
-                                                                    ))
+                                  folder=task[TSK_STORE_INDEX],
+                                  folder_id=folder_id,
+                                  share_lists=task[TSK_SHR_INDEX]
+                                  ))
             else:
                 add_to_report("{folder} uploading failed due to "
                               "following error\n{error}\n".format(
-                                                                  folder=task[TSK_STORE_INDEX],
-                                                                  error=error
-                                                                  ))
+                                  folder=task[TSK_STORE_INDEX],
+                                  error=error
+                                  ))
 
         # uploading logs with every upload.
         GDrive.upload_log(file_service)
@@ -144,12 +147,15 @@ class GDrive(Uploader):
         -------
 
         """
-        timestamped_log_path = os.path.join(__log_dir__, str(datetime.now().strftime("nephos_%d%m%Y_%H%M.log")))
+        timestamped_log_path = os.path.join(__log_dir__,
+                                            str(datetime.now().strftime(
+                                                "nephos_%d%m%Y_%H%M.log")))
         shutil.copyfile(LOG_FILE_PATH, timestamped_log_path)
         file_id = GDrive._upload_file(file_service, LOG_DRIVE_FOLDER_ID, timestamped_log_path)
         if file_id is not None:
             open(LOG_FILE_PATH, 'w').close()
-            LOG.debug("Logs till here uploaded to 'Nephos_Logs' drive folder (file id: %s).", file_id)
+            LOG.debug("Logs till here uploaded to 'Nephos_Logs' "
+                      "drive folder (file id: %s).", file_id)
         else:
             LOG.warning("Uploading logs to drive (folder id: %s) failed!", LOG_DRIVE_FOLDER_ID)
         os.remove(timestamped_log_path)
@@ -206,18 +212,18 @@ class GDrive(Uploader):
                 redirect_uri="urn:ietf:wg:oauth:2.0:oob"  # GUI is not opened
             )
         except (InvalidClientSecretsError, ValueError) as error:
-            LOG.error("Invalid client secrets file provided at {filepath}".format(
-                filepath=CLI_SECRET_PATH
-            ))
+            LOG.error("Invalid client secrets file provided at %s",
+                      CLI_SECRET_PATH
+                      )
             LOG.debug(error)
             raise OAuthFailure()
 
         flow.user_agent = APPLICATION_NAME
         url = flow.step1_get_authorize_url()
 
-        LOG.critical("Please visit the following URL: {auth_url}".format(
-            auth_url=url
-        ))
+        LOG.critical("Please visit the following URL: %s",
+                     url
+                     )
         code = input("Enter the code: ")
 
         try:
@@ -396,7 +402,7 @@ class GDrive(Uploader):
         return mimetype[extension]
 
     @staticmethod
-    def _share_callback(request_id, response, exception):
+    def _share_callback(_, response, exception):
         if exception:
             # Handle error
             LOG.debug(exception)

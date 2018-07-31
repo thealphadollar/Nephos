@@ -4,13 +4,13 @@ Stores all the code concerning the preprocessor operations
 from ..load_config import Config
 
 
-config = None
+CONFIG = None
 
 
 # Below function is deprecated at the moment
 def set_preprocessor_config(preprocess_config):
     """
-    sets config for the module
+    sets CONFIG for the module
 
     Parameters
     ----------
@@ -22,8 +22,8 @@ def set_preprocessor_config(preprocess_config):
     -------
 
     """
-    global config
-    config = preprocess_config
+    global CONFIG
+    CONFIG = preprocess_config
 
 
 def get_preprocessor_config():
@@ -34,6 +34,6 @@ def get_preprocessor_config():
     configuration for the preprocessing module
 
     """
-    global config
-    config = Config.load_data("modules.yaml", True)['preprocess']
-    return config
+    global CONFIG
+    CONFIG = Config.load_data("modules.yaml", True)['preprocess']
+    return CONFIG

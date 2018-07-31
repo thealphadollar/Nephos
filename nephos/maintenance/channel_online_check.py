@@ -4,7 +4,6 @@ Contains class for the checking of channel, whether online or not
 import os
 from tempfile import TemporaryDirectory
 from logging import getLogger
-from functools import partial
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
@@ -58,8 +57,8 @@ class ChannelOnlineCheck(Checker):
             # create a list of IPs and pass it to recording
             ips = self._extract_ips()
             if ips:  # when ip is not empty
-                for ip in ips:
-                    self._check_ip(ip, tmpdir)
+                for ip_to_check in ips:
+                    self._check_ip(ip_to_check, tmpdir)
 
                 self.channel_list = ChannelHandler.grab_ch_list()
                 new_stats = self._channel_stats()
@@ -76,7 +75,8 @@ class ChannelOnlineCheck(Checker):
     def _check_ip(ip_addr, path):
         """
         Evaluates whether an IP address is online or offline and updates it's status accordingly
-        in the database; status set to 'down' for unreachable channels and 'up' for healthy channels.
+        in the database; status set to 'down' for unreachable channels and 'up' for healthy
+        channels.
 
         Parameters
         -------

@@ -90,7 +90,6 @@ def stop(scheduler):
 
     """
     scheduler.shutdown()
-    return
 
 
 @click.group(chain=True)

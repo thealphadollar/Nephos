@@ -34,10 +34,15 @@ MIN_BYTES = 1024  # 1KB
 
 
 class ApplyProcessMethods:
+    """
+    Handles application of pipeline of processing the recording and
+    eventually updating the database.
+    """
 
     def __init__(self, path_to_file, store_path):
         """
-        Loads the file to be processed, modifies status to "processing" and calls apply_methods on it.
+        Loads the file to be processed, modifies status to "processing" and calls
+        apply_methods on it.
 
         Parameters
         ----------
@@ -219,7 +224,7 @@ class ApplyProcessMethods:
             tags.append(ch_info[CH_COUN_INDEX])
             tags.append(ch_info[CH_TMZ_INDEX])
             tags.append(ch_info[CH_LANG_INDEX])
-                
+
         except DBException as err:
             LOG.debug(err)
 
