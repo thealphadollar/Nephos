@@ -6,6 +6,7 @@ import sys
 import logging
 import time
 import click
+
 from . import __nephos_dir__
 from .nephos import Nephos
 from .ver_info import VER_INFO

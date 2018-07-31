@@ -6,6 +6,7 @@ import ftplib
 import ntpath
 from logging import getLogger
 from pydash import get
+
 from . import get_uploader_config
 from ..exceptions import FTPFailure
 from ..manage_db import TSK_STORE_INDEX

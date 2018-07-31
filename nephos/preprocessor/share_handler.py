@@ -3,8 +3,10 @@ Class and methods required to handle sharing
 """
 from logging import getLogger
 from sqlite3 import Error
-from ..manage_db import DBHandler, DBException
+
 from .. import validate_entries
+from ..manage_db import DBHandler, DBException
+
 
 LOG = getLogger(__name__)
 CMD_GET_SHRS = "SELECT * FROM share_list"

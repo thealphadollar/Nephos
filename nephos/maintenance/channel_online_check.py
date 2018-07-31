@@ -4,10 +4,12 @@ Contains class for the checking of channel, whether online or not
 import os
 from tempfile import TemporaryDirectory
 from logging import getLogger
+
 from .checker import Checker
 from ..manage_db import DBHandler, CH_IP_INDEX, CH_NAME_INDEX, CH_STAT_INDEX
 from ..recorder.channels import ChannelHandler
 from ..exceptions import DBException
+
 
 LOG = getLogger(__name__)
 MIN_BYTES = 1024  # 1 KB, recording created in 5 seconds should be larger than this

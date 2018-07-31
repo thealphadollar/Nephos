@@ -4,8 +4,10 @@ Define DiskSpaceCheck class and it's required functions
 
 import shutil
 from logging import getLogger
-from .. import __nephos_dir__
+
 from .checker import Checker
+from .. import __nephos_dir__
+
 
 LOG = getLogger(__name__)
 

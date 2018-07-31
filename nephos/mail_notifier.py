@@ -5,6 +5,7 @@ import os
 import subprocess
 from datetime import datetime
 from logging import getLogger
+
 from . import load_mail_list, __nephos_dir__
 
 

@@ -3,6 +3,7 @@ The pipeline for the working of nephos
 """
 import sys
 from logging import getLogger
+
 from . import first_time, __nephos_dir__
 from .load_config import Config
 from .manage_db import DBHandler
@@ -15,6 +16,7 @@ from .exceptions import SingleInstanceException
 from .preprocessor.preprocess import PreprocessHandler
 from .preprocessor.share_handler import ShareHandler
 from .uploader.gdrive import GDrive
+
 
 LOG = getLogger(__name__)
 

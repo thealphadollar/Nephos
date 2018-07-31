@@ -4,7 +4,9 @@ Contains custom errors and exceptions for Nephos
 import shutil
 import os
 from logging import getLogger
+
 from .mail_notifier import add_to_report
+
 
 LOG = getLogger(__name__)
 UNSET_PROCESSING_COMMAND = """UPDATE tasks

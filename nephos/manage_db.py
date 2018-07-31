@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from logging import getLogger
 import sqlite3
 from sqlite3 import Error
+
 from .exceptions import DBException
 from . import __nephos_dir__
 

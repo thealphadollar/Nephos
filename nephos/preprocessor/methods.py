@@ -5,13 +5,15 @@ import os
 import subprocess
 import json
 from logging import getLogger
+
 from . import get_preprocessor_config
 from .share_handler import ShareHandler
+from .. import __config_dir__
 from ..manage_db import DBHandler, SL_MAIL_INDEX, SL_TAG_INDEX, \
     TSK_CHNAME_INDEX, TSK_LANG_INDEX, TSK_SUBLANG_INDEX, CH_COUN_INDEX, \
     CH_LANG_INDEX, CH_TMZ_INDEX
-from .. import __config_dir__
 from ..exceptions import DBException, ProcessFailedException
+
 
 LOG = getLogger(__name__)
 SET_PROCESSING_COMMAND = """UPDATE tasks

@@ -7,9 +7,11 @@ import ntpath
 import shutil
 import sqlite3
 from logging import getLogger
-from ..manage_db import DBHandler, DBException
+
 from . import get_uploader_config
 from .ftp import FTPUploader
+from ..manage_db import DBHandler, DBException
+
 
 LOG = getLogger(__name__)
 CMD_GET_FOLDERS = 'SELECT * FROM tasks WHERE status = "processed"'

@@ -7,6 +7,7 @@ Defines maintenance class and it's functioning
 
 from logging import getLogger
 import pydash
+
 from .disk_space_check import DiskSpaceCheck
 from .channel_online_check import ChannelOnlineCheck
 from ..load_config import Config

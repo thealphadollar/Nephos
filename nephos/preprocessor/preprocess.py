@@ -5,11 +5,12 @@ import os
 from logging import getLogger
 from sqlite3 import Error
 from datetime import datetime
+
 from . import get_preprocessor_config
 from .methods import ApplyProcessMethods
+from .. import __upload_dir__
 from ..manage_db import DBHandler, DBException, TSK_ID_INDEX, \
     TSK_PATH_INDEX, TSK_STORE_INDEX, TSK_STAT_INDEX, TSK_FAIL_INDEX
-from .. import __upload_dir__
 
 
 LOG = getLogger(__name__)

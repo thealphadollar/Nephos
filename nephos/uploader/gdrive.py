@@ -5,12 +5,14 @@ import os
 import shutil
 from datetime import datetime
 from logging import getLogger
+
 from oauth2client import client, file
 from oauth2client.clientsecrets import InvalidClientSecretsError
 from googleapiclient.http import HttpError, MediaFileUpload, UnexpectedMethodError, \
     ResumableUploadError, UnexpectedBodyError
 from googleapiclient import discovery
 from httplib2 import Http
+
 from .uploader import Uploader
 from .. import __nephos_dir__, __log_dir__
 from ..exceptions import OAuthFailure, UploadingFailed

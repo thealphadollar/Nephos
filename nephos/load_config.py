@@ -9,10 +9,11 @@ import logging.config
 import yaml
 import yaml.error
 import pydash
+
 from . import __nephos_dir__, __config_dir__, __default_config_dir__
 from .recorder import set_recorder_config
-# from .preprocessor import set_preprocessor_config
 from .uploader import set_uploader_config
+
 
 LOG = getLogger(__name__)
 

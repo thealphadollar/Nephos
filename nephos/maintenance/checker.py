@@ -7,6 +7,7 @@ import pydash
 
 from ..mail_notifier import send_mail
 
+
 LOG = getLogger(__name__)
 
 

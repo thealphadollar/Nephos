@@ -2,12 +2,14 @@
 Ensures only one Nephos running at a time.
 Source: https://github.com/pycontribs/tendo/blob/master/tendo/singleton.py
 """
-from logging import getLogger
 import os
 import sys
 import tempfile
 import fcntl
+from logging import getLogger
+
 from ..exceptions import SingleInstanceException
+
 
 LOG = getLogger(__name__)
 

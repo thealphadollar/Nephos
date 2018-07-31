@@ -1,17 +1,19 @@
 """
 Manages all operations related to channels, including adding, deleting and updating channel data
 """
+import os
+import subprocess
 from logging import getLogger
 from sqlite3 import Error
-import subprocess
-import os
 from datetime import datetime
+
 from . import get_recorder_config
+from .. import __recording_dir__, validate_entries
 from ..manage_db import DBHandler, CH_STAT_INDEX
 from ..exceptions import DBException
-from .. import __recording_dir__, validate_entries
 from ..preprocessor.preprocess import PreprocessHandler
 from ..mail_notifier import add_to_report
+
 
 LOG = getLogger(__name__)
 CMD_GET_CHANNELS = "SELECT * FROM channels"

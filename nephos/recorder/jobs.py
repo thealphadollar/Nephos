@@ -5,11 +5,12 @@ Stores all code related to recording jobs
 import os
 from logging import getLogger
 from sqlite3 import InterfaceError
+
+from .. import __recording_dir__, validate_entries
 from ..manage_db import DBHandler
 from ..exceptions import DBException
 from ..load_config import Config
-from .. import __recording_dir__
-from .. import validate_entries
+
 
 LOG = getLogger(__name__)
 

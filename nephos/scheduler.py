@@ -4,15 +4,18 @@ All scheduler tasks go here.
 
 import os
 from logging import getLogger
+
+from pytz.exceptions import UnknownTimeZoneError
+from tzlocal import get_localzone
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.jobstores.base import JobLookupError, ConflictingIdError
 from apscheduler.executors.pool import ThreadPoolExecutor
-from pytz.exceptions import UnknownTimeZoneError
-from tzlocal import get_localzone
+
 from .recorder.jobs import JobHandler
 from . import __nephos_dir__
 from .recorder.channels import ChannelHandler
+
 
 LOG = getLogger(__name__)
 
