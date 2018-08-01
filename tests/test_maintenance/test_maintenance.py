@@ -9,7 +9,7 @@ class TestMaintenance(TestCase):
     def test_add_maintenance_to_scheduler(self, mock_scheduler, mock_maintenance):
         Maintenance.add_maintenance_to_scheduler(mock_maintenance, mock_scheduler)
 
-        self.assertTrue(mock_scheduler.add_necessary_jobs.called)
+        self.assertTrue(mock_scheduler.add_necessary_job.called)
 
     @mock.patch('nephos.maintenance.main.DiskSpaceCheck')
     def test_call_disk_space_check(self, mock_disk_space, _):

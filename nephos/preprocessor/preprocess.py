@@ -167,7 +167,7 @@ class PreprocessHandler:
 
         for job in jobs:
             LOG.debug("Adding %s default job to scheduler...", job)
-            self.scheduler.add_necessary_jobs(job_funcs[job], job,
+            self.scheduler.add_necessary_job(job_funcs[job], job,
                                               self.config['interval'])
 
     @staticmethod

@@ -105,7 +105,7 @@ class Scheduler:
             LOG.warning("Job insertion failed: name should be unique!")
             LOG.debug(error)
 
-    def add_necessary_jobs(self, func, main_id, interval, args=None):
+    def add_necessary_job(self, func, main_id, interval, args=None):
         """
         Add necessary jobs to the scheduler
 

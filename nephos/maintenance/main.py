@@ -56,7 +56,7 @@ class Maintenance:
 
         """
         # TODO: Add more jobs
-        jobs = ["disk_space_check", "channel_online_check", "daily_report"]
+        jobs = ["disk_space_check", "channel_online_check", "daily_report", "update_data"]
         job_funcs = {
             "disk_space_check": self.call_disk_space_check,
             "channel_online_check": self.call_channel_online_check,
@@ -76,7 +76,7 @@ class Maintenance:
                                             [self.job_handler]
                                             )
             else:
-                scheduler.add_necessary_jobs(job_funcs[job], job,
+                scheduler.add_necessary_job(job_funcs[job], job,
                                              self._get_maintenance_data(job)
                                              )
 
