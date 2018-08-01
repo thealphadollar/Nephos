@@ -90,6 +90,8 @@ class Config:
         -------
         type: dict
         Dictionary containing configuration information provided by the path or default path
+        type: bool
+        False if the file is a data file and fails to load
 
         """
         if is_config:
@@ -116,6 +118,8 @@ class Config:
                 with open(default_path) as config_file:
                     yaml_data = config_file.read()
                     return yaml.safe_load(yaml_data)
+            else:
+                return False
 
     def _correct_log_file_path(self, handler_name):
         """

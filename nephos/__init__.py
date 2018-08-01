@@ -100,27 +100,7 @@ def validate_entries(data_type, data):
     """
 
     for key in data.keys():
-        name = key
-
-        def correct(dict_key):
-            """
-            Ask user to correct the value for the key
-
-            Parameters
-            ----------
-            dict_key
-                type: str
-                dict key value to alter
-
-            Returns
-            -------
-
-            """
-            data[key][dict_key] = input("Enter correct {key} for {type} {name}: ".format(
-                key=dict_key,
-                type=data_type,
-                name=name
-            ))
+        removed = False
 
         for key2 in data[key].keys():
             if key2 in REGEX_CHECK.keys():
@@ -129,10 +109,15 @@ def validate_entries(data_type, data):
                     for email in data[key][key2].split(' '):
                         if not REGEX_CHECK[key2].match(email):
                             print("{email} incorrect".format(email=email))
-                            correct(key2)
+                            data.pop(key, None)
+                            removed = True
+                            break
                 else:
                     if not REGEX_CHECK[key2].match('{}'.format(data[key][key2])):
-                        correct(key2)
+                        data.pop(key, None)
+                        removed = True
+            if removed:
+                break
 
     return data
 

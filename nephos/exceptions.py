@@ -127,3 +127,10 @@ class FTPFailure(Exception):
     def __init__(self):
         LOG.error("FTP upload failed!")
         super(FTPFailure, self).__init__()
+
+
+class UpdateDataFailure(Exception):
+    """
+    Handles all Update Data failures and exceptions raised
+    """
+    pass

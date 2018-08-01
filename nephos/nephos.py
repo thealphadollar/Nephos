@@ -58,7 +58,8 @@ class Nephos:
         self.preprocessor = PreprocessHandler(self.scheduler)
         # TODO: Allow multiple options for uploader
         self.uploader = GDrive(self.scheduler)
-        self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
+        self.maintenance_handler = Maintenance(self.config_handler.maintenance_config,
+                                               self.job_handler)
 
         LOG.info("Nephos is all set to launch")
 
@@ -76,22 +77,17 @@ class Nephos:
         self.preprocessor.add_to_scheduler()
         self.uploader.add_to_scheduler()
 
-    def load_channels_sharelist(self, data_file):
+    def load_channels_sharelist(self):
         """
         loads data from a file which contains both channels and share entities
         Segregates them based on the dictionary key and then passes the dictionary to
         appropriate functions in recorder and uploader.
 
-        Parameters
-        ----------
-        data_file
-            type: str
-            absolute path to the file, add_data.yaml
-
         Returns
         -------
 
         """
+        data_file = input("File path: ")
 
         data = self.config_handler.load_data(data_file, False)
         try:

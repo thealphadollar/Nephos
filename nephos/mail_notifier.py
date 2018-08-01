@@ -36,20 +36,19 @@ def send_mail(msg, msg_type):
     if msg_type != "report":
         msg = str(datetime.now().strftime("[%d/%m/%Y %I:%M:%S %p]: ")) + msg
 
-    if msg_type == "ch_down":
-        subject = "[NEPHOS] New Channels Down"
-    elif msg_type == "critical_disk":
-        subject = "[NEPHOS] Disk Space Critically Low"
-    elif msg_type == "corrupt_file":
-        subject = "[NEPHOS] Corrupt Recording"
-    elif msg_type == "report":
-        subject = "[NEPHOS] Daily Report"
-    elif msg_type == "critical":
-        subject = "[NEPHOS] Critical Notification"
+    subject = {
+        "ch_down": "[NEPHOS] New Channels Down",
+        "critical_disk": "[NEPHOS] Disk Space Critically Low",
+        "corrupt_file": "[NEPHOS] Corrupt Recording",
+        "report": "[NEPHOS] Daily Report",
+        "critical": "[NEPHOS] Critical Notification",
+        "update_failed": "[NEPHOS] Updating Config Failed",
+        "update_success": "[NEPHOS] Updating Config Successful"
+    }
 
     cmd = 'echo "{msg}" | mail -s "{subject}" {emails}'.format(
         msg=msg,
-        subject=subject,
+        subject=subject[msg_type],
         emails=emails
     )
 

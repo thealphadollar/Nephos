@@ -9,7 +9,6 @@ from sqlite3 import InterfaceError
 from .. import __recording_dir__, validate_entries
 from ..manage_db import DBHandler
 from ..exceptions import DBException
-from ..load_config import Config
 
 
 LOG = getLogger(__name__)
@@ -62,26 +61,32 @@ class JobHandler:
             LOG.warning("Data addition failed")
             LOG.debug(err)
 
-    def load_jobs(self):
+    def load_jobs(self, data):
         """
         loads data from a file which contains jobs
         Segregates them based on the dictionary key and then passes the dictionary to
         appropriate functions in JobHandler.
 
+        Parameters
+        ----------
+        data
+            type: dict
+            contains the list of new jobs to be added to database
+
         Returns
         -------
+        type: bool
+        True if operations were successful, False otherwise
 
         """
-        # path to the data file
-        data_file = input("File path: ")
-
-        data = Config.load_data(data_file, False)
         try:
             with DBHandler.connect() as db_cur:
                 self.insert_jobs(db_cur, data)
+            return True
         except DBException as err:
             LOG.warning("Data addition failed")
             LOG.debug(err)
+            return False
 
     def insert_jobs(self, db_cur, job_data):
         """

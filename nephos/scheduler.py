@@ -105,7 +105,7 @@ class Scheduler:
             LOG.warning("Job insertion failed: name should be unique!")
             LOG.debug(error)
 
-    def add_necessary_jobs(self, func, main_id, interval):
+    def add_necessary_jobs(self, func, main_id, interval, args=None):
         """
         Add necessary jobs to the scheduler
 
@@ -120,6 +120,9 @@ class Scheduler:
         interval
             type: int
             repetition interval in minutes
+        args
+            type: list or tuple
+            list of positional arguments to call func with
 
         Returns
         -------
@@ -130,7 +133,7 @@ class Scheduler:
         except JobLookupError as _:
             pass
 
-        job = self._scheduler.add_job(func=func, trigger='interval',
+        job = self._scheduler.add_job(func=func, trigger='interval', args=args,
                                       minutes=interval, id=main_id, max_instances=1, )
         LOG.debug("Default job added: %s", job)
 

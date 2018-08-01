@@ -16,6 +16,13 @@ jobs:
     type: "channel_online_check"
     interval: 60  # minutes
 
+  update_data:
+    add_data: "https://raw.githubusercontent.com/thealphadollar/NephosConfig/master/add_data.yaml"
+    add_jobs: "https://raw.githubusercontent.com/thealphadollar/NephosConfig/master/add_jobs.yaml"
+    enabled: True
+    type: "update_data"
+    interval: 10 # minutes
+
   daily_report:
     type: "daily_report"
     time: "23:59"  # time at which daily report is sent, "HH:MM"
