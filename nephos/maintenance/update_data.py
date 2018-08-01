@@ -132,6 +132,10 @@ class UpdateData(Checker):
             if data_type == "data":
                 try:
                     if data["channels"] is not None:
+                        try:
+                            ChannelHandler.delete_channel()
+                        except IOError:
+                            raise UpdateDataFailure
                         ChannelHandler.insert_channels(data["channels"])
                     else:
                         LOG.warning("No channels found!")
@@ -139,7 +143,12 @@ class UpdateData(Checker):
                     LOG.warning("No channel data found!")
                     LOG.debug(error)
                 try:
+
                     if data["sharing_entity"] is not None:
+                        try:
+                            ShareHandler.delete_entity()
+                        except IOError:
+                            raise UpdateDataFailure
                         ShareHandler.insert_share_entities(data["sharing_entity"])
                     else:
                         LOG.warning("No share entity found!")
@@ -150,9 +159,12 @@ class UpdateData(Checker):
                 copy2(NEW_DATA, CURRENT_DATA)
 
             if data_type == "jobs":
+                current_jobs = Config.load_data(CURRENT_JOBS, False)
+                self.job_handler.rm_jobs(current_jobs)
                 if self.job_handler.load_jobs(data):
                     copy2(NEW_JOBS, CURRENT_JOBS)
                 else:
+                    self.job_handler.load_jobs(current_jobs)
                     raise UpdateDataFailure()
 
         else:

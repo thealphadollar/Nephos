@@ -57,16 +57,12 @@ def runtime_help():
     "help", "?"\t\t\t\tshow help
     "version", "ver"\t\t\tshow version
     "stop", "st"\t\t\tstop nephos after completion of running jobs
-    "load batch jobs", "ldjb"\t\tload jobs from add_jobs file
     "add job", "adjb"\t\t\tadd a job using command line
     "list jobs", "lsjb"\t\t\tlist currently scheduled jobs
-    "remove job", "rmjb"\t\tremove job using job name
     "add channel, "adch"\t\tadd a channel using command line
     "list channels", "lsch"\t\tlist currently added channels
-    "remove channel", "rmch"\t\tremove channel using ip or name
     "add share", "adsh"\t\t\tadd a new share entity with tags
     "list share", "lssh"\t\tlists present share entities in database
-    "remove share", "rmsh"\t\tremove a share entity using email
     "list tasks", "lstk"\t\tlists the recordings queue for processing and uploading
     "remove task", "rmtk"\t\tremove a task from queue using it's ID from 'lstk' 
 
@@ -129,16 +125,12 @@ def start():
     # provides functions to launch while scheduler in background
     cli = {
         ("help", "?"): runtime_help,
-        ("load batch jobs", "ldjb"): client.job_handler.load_jobs,
         ("add job", "adjb"): client.job_handler.add_job,
         ("list jobs", "lsjb"): client.job_handler.display_jobs,
-        ("remove job", "rmjb"): client.job_handler.rm_job,
         ("add channel", "adch"): client.channel_handler.add_channel,
         ("list channels", "lsch"): client.channel_handler.display_channel,
-        ("remove channel", "rmch"): client.channel_handler.delete_channel,
         ("add share", "adsh"): client.share_handler.add_share_entity,
         ("list share", "lssh"): client.share_handler.display_shr_entities,
-        ("remove share", "rmsh"): client.share_handler.delete_entity,
         ("list tasks", "lstk"): client.preprocessor.display_tasks,
         ("remove task", "rmtk"): client.preprocessor.rm_task,
         ("adtk", "add task"): client.preprocessor.add_task

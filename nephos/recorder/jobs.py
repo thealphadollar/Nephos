@@ -146,18 +146,24 @@ class JobHandler:
         for job in job_list:
             print("Name: " + job.id, "\tNextRun: ", job.next_run_time)
 
-    def rm_job(self):
+    def rm_jobs(self, job_data):
         """
         removes a job from the schedule
+
+        Parameters
+        ----------
+        job_data
+            type: dict
+            dict containing the list of jobs to be added
 
         Returns
         -------
 
         """
         # job name, unique id of the job to be removed
-        job_name = input("Job name: ")
-
-        self._scheduler.rm_recording_job(job_name)
+        for job_key in job_data.keys():
+            job_name = "_".join(job_data[job_key]["name"].lower().split())
+            self._scheduler.rm_recording_job(job_name)
 
     @staticmethod
     def to_weekday(entry):

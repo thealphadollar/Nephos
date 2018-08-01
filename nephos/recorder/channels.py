@@ -104,15 +104,15 @@ class ChannelHandler:
         -------
 
         """
-        ch_ip_name = "_".join(input("Channel name or ip: ").lower().split())
-        command = "DELETE FROM channels WHERE name=? OR ip=?"
+        command = "DELETE FROM channels"
         try:
             with DBHandler.connect() as db_cur:
-                db_cur.execute(command, (ch_ip_name, ch_ip_name))
-            LOG.info("Channel with name/ip = %s removed from database", ch_ip_name)
+                db_cur.execute(command)
+            LOG.info("All channels removed from database")
         except Error as err:
-            LOG.warning("Failed to remove channel!")
+            LOG.warning("Failed to remove channels!")
             LOG.debug(err)
+            raise IOError
 
     @staticmethod
     def grab_ch_list():

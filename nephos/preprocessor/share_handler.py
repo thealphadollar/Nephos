@@ -10,7 +10,7 @@ from ..manage_db import DBHandler, DBException
 
 LOG = getLogger(__name__)
 CMD_GET_SHRS = "SELECT * FROM share_list"
-CMD_DEL_SHRS = "DELETE FROM share_list WHERE email=?"
+CMD_DEL_SHRS = "DELETE FROM share_list"
 
 
 class ShareHandler:
@@ -85,15 +85,14 @@ class ShareHandler:
         -------
 
         """
-        sh_en_mail = input("Email: ").lower()
-
         try:
             with DBHandler.connect() as db_cur:
-                db_cur.execute(CMD_DEL_SHRS, (sh_en_mail, ))
-            LOG.info("Share entity with email = %s removed from database", sh_en_mail)
+                db_cur.execute(CMD_DEL_SHRS)
+            LOG.info("Sharing list cleaned to add new data...")
         except (Error, DBException) as err:
-            LOG.warning("Failed to remove channel!")
+            LOG.warning("Failed to remove share lists!")
             LOG.debug(err)
+            raise IOError
 
     @staticmethod
     def grab_shr_list():
