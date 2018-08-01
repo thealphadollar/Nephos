@@ -171,6 +171,8 @@ class FTPUploader:
         base_query = 'upload.ftp.'
 
         host = get(config, base_query+'host')
+        if host is None:
+            return host, None, None, None
         port = int(get(config, base_query+'port'))
         username = get(config, base_query+'username')
         password = get(config, base_query+'password')
