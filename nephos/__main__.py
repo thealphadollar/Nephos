@@ -61,7 +61,6 @@ def runtime_help():
     "add job", "adjb"\t\t\tadd a job using command line
     "list jobs", "lsjb"\t\t\tlist currently scheduled jobs
     "remove job", "rmjb"\t\tremove job using job name
-    "add data", "adda"\t\t\tadd channels and share entities
     "add channel, "adch"\t\tadd a channel using command line
     "list channels", "lsch"\t\tlist currently added channels
     "remove channel", "rmch"\t\tremove channel using ip or name
@@ -134,7 +133,6 @@ def start():
         ("add job", "adjb"): client.job_handler.add_job,
         ("list jobs", "lsjb"): client.job_handler.display_jobs,
         ("remove job", "rmjb"): client.job_handler.rm_job,
-        ("add data", "adda"): client.load_channels_sharelist,
         ("add channel", "adch"): client.channel_handler.add_channel,
         ("list channels", "lsch"): client.channel_handler.display_channel,
         ("remove channel", "rmch"): client.channel_handler.delete_channel,
