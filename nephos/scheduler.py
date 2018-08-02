@@ -39,18 +39,19 @@ class Scheduler:
             type: bool
             whether the initiated scheduler is the nephos's scheduler or not
         """
+        self.main = main
         job_stores = {
             'default': SQLAlchemyJobStore(url='sqlite:///' + PATH_JOB_DB)
         }
 
-        if main:
+        if self.main:
             LOG.debug("Storing scheduler jobs in %s", job_stores["default"])
 
         executors = {
             'default': ThreadPoolExecutor(MAX_CONCURRENT_JOBS)
         }
 
-        if main:
+        if self.main:
             LOG.info("Initialising scheduler with timezone %s", TMZ)
         try:
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
@@ -60,7 +61,7 @@ class Scheduler:
             LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", TMZ)
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone='utc')
-        if main:
+        if self.main:
             LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)
 
     def start(self):
@@ -71,7 +72,8 @@ class Scheduler:
 
         """
         self._scheduler.start()
-        LOG.info("Scheduler running!")
+        if self.main:
+            LOG.info("Scheduler running!")
 
     def add_recording_job(self, ip_addr, out_path,  # pylint: disable=too-many-arguments
                           duration, job_time, week_days, job_name):
@@ -224,3 +226,5 @@ class Scheduler:
 
         """
         self._scheduler.shutdown()
+        if not self.main:
+            LOG.debug("Side scheduler turned off!")

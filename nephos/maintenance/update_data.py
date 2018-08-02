@@ -42,7 +42,8 @@ class UpdateData(Checker):
         super(UpdateData, self).__init__(config_maintain)
         self.add_data_url = self._get_data("update_data", "add_data")
         self.add_jobs_url = self._get_data("update_data", "add_jobs")
-        self.job_handler = JobHandler(Scheduler(False))
+        self.scheduler = Scheduler(False)
+        self.job_handler = JobHandler(self.scheduler)
 
     def _execute(self):
         """
@@ -68,7 +69,8 @@ class UpdateData(Checker):
                 msg_type = "update_success"
                 msg = "New configuration loaded into Nephos successfully."
                 self._handle(True, msg_type, msg)
-
+            else:
+                LOG.debug("No change in the configuration!")
         except UpdateDataFailure:
             msg_type = "update_failed"
             msg = "Updating configuration failed. Please check if you have " \
@@ -161,11 +163,14 @@ class UpdateData(Checker):
 
             if data_type == "jobs":
                 current_jobs = Config.load_data(CURRENT_JOBS, False)
+                self.scheduler.start()
                 self.job_handler.rm_jobs(current_jobs)
                 if self.job_handler.load_jobs(data):
                     copy2(NEW_JOBS, CURRENT_JOBS)
+                    self.scheduler.shutdown()
                 else:
                     self.job_handler.load_jobs(current_jobs)
+                    self.scheduler.shutdown()
                     raise UpdateDataFailure()
 
         else:
