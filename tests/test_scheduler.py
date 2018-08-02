@@ -19,20 +19,20 @@ class TestScheduler(TestCase):
 
     @mock.patch('nephos.scheduler.TMZ', new='utc')
     def test_init_utc(self, mock_log):
-        Scheduler()
+        Scheduler(True)
         mock_log.info.assert_called_with("Scheduler initialised with database at %s", DB_JOBS_PATH)
         mock_log.warning.assert_not_called()
 
     @mock.patch('nephos.scheduler.TMZ', new='IST')
     def test_init_ist(self, mock_log):
-        Scheduler()
+        Scheduler(True)
         mock_log.info.assert_called_with("Scheduler initialised with database at %s",
                                          DB_JOBS_PATH)
         mock_log.warning.assert_called_with("Unknown timezone %s, resetting timezone to 'utc'",
                                             'IST')
 
     def test_start_and_shutdown(self, mock_log):
-        scheduler = Scheduler()
+        scheduler = Scheduler(True)
         scheduler.start()
         mock_log.info.assert_called_with("Scheduler running!")
         self.assertTrue(scheduler._scheduler.running)

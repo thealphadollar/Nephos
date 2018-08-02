@@ -12,7 +12,9 @@ from .checker import Checker
 from .. import __nephos_dir__, __config_dir__
 from ..exceptions import UpdateDataFailure
 from ..load_config import Config
+from ..scheduler import Scheduler
 from ..recorder.channels import ChannelHandler
+from ..recorder.jobs import JobHandler
 from ..preprocessor.share_handler import ShareHandler
 
 
@@ -27,7 +29,7 @@ class UpdateData(Checker):
     """
     Syncs the current data with the aforementioned repositories data
     """
-    def __init__(self, config_maintain, job_handler):
+    def __init__(self, config_maintain):
         """
         Initiates UpdateData
 
@@ -36,12 +38,11 @@ class UpdateData(Checker):
         config_maintain
             type: dict
             contains the essential configuration required to run
-        job_handler
         """
         super(UpdateData, self).__init__(config_maintain)
         self.add_data_url = self._get_data("update_data", "add_data")
         self.add_jobs_url = self._get_data("update_data", "add_jobs")
-        self.job_handler = job_handler
+        self.job_handler = JobHandler(Scheduler(False))
 
     def _execute(self):
         """
@@ -101,8 +102,8 @@ class UpdateData(Checker):
         type: bool
 
         """
-        data_file = filecmp.cmp(NEW_DATA, CURRENT_DATA)
-        jobs_file = filecmp.cmp(NEW_JOBS, CURRENT_JOBS)
+        data_file = not filecmp.cmp(NEW_DATA, CURRENT_DATA)
+        jobs_file = not filecmp.cmp(NEW_JOBS, CURRENT_JOBS)
 
         return data_file, jobs_file
 

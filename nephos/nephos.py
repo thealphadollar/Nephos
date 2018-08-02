@@ -51,15 +51,14 @@ class Nephos:
 
         LOG.info("Loading database, scheduler, maintenance modules...")
         self.db_handler = DBHandler()
-        self.scheduler = Scheduler()
+        self.scheduler = Scheduler(True)
         self.channel_handler = ChannelHandler()
         self.share_handler = ShareHandler()
         self.job_handler = JobHandler(self.scheduler)
         self.preprocessor = PreprocessHandler(self.scheduler)
         # TODO: Allow multiple options for uploader
         self.uploader = GDrive(self.scheduler)
-        self.maintenance_handler = Maintenance(self.config_handler.maintenance_config,
-                                               self.job_handler)
+        self.maintenance_handler = Maintenance(self.config_handler.maintenance_config)
 
         LOG.info("Nephos is all set to launch")
 

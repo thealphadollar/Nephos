@@ -23,7 +23,7 @@ class Maintenance:
     Manages all the maintenance tasks in a nut shell.
     """
 
-    def __init__(self, maintenance_config, job_handler):
+    def __init__(self, maintenance_config):
         """
         Initiate the Maintenance object with it's configuration.
         All jobs have different call methods for ease of scheduling.
@@ -33,13 +33,9 @@ class Maintenance:
         maintenance_config
             type: dictionary
             maintenance configuration from "maintenance.yaml"
-        job_handler
-            type: JobHandler class
-            main jobhandler of nephos
 
         """
         self.config = maintenance_config
-        self.job_handler = job_handler
 
     def add_maintenance_to_scheduler(self, scheduler):
         """
@@ -70,15 +66,10 @@ class Maintenance:
                 scheduler.add_cron_necessary_job(job_funcs[job], job,
                                                  self._get_maintenance_data(job)
                                                  )
-            elif job == "update_data":
-                scheduler.add_necessary_job(job_funcs[job], job,
-                                            self._get_maintenance_data(job),
-                                            [self.job_handler]
-                                            )
             else:
                 scheduler.add_necessary_job(job_funcs[job], job,
-                                             self._get_maintenance_data(job)
-                                             )
+                                            self._get_maintenance_data(job)
+                                            )
 
     @staticmethod
     def call_disk_space_check():
@@ -105,22 +96,16 @@ class Maintenance:
         ChannelOnlineCheck(_refresh_config()).to_run("channel_online_check")
 
     @staticmethod
-    def call_update_data(job_handler):
+    def call_update_data():
         """
         Calls update data job passing the kind.
         It may or may not execute depending on the setting.
-
-        Parameters
-        ----------
-        job_handler
-            type: JobHandler class
-            main nephos's jobhandler used for inserting jobs
 
         Returns
         -------
 
         """
-        UpdateData(_refresh_config(), job_handler).to_run("update_data")
+        UpdateData(_refresh_config()).to_run("update_data")
 
     def _get_maintenance_data(self, job):
         """

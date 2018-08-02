@@ -29,21 +29,29 @@ class Scheduler:
     """
     A class to rule all the scheduling related tasks.
     """
-    def __init__(self):
+    def __init__(self, main):
         """
         initialise Scheduler with basic configuration
+
+        Parameters
+        ----------
+        main
+            type: bool
+            whether the initiated scheduler is the nephos's scheduler or not
         """
         job_stores = {
             'default': SQLAlchemyJobStore(url='sqlite:///' + PATH_JOB_DB)
         }
 
-        LOG.debug("Storing scheduler jobs in %s", job_stores["default"])
+        if main:
+            LOG.debug("Storing scheduler jobs in %s", job_stores["default"])
 
         executors = {
             'default': ThreadPoolExecutor(MAX_CONCURRENT_JOBS)
         }
 
-        LOG.info("Initialising scheduler with timezone %s", TMZ)
+        if main:
+            LOG.info("Initialising scheduler with timezone %s", TMZ)
         try:
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone=TMZ)
@@ -52,7 +60,8 @@ class Scheduler:
             LOG.warning("Unknown timezone %s, resetting timezone to 'utc'", TMZ)
             self._scheduler = BackgroundScheduler(jobstores=job_stores, executors=executors,
                                                   timezone='utc')
-        LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)
+        if main:
+            LOG.info("Scheduler initialised with database at %s", PATH_JOB_DB)
 
     def start(self):
         """
