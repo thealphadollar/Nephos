@@ -52,7 +52,7 @@ class ShareHandler:
         -------
 
         """
-        shr_data = validate_entries("share-entity", shr_data)
+        shr_data = validate_entries(shr_data)
         for key in shr_data.keys():
             try:
                 with DBHandler.connect() as db_cur:

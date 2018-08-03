@@ -81,7 +81,7 @@ class ChannelHandler:
         -------
 
         """
-        ch_data = validate_entries("channel", ch_data)
+        ch_data = validate_entries(ch_data)
         for key in ch_data.keys():
             ch_data[key]["name"] = "_".join(
                 ch_data[key]["name"].lower().split()

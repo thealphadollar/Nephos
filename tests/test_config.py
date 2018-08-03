@@ -176,7 +176,7 @@ class TestConfig(TestCase):
                 call_return = self.TestConfig.load_data(file_path, False)
                 output = mock_out.getvalue()
                 expected_output = "Error in {file}:\n".format(file=file_path)
-                self.assertIsNone(call_return)
+                self.assertFalse(call_return)
                 self.assertIn(expected_output, output)
 
     def test_load_data_nonexistent_config_file(self):

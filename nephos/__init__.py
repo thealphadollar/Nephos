@@ -79,15 +79,12 @@ def load_mail_list():
     return ",".join(emails)
 
 
-def validate_entries(data_type, data):
+def validate_entries(data):
     """
     Validates the data entry for the channels, jobs and sharelists
 
     Parameters
     ----------
-    data_type
-        type: str
-        information about whether it's channel, job or share entity
     data
         type: dict
         contains multiple channels' data
@@ -99,7 +96,7 @@ def validate_entries(data_type, data):
 
     """
 
-    for key in data.keys():
+    for key in data.copy().keys():
         removed = False
 
         for key2 in data[key].keys():

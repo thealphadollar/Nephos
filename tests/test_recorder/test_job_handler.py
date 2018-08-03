@@ -45,29 +45,21 @@ class TestJobHandler(TestCase):
         self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
-    @mock.patch('nephos.recorder.jobs.input', return_value='test')
-    @mock.patch('nephos.recorder.jobs.Config')
     @mock.patch('nephos.recorder.jobs.DBHandler')
-    def test_load_jobs(self, mock_db, mock_config, mock_input, mock_log, mock_job_handler):
-        JobHandler.load_jobs(mock_job_handler)
+    def test_load_jobs(self, mock_db, mock_log, mock_job_handler):
+        JobHandler.load_jobs(mock_job_handler, MOCK_JOB_DATA)
 
-        mock_input.assert_called_with("File path: ")
-        mock_config.load_data.assert_called_with(mock.ANY, mock.ANY)
         self.assertTrue(mock_db.connect.called)
         mock_job_handler.insert_jobs.assert_called_with(mock.ANY, mock.ANY)
         self.assertFalse(mock_log.warning.called)
         self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
-    @mock.patch('nephos.recorder.jobs.input', return_value='test')
-    @mock.patch('nephos.recorder.jobs.Config')
     @mock.patch('nephos.recorder.jobs.DBHandler')
-    def test_load_jobs_error(self, mock_db, mock_config, mock_input, mock_log, mock_job_handler):
+    def test_load_jobs_error(self, mock_db, mock_log, mock_job_handler):
         mock_db.connect.side_effect = DBException
-        JobHandler.load_jobs(mock_job_handler)
+        JobHandler.load_jobs(mock_job_handler, MOCK_JOB_DATA)
 
-        mock_input.assert_called_with("File path: ")
-        mock_config.load_data.assert_called_with(mock.ANY, mock.ANY)
         self.assertTrue(mock_db.connect.called)
         self.assertFalse(mock_job_handler.insert_jobs.called)
         self.assertTrue(mock_log.warning.called)
@@ -87,13 +79,6 @@ class TestJobHandler(TestCase):
         JobHandler.display_jobs(mock_job_handler)
 
         self.assertTrue(mock_job_handler._scheduler.get_jobs.called)
-
-    @mock.patch('nephos.recorder.jobs.input')
-    def test_rm_job(self, mock_input, mock_job_handler):
-        JobHandler.rm_job(mock_job_handler)
-
-        mock_input.assert_called_with("Job name: ")
-        self.assertTrue(mock_job_handler._scheduler.rm_recording_job.called)
 
     def test_to_weekday(self, _):
         entry = '1111110'

@@ -71,18 +71,18 @@ class TestScheduler(TestCase):
         self.assertIn(expected, mock_log.debug.call_args[0])
 
     def test_get_jobs(self, _):
-        output = Scheduler().get_jobs()
+        output = Scheduler(True).get_jobs()
 
         self.assertIsInstance(output, list)
 
     @mock.patch('nephos.scheduler.Scheduler')
-    def test_rm_recording_job(self, mock_scheduler, mock_log):
+    def test_rm_recording_job(self, mock_scheduler, _):
         Scheduler.rm_recording_job(mock_scheduler, MOCK_JOB_ID)
 
         mock_scheduler._scheduler.remove_job.assert_called_with(MOCK_JOB_ID)
 
     def test_rm_non_existing_recording_job(self, mock_log):
-        Scheduler().rm_recording_job(MOCK_JOB_ID)
+        Scheduler(True).rm_recording_job(MOCK_JOB_ID)
 
         self.assertTrue(mock_log.warning.called)
         self.assertTrue(mock_log.debug.called)

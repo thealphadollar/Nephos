@@ -63,32 +63,27 @@ class TestChannelHandler(TestCase):
         self.assertFalse(mock_log.info.called)
         self.assertFalse(mock_os.makedirs.called)
 
-    @mock.patch('nephos.recorder.channels.input')
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.DBHandler')
-    def test_delete_channel(self, mock_db_handler, mock_log, mock_input, _):
-        mock_input.return_value = "ch_test"
+    def test_delete_channel(self, mock_db_handler, mock_log, _):
         ChannelHandler.delete_channel()
 
-        self.assertTrue(mock_input.called)
         self.assertTrue(mock_db_handler.connect.called)
         self.assertTrue(mock_log.info.called)
         self.assertFalse(mock_log.warning.called)
         self.assertFalse(mock_log.debug.called)
 
-    @mock.patch('nephos.recorder.channels.input')
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.DBHandler')
-    def test_delete_channel_error(self, mock_db_handler, mock_log, mock_input, _):
-        mock_input.return_value = "ch_test"
+    def test_delete_channel_error(self, mock_db_handler, mock_log, _):
         mock_db_handler.connect.side_effect = Error
-        ChannelHandler.delete_channel()
+        with self.assertRaises(IOError):
+            ChannelHandler.delete_channel()
 
-        self.assertTrue(mock_input.called)
-        self.assertTrue(mock_db_handler.connect.called)
-        self.assertFalse(mock_log.info.called)
-        self.assertTrue(mock_log.warning.called)
-        self.assertTrue(mock_log.debug.called)
+            self.assertTrue(mock_db_handler.connect.called)
+            self.assertFalse(mock_log.info.called)
+            self.assertTrue(mock_log.warning.called)
+            self.assertTrue(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.channels.LOG')
     @mock.patch('nephos.recorder.channels.DBHandler')

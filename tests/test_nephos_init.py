@@ -16,11 +16,21 @@ MOCK_WRONG_DATA = {
         'start_time': '05:00',
         'duration': '17',
         'repetition': '0000000'
+    },
+    '1': {
+        'email': 'abc@xyz.com',
+        'ip': '0.0.0.0:8080',
+        'country_code': 'IND USA',
+        'language': 'ENG',
+        'timezone': 'UTC',
+        'start_time': '05:00',
+        'duration': '17',
+        'repetition': '0000000'
     }
 }
 
 MOCK_CORRECT_DATA = {
-    '0': {
+    '1': {
         'email': 'abc@xyz.com',
         'ip': '0.0.0.0:8080',
         'country_code': 'IND USA',
@@ -90,10 +100,9 @@ class TestValidateEntries(TestCase):
 
     @mock.patch('sys.stdout', new_callable=StringIO)
     def test_validate_entries(self, mock_output):
-        with mock.patch('nephos.input', return_value='abc@xyz.com'):
-            correct_data = validate_entries('test', MOCK_WRONG_DATA)
-            self.assertDictEqual(correct_data, MOCK_CORRECT_DATA)
+        correct_data = validate_entries(MOCK_WRONG_DATA)
+        self.assertDictEqual(correct_data, MOCK_CORRECT_DATA)
 
-            output = mock_output.getvalue()
-            expected_output = "abc.com incorrect\n"
-            self.assertEqual(output, expected_output)
+        output = mock_output.getvalue()
+        expected_output = "abc.com incorrect\n"
+        self.assertEqual(output, expected_output)
