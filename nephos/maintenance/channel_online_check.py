@@ -191,9 +191,9 @@ class ChannelOnlineCheck(Checker):
         msg = [
             "\nCurrent status:\nFollowing {number} channel(s) are down:".format(
                 number=new_stats["down_ch"]),
-            "\n".join(new_stats["down_ch_names"]),
+            ", ".join(new_stats["down_ch_names"]),
             "Previous status:",
-            "\n".join(prev_stats["down_ch_names"])
+            ", ".join(prev_stats["down_ch_names"])
 
         ]
         report = (True, "\n".join(msg))

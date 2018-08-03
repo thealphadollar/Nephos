@@ -10,6 +10,7 @@ from pydash import get
 from . import get_uploader_config
 from ..exceptions import FTPFailure
 from ..manage_db import TSK_STORE_INDEX
+from ..mail_notifier import add_to_report
 
 
 LOG = getLogger(__name__)
@@ -42,10 +43,15 @@ class FTPUploader:
                 self.ftp.cwd(self.nephos_ftp_path)
                 for task in tasks_list:
                     self._upload(task[TSK_STORE_INDEX])
+                    add_to_report("{folder} successfully uploaded to FTP server.".format(
+                        folder=task[TSK_STORE_INDEX]
+                    ))
             except FTPFailure as _:
                 pass
         else:
-            LOG.warning("FTP upload aborted: incomplete configuration!")
+            msg = "FTP upload aborted due to incomplete configuration!"
+            add_to_report(msg)
+            LOG.warning(msg)
 
     def _upload(self, folder):
         """
@@ -106,7 +112,9 @@ class FTPUploader:
         try:
             self.ftp.connect(host, port)
         except ConnectionError as err:
-            LOG.error("couldn't establish connection to ftp server")
+            msg = "couldn't establish connection to ftp server"
+            add_to_report("FTP Upload failed: {msg}".format(msg=msg))
+            LOG.error(msg)
             LOG.debug(err)
             raise FTPFailure
         LOG.debug("Connection to FTP (host: %s, port: %s) established, "
@@ -115,7 +123,9 @@ class FTPUploader:
         try:
             self.ftp.login(username, password)
         except ftplib.error_perm as err:
-            LOG.error("FTP server authentication failed")
+            msg = "FTP server authentication failed"
+            add_to_report("FTP Upload failed: {msg}".format(msg=msg))
+            LOG.error(msg)
             LOG.debug(err)
             raise FTPFailure
         LOG.debug("Authenticated to FTP server successfully")

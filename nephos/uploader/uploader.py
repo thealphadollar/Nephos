@@ -88,6 +88,8 @@ class Uploader(ABC):
             FTPUploader(tasks_list)
             LOG.info("Beginning upload to cloud storage...")
             up_func(tasks_list)
+        else:
+            LOG.debug("No uploads queued!")
 
     @staticmethod
     @abstractmethod
