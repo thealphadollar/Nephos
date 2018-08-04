@@ -13,6 +13,7 @@ from .. import __nephos_dir__, __config_dir__
 from ..exceptions import UpdateDataFailure
 from ..load_config import Config
 from ..scheduler import Scheduler
+from ..mail_notifier import add_to_report
 from ..recorder.channels import ChannelHandler
 from ..recorder.jobs import JobHandler
 from ..preprocessor.share_handler import ShareHandler
@@ -68,6 +69,7 @@ class UpdateData(Checker):
             if data or jobs:
                 msg_type = "update_success"
                 msg = "New configuration loaded into Nephos successfully."
+                add_to_report("Channel/Job/Share data updated remotely.")
                 self._handle(True, msg_type, msg)
             else:
                 LOG.debug("No change in the configuration!")
