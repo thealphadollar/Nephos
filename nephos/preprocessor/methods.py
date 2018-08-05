@@ -137,44 +137,6 @@ class ApplyProcessMethods:
             except DBException as err:
                 LOG.debug(err)
 
-    # def _extract_subtitles(self):
-    #     """
-    #     Extracts subtitles using provided CCExtractor
-    #     Returns
-    #     -------
-    #
-    #     """
-    #     path_ccextractor = self.config["path_to_CCEx"]
-    #     ccex_args = self.config["CCEx_args"]
-    #     out_file = os.path.join(self.store_dir, self.name + ".srt")
-    #
-    #     cmd = "{path_ccextractor} {input} {args} -o {output}".format(
-    #         path_ccextractor=path_ccextractor,
-    #         input=self.addr,
-    #         args=ccex_args,
-    #         output=out_file
-    #     )
-    #     self._execute(cmd, out_file)
-    #
-    # def _convert_to_mp4(self):
-    #     """
-    #     Converts the video to mp4 format using ffmpeg
-    #     Returns
-    #     -------
-    #
-    #     """
-    #     path_ffmpeg = self.config["path_to_ffmpeg"]
-    #     ffmpeg_args = self.config["ffmpeg_args"]
-    #     out_file = os.path.join(self.store_dir, self.name + ".mp4")
-    #
-    #     cmd = "{path_ffmpeg} -i {input} {args} {output}".format(
-    #         path_ffmpeg=path_ffmpeg,
-    #         input=self.addr,
-    #         args=ffmpeg_args,
-    #         output=out_file
-    #     )
-    #     self._execute(cmd, out_file)
-
     def _add_share_entities(self):
         """
         Appends share entities to the file querying share_list database.
@@ -236,6 +198,7 @@ class ApplyProcessMethods:
     def _tag_match(list_a, list_b):
         """
         Takes in two lists and evaluates if they have any element common.
+
         Parameters
         ----------
         list_a
@@ -297,6 +260,7 @@ class ApplyProcessMethods:
             path_to_file=path_to_file
         )
         try:
+            LOG.debug("running %s command", cmd)
             raw_json = subprocess.check_output(cmd, shell=True).decode('utf-8')
             lang_data = json.loads(raw_json)
             for data in lang_data["streams"]:
