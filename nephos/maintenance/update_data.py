@@ -6,7 +6,7 @@ import os
 import urllib.request
 from shutil import copy2
 from logging import getLogger
-import filecmp
+from filecmp import cmp
 
 from .checker import Checker
 from .. import __nephos_dir__, __config_dir__
@@ -106,8 +106,8 @@ class UpdateData(Checker):
         type: bool
 
         """
-        data_file = not filecmp.cmp(NEW_DATA, CURRENT_DATA)
-        jobs_file = not filecmp.cmp(NEW_JOBS, CURRENT_JOBS)
+        data_file = not cmp(NEW_DATA, CURRENT_DATA)
+        jobs_file = not cmp(NEW_JOBS, CURRENT_JOBS)
 
         return data_file, jobs_file
 
