@@ -48,19 +48,19 @@ class PreprocessHandler:
         for task in PreprocessHandler._query_tasks(sql_command):
             ApplyProcessMethods(task[TSK_PATH_INDEX], task[TSK_STORE_INDEX])
 
-    # TODO: remove this
-    @staticmethod
-    def add_task():
-        """
-        this is for testing the preprocessor
-
-        Returns
-        -------
-
-        """
-        orig_path = input("Orig_path: ")
-        ip_addr = input("IP_Addr: ")
-        PreprocessHandler.insert_task(orig_path, ip_addr)
+    # # TODO: remove this
+    # @staticmethod
+    # def add_task():
+    #     """
+    #     this is for testing the preprocessor
+    #
+    #     Returns
+    #     -------
+    #
+    #     """
+    #     orig_path = input("Orig_path: ")
+    #     ip_addr = input("IP_Addr: ")
+    #     PreprocessHandler.insert_task(orig_path, ip_addr)
 
     @staticmethod
     def insert_task(orig_path, ip_addr):
@@ -132,25 +132,25 @@ class PreprocessHandler:
             ]
             print("\t".join(str(x) for x in to_print_data))
 
-    @staticmethod
-    def rm_task():
-        """
-        Removes a task from the task list on user command.
-        This is to be used mostly in case of excessive failures
-
-        Returns
-        -------
-
-        """
-        task_id = input("Task ID: ").lower()
-        sql_command = "DELETE FROM tasks WHERE task_id=?"
-        try:
-            with DBHandler.connect() as db_cur:
-                db_cur.execute(sql_command, (task_id, ))
-            LOG.info("Task (ID=%s) removed from database", task_id)
-        except Error as err:
-            LOG.warning("Failed to remove task!")
-            LOG.debug(err)
+    # @staticmethod
+    # def rm_task():
+    #     """
+    #     Removes a task from the task list on user command.
+    #     This is to be used mostly in case of excessive failures
+    #
+    #     Returns
+    #     -------
+    #
+    #     """
+    #     task_id = input("Task ID: ").lower()
+    #     sql_command = "DELETE FROM tasks WHERE task_id=?"
+    #     try:
+    #         with DBHandler.connect() as db_cur:
+    #             db_cur.execute(sql_command, (task_id, ))
+    #         LOG.info("Task (ID=%s) removed from database", task_id)
+    #     except Error as err:
+    #         LOG.warning("Failed to remove task!")
+    #         LOG.debug(err)
 
     def add_to_scheduler(self):
         """
