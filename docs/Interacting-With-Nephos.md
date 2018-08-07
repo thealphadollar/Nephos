@@ -1,3 +1,5 @@
+**This page is aimed at developers to help them test their changes locally.**
+
 Nephos provides a minimal CLI to interact with it at the runtime. All the options are explained below. To interact with other parts of Nephos, configuration files are provided and, details are available on `Modifying Configuration` page.
 
 ## Basic Info

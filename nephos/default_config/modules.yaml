@@ -3,6 +3,7 @@
 # NOTE: If this file is edited, Nephos needs to be restarted to reflect changes
 # for more info on ifaddr, https://github.com/mmalecki/multicat/blob/master/trunk/README
 # You can add MULTIPLE UPLOAD TIMES by appending into the upload->timings section below!
+# You can leave the FTP details if they are not available.
 recording:
   ifaddr: '159.237.36.240'  # bind to the specific network interface, by link number, leave empty for no 'ifaddr' argument
   path_to_multicat: 'multicat'  # path to multicat binary

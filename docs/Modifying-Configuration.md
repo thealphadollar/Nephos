@@ -8,19 +8,7 @@ Though the configurations are stored in an easily editable `YAML` format, it is 
 ***
 ## logging.yaml
 The configuration file concerns logging of the entire Nephos and should be modified **very carefully**. Most of the options don't need to be touched, and hence only the appropriate operations are provided in details below.
-### Set Up Email Handler
-The below fields are **compulsory** to fill for the working of Critical mailing service. 
-- fromaddr: Address from which the mail should appear to be coming
-- toaddrs: Set at the first run of Nephos
-- subject: Subject of the mail, default is "[Nephos] Critical Notification"
 
-Secondly, you need to instantiate following environment variables (before starting Nephos) for connecting and authenticating with the mailing service. **Without these, the emails won't be sent, though no exception will be raised.**
-- MAIL_HOST: Host of the mailing service, eg. for GMail, "smtp.gmail.com"
-- MAIL_PORT: Port of the mailing service (for TLS connection), eg. for GMail, "587"
-- CRED_EMAIL: Email address of the sender
-- CRED_PASS: Password of the sender
-
-**NOTE:** If you are using GMail, you need to [enable access to Less Secure Apps](https://support.google.com/accounts/answer/6010255).
 ***
 ## maintenance.yaml
 The configuration file concerns all the maintenance tasks and most of the options can be changed without an issue.
@@ -57,14 +45,25 @@ For more info, [read here](https://github.com/mmalecki/multicat/blob/master/trun
 Multicat is the recording client we use and it can be found [here](https://github.com/mmalecki/multicat/).<br/>
 A version of multicat is bundled with the program but module can be set to use custom multicat binary by modifying this parameter.
 
-### Proper Subtitles Extractor
-For proper subtitles extraction, latest CCExtractor version should be used with appropriate arguments. The user can modify
-the path to CCExtractor binary as well as the arguments to be used while extracting file using the below parameters:
-
-- path_to_CCEx: (default is system-wide installed 'ccextractor')
-- ccextractor_args: (default is '-autoprogram')
-
 ### Modifying Frequency
 Preprocessing and uploading operations are launched periodicially with set intervals. These intervals can be set by modifying the paramter, `interval`
 available under particular module options.
+
+### Using FTP uploading
+To use FTP uploading feature, please specify the following in the config `module.yaml`
+```yaml
+    host: # ftp host within parenthesis
+    port: # ftp port
+    username: # username for the server
+    password: # FTP account's password
+```
+
+### Set uploading times
+You can set times at which the uploads should be made. Please note that along with files, Logs are also uploaded at the upload time.
+
+### Update Data Link
+You can fork the repository [NephosConfig](https://github.com/thealphadollar/NephosConfig) and then link your own Nephos to take configuration from there in the
+`maintenance.module` config under update_data->add_data and update_data->add_jobs.
+
+
 

@@ -10,6 +10,8 @@ The recording module will be responsible for managing the addition of channel li
 
 Nephos will be developed, using Python and few other open source projects, to accomplish all the above mentioned tasks with cent-percent reliability and zero failures (unless wrong data is input, which will get logged). Testing and logging will be an integral part of Nephos development and running cycle, respectively.
 
+[Project Link](https://summerofcode.withgoogle.com/projects/#5889497431015424)
+
 ***
 ## Installation (And Setup)
 1. Nephos requires following environment dependencies:
@@ -25,7 +27,7 @@ Nephos will be developed, using Python and few other open source projects, to ac
 <!-- 2. 1) [Install FFMPEG and FFPROBE](https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos)<br/> -->
    <!-- 2) [Install CCExtractor](https://github.com/CCExtractor/ccextractor/wiki/Installation)<br/> -->
    <!-- 3) [Install Multicat](https://github.com/mmalecki/multicat/blob/master/trunk/INSTALL)<br/> -->
-3. 1) Nephos uses `mail` bash command to send email notifications, please [configure](https://superuser.com/questions/351841/how-do-i-set-up-the-unix-mail-command) it before running Nephos.
+3. 1) Nephos uses `mail` client to send email notifications, please [configure](https://superuser.com/questions/351841/how-do-i-set-up-the-unix-mail-command) it before running Nephos.
    2) You'll be asked to enter the email address(es) of recipient(s) of critical mails
 at initialisation of Nephos. It is only asked on first launch, to edit it
 later:
@@ -39,12 +41,15 @@ later:
 
 ### Install Using Git Clone
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/nephos.git && cd nephos`<br/>
-   2) Run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
+   2) On **centOS 6** run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
 5. 1) Observe and modify configurations available in `$HOME/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
         - Update path to various libraries, in the config file, being used; **fatal error might error** in case where the path to binaries (soft links work) is not appropriate.
    2) Add `nephos_start.sh` as [a cron job to be executed at startup](https://www.cyberciti.biz/faq/linux-execute-cron-job-after-system-reboot/) in `root` crontab.<br/>
         `@restart /path/to/nephos_start.sh 2&> ~/Nephos/boot_start.log`
-   3) Run nephos using `sudo ./nephos_start.sh`
+   3) Run nephos using `sudo ./nephos_start.sh`. This command runs `Nephos` under a new `screen` session. Press `ctrl + a` and then 'd' to detach from the session while it keeps running in the background.
+
+## To Add Channels And Jobs
+Please go to [Nephos Config](https://github.com/thealphadollar/NephosConfig) repository to modify the channels, jobs and share lists that Nephos works on.
 
 ## More Info
 For more information regarding using Nephos and how it works, [visit the wiki](https://www.github.com/thealphadollar/Nephos/wiki)

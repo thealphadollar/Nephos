@@ -1,7 +1,4 @@
 ---
-# This file is a template on how batch data for channels and sharing entities
-# can be inserted into Nephos. Use a modification of the file with the
-# `load data` argument to insert batch data to the database.
 # To add more data, create new dictionary elements with incrementing indexes.
 # "0"  has been created for understanding.
 # NOTE: Multiple values can be entered for single dict key by separation through

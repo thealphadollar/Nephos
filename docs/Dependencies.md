@@ -8,6 +8,8 @@ Below are all the Nephos' dependencies:
 - click
 - APScheduler
 - SQLAlchemy
+- google-api-python-client
+- oauth2client
 
 ### PyDash
 [PyDash](https://pydash.readthedocs.io/en/latest/) is used to make the process of data insertion and extraction from data types, such as python dictionary and lists, easier. An example is given below.
@@ -38,5 +40,11 @@ Nephos uses PyYAML's `safeload` method to load data into the program. The method
 
 ### APScheduler And SQLAlchemy
 [APScheduler](https://apscheduler.readthedocs.io/en/latest/), with SQLAlchemy jobstore, is used to manage the scheduling of the jobs. The [background scheduler](http://apscheduler.readthedocs.io/en/latest/modules/schedulers/background.html) from the module is used in Nephos; it stores jobs in a database permanently, and executes the tasks at designated time, all while running in the background.
+
+### google-api-python-client
+[Google python API](https://developers.google.com/api-client-library/python/) is used to handle all the interactions with Drive API to make uploads and share them with the emails provided.
+
+### oauth2client
+[OAuth2Client](https://github.com/google/oauth2client) handles all the authentication; we use flow method to authenticate with the google Drive.
 
 
