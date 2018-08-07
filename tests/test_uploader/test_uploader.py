@@ -12,18 +12,21 @@ class Job:
 @mock.patch('nephos.uploader.uploader.LOG')
 class TestUploader(TestCase):
 
-    def test___init__(self, mock_log, mock_uploader):
+    def test___init__(self, _, mock_uploader):
         Uploader.__init__(mock_uploader, mock.ANY)
 
         self.assertTrue(mock_uploader.auth.called)
         self.assertTrue(mock_uploader.service is None)
 
     @mock.patch('nephos.uploader.uploader.DBHandler')
-    def test_begin_uploads(self, mock_db, mock_log, _):
+    @mock.patch('nephos.uploader.uploader.FTPUploader')
+    def test_begin_uploads(self, mock_ftp, mock_db, mock_log, __):
         Uploader.begin_uploads(mock_log)
 
         self.assertTrue(mock_db.connect.called)
         self.assertFalse(mock_log.warning.called)
+        self.assertTrue(mock_ftp.called)
+        self.assertTrue(mock_log.called)
         self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.uploader.uploader.DBHandler')

@@ -93,7 +93,8 @@ class TestGDrive(TestCase):
 
     @mock.patch('nephos.uploader.gdrive.os')
     @mock.patch('nephos.uploader.gdrive.shutil')
-    def test_upload_log(self, mock_shutil, mock_os, mock_log, mock_drive):
+    @mock.patch('nephos.uploader.gdrive.open')
+    def test_upload_log(self, _, mock_shutil, mock_os, mock_log, mock_drive):
         GDrive.upload_log(mock_drive)
 
         self.assertTrue(mock_os.path.join.called)
