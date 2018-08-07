@@ -187,7 +187,6 @@ class Uploader(ABC):
             if "run_uploader@" in job.id:
                 self._scheduler.rm_recording_job(job.id)
 
-
     @staticmethod
     def _get_name(path):
         """
