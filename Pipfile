@@ -21,6 +21,7 @@ pytz = "*"
 tzlocal = "*"
 google-api-python-client = "*"
 "oauth2client" = "*"
+"pathlib2" = "*"
 
 [requires]
 python_version = "3.4"
