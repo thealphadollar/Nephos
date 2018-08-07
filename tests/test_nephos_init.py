@@ -67,7 +67,7 @@ class TestFirstTime(TestCase):
             self.assertTrue(mock_copy.called)
             self.assertTrue(mock_load_mail.called)
 
-    @mock.patch('nephos.input')
+    @mock.patch('builtins.input')
     def test_load_mail_list(self, mock_input):
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_file = os.path.join(temp_dir, "email_test")

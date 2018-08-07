@@ -18,7 +18,7 @@ MOCK_JOB_DATA = {
 class TestJobHandler(TestCase):
 
     @mock.patch('nephos.recorder.jobs.LOG')
-    @mock.patch('nephos.recorder.jobs.input')
+    @mock.patch('builtins.input')
     @mock.patch('nephos.recorder.jobs.DBHandler')
     def test_add_job(self, mock_db, mock_input, mock_log, mock_job_handler):
         with mock.patch('nephos.recorder.jobs.validate_entries'):
@@ -31,7 +31,7 @@ class TestJobHandler(TestCase):
         self.assertFalse(mock_log.debug.called)
 
     @mock.patch('nephos.recorder.jobs.LOG')
-    @mock.patch('nephos.recorder.jobs.input')
+    @mock.patch('builtins.input')
     @mock.patch('nephos.recorder.jobs.DBHandler')
     def test_add_job_error(self, mock_db, mock_input, mock_log, mock_job_handler):
         with mock.patch('nephos.recorder.jobs.validate_entries'):

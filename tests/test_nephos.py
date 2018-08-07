@@ -33,7 +33,7 @@ class TestNephos(TestCase):
 
         self.assertTrue(mock_nephos.scheduler.start.called)
 
-    @mock.patch('nephos.nephos.input')
+    @mock.patch('builtins.input')
     def test_load_channels_sharelist(self, mock_input, mock_log, mock_nephos):
         Nephos.load_channels_sharelist(mock_nephos)
 
@@ -43,7 +43,7 @@ class TestNephos(TestCase):
         self.assertFalse(mock_log.warning.called)
         self.assertFalse(mock_log.error.called)
 
-    @mock.patch('nephos.nephos.input')
+    @mock.patch('builtins.input')
     def test_load_channels_sharelist_key_error(self, mock_input, mock_log, mock_nephos):
         mock_nephos.channel_handler.insert_channels.side_effect = KeyError
         Nephos.load_channels_sharelist(mock_nephos)

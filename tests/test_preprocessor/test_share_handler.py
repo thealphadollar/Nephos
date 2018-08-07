@@ -7,7 +7,7 @@ from nephos.preprocessor.share_handler import ShareHandler, DBException
 @mock.patch('nephos.preprocessor.share_handler.LOG')
 class TestShareHandler(TestCase):
 
-    @mock.patch('nephos.preprocessor.share_handler.input')
+    @mock.patch('builtins.input')
     def test_add_share_entity(self, mock_input, mock_log, mock_share):
         ShareHandler.add_share_entity(mock_share)
 

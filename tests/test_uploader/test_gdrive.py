@@ -93,7 +93,7 @@ class TestGDrive(TestCase):
 
     @mock.patch('nephos.uploader.gdrive.os')
     @mock.patch('nephos.uploader.gdrive.shutil')
-    @mock.patch('nephos.uploader.gdrive.open')
+    @mock.patch('builtins.open')
     def test_upload_log(self, _, mock_shutil, mock_os, mock_log, mock_drive):
         GDrive.upload_log(mock_drive)
 
@@ -132,7 +132,7 @@ class TestGDrive(TestCase):
         self.assertTrue(mock_log.warning.called)
 
     @mock.patch('nephos.uploader.gdrive.client')
-    @mock.patch('nephos.uploader.gdrive.input')
+    @mock.patch('builtins.input')
     def test__init_auth_flow(self, mock_input, mock_client, mock_log, _):
         GDrive._init_auth_flow()
 

@@ -40,14 +40,14 @@ class TestMailNotifier(TestCase):
         self.assertTrue(mock_log.warning.called)
         self.assertEqual(return_value, False)
 
-    @mock.patch('nephos.mail_notifier.open')
+    @mock.patch('builtins.open')
     def test_add_to_report(self, mock_open, mock_log):
         add_to_report("test")
 
         self.assertFalse(mock_log.called)
         mock_open.assert_called_with(mock.ANY, "a")
 
-    @mock.patch('nephos.mail_notifier.open')
+    @mock.patch('builtins.open')
     @mock.patch('nephos.mail_notifier.send_mail')
     @mock.patch('nephos.mail_notifier.os')
     def test_send_report(self, mock_os, mock_mail, mock_open, mock_log):

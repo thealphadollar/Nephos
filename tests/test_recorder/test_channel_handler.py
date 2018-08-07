@@ -23,7 +23,7 @@ MOCK_RECORDER_CONFIG = {
 @mock.patch('nephos.recorder.channels.ChannelHandler')
 class TestChannelHandler(TestCase):
 
-    @mock.patch('nephos.recorder.channels.input')
+    @mock.patch('builtins.input')
     def test_add_channel(self, mock_input, mock_ch_handler):
         with mock.patch('nephos.recorder.channels.validate_entries'):
             ChannelHandler.add_channel(mock_ch_handler)

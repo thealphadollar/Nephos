@@ -28,7 +28,7 @@ class MockUpdateData:
 @mock.patch('nephos.maintenance.update_data.UpdateData')
 class TestUpdateData(TestCase):
 
-    @mock.patch('nephos.maintenance.update_data.super')
+    @mock.patch('builtins.super')
     @mock.patch('nephos.maintenance.update_data.Scheduler')
     @mock.patch('nephos.maintenance.update_data.JobHandler')
     @mock.patch('nephos.maintenance.update_data.Checker.__init__')
