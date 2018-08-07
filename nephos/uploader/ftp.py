@@ -33,11 +33,11 @@ class FTPUploader:
             list containing details of recordings to be uploaded.
 
         """
-        self.ftp = ftplib.FTP()
         host, port, username, password = self._get_ftp_config()
-        if (host is not None) and (port is not None) and \
-                (username is not None) and (password is not None):
+        if not ((host is None) or (port is None) or
+                (username is None) or (password is None)):
             try:
+                self.ftp = ftplib.FTP()
                 self._auth(host, port, username, password)
                 self.nephos_ftp_path = self._create_folder("Nephos")
                 self.ftp.cwd(self.nephos_ftp_path)
