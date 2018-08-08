@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.logger</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.logger</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/logger.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/logger.py</a></font></td></tr></table>
+    <p><tt>Contains&nbsp;classes&nbsp;used&nbsp;for&nbsp;logging&nbsp;through&nbsp;logger.YAML&nbsp;config&nbsp;file</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="logging.html#FileHandler">logging.FileHandler</a>(<a href="logging.html#StreamHandler">logging.StreamHandler</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.logger.html#EnsureFolderFileHandler">EnsureFolderFileHandler</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="EnsureFolderFileHandler">class <strong>EnsureFolderFileHandler</strong></a>(<a href="logging.html#FileHandler">logging.FileHandler</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Ensures&nbsp;that&nbsp;the&nbsp;directory&nbsp;specified&nbsp;for&nbsp;the&nbsp;log&nbsp;file&nbsp;exists<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nephos.logger.html#EnsureFolderFileHandler">EnsureFolderFileHandler</a></dd>
+<dd><a href="logging.html#FileHandler">logging.FileHandler</a></dd>
+<dd><a href="logging.html#StreamHandler">logging.StreamHandler</a></dd>
+<dd><a href="logging.html#Handler">logging.Handler</a></dd>
+<dd><a href="logging.html#Filterer">logging.Filterer</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="EnsureFolderFileHandler-__init__"><strong>__init__</strong></a>(self, filename, mode='a', encoding=None, delay=False)</dt><dd><tt>Parameters<br>
+----------<br>
+filename<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Compulsory&nbsp;parameter,&nbsp;path&nbsp;to&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;store&nbsp;logs<br>
+mode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;'a'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Specifies&nbsp;the&nbsp;method&nbsp;in&nbsp;which&nbsp;log&nbsp;file&nbsp;is&nbsp;to&nbsp;be&nbsp;opened<br>
+encoding<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Specifies&nbsp;the&nbsp;encoding&nbsp;in&nbsp;which&nbsp;file&nbsp;is&nbsp;to&nbsp;be&nbsp;opened<br>
+delay<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;default:&nbsp;False<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;delay&nbsp;is&nbsp;true,&nbsp;then&nbsp;file&nbsp;opening&nbsp;is&nbsp;deferred&nbsp;until&nbsp;the&nbsp;first&nbsp;call&nbsp;to&nbsp;<a href="#EnsureFolderFileHandler-emit">emit</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;https://docs.python.org/3/library/logging.handlers.html#logging.<a href="logging.html#FileHandler">FileHandler</a>.emit</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="logging.html#FileHandler">logging.FileHandler</a>:<br>
+<dl><dt><a name="EnsureFolderFileHandler-close"><strong>close</strong></a>(self)</dt><dd><tt>Closes&nbsp;the&nbsp;stream.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-emit"><strong>emit</strong></a>(self, record)</dt><dd><tt>Emit&nbsp;a&nbsp;record.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;stream&nbsp;was&nbsp;not&nbsp;opened&nbsp;because&nbsp;'delay'&nbsp;was&nbsp;specified&nbsp;in&nbsp;the<br>
+constructor,&nbsp;open&nbsp;it&nbsp;before&nbsp;calling&nbsp;the&nbsp;superclass's&nbsp;emit.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="logging.html#StreamHandler">logging.StreamHandler</a>:<br>
+<dl><dt><a name="EnsureFolderFileHandler-flush"><strong>flush</strong></a>(self)</dt><dd><tt>Flushes&nbsp;the&nbsp;stream.</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="logging.html#StreamHandler">logging.StreamHandler</a>:<br>
+<dl><dt><strong>terminator</strong> = '<font color="#c040c0">\n</font>'</dl>
+
+<hr>
+Methods inherited from <a href="logging.html#Handler">logging.Handler</a>:<br>
+<dl><dt><a name="EnsureFolderFileHandler-acquire"><strong>acquire</strong></a>(self)</dt><dd><tt>Acquire&nbsp;the&nbsp;I/O&nbsp;thread&nbsp;lock.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-createLock"><strong>createLock</strong></a>(self)</dt><dd><tt>Acquire&nbsp;a&nbsp;thread&nbsp;lock&nbsp;for&nbsp;serializing&nbsp;access&nbsp;to&nbsp;the&nbsp;underlying&nbsp;I/O.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-format"><strong>format</strong></a>(self, record)</dt><dd><tt>Format&nbsp;the&nbsp;specified&nbsp;record.<br>
+&nbsp;<br>
+If&nbsp;a&nbsp;formatter&nbsp;is&nbsp;set,&nbsp;use&nbsp;it.&nbsp;Otherwise,&nbsp;use&nbsp;the&nbsp;default&nbsp;formatter<br>
+for&nbsp;the&nbsp;module.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-get_name"><strong>get_name</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-handle"><strong>handle</strong></a>(self, record)</dt><dd><tt>Conditionally&nbsp;emit&nbsp;the&nbsp;specified&nbsp;logging&nbsp;record.<br>
+&nbsp;<br>
+Emission&nbsp;depends&nbsp;on&nbsp;filters&nbsp;which&nbsp;may&nbsp;have&nbsp;been&nbsp;added&nbsp;to&nbsp;the&nbsp;handler.<br>
+Wrap&nbsp;the&nbsp;actual&nbsp;emission&nbsp;of&nbsp;the&nbsp;record&nbsp;with&nbsp;acquisition/release&nbsp;of<br>
+the&nbsp;I/O&nbsp;thread&nbsp;lock.&nbsp;Returns&nbsp;whether&nbsp;the&nbsp;filter&nbsp;passed&nbsp;the&nbsp;record&nbsp;for<br>
+emission.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-handleError"><strong>handleError</strong></a>(self, record)</dt><dd><tt>Handle&nbsp;errors&nbsp;which&nbsp;occur&nbsp;during&nbsp;an&nbsp;<a href="#EnsureFolderFileHandler-emit">emit</a>()&nbsp;call.<br>
+&nbsp;<br>
+This&nbsp;method&nbsp;should&nbsp;be&nbsp;called&nbsp;from&nbsp;handlers&nbsp;when&nbsp;an&nbsp;exception&nbsp;is<br>
+encountered&nbsp;during&nbsp;an&nbsp;<a href="#EnsureFolderFileHandler-emit">emit</a>()&nbsp;call.&nbsp;If&nbsp;raiseExceptions&nbsp;is&nbsp;false,<br>
+exceptions&nbsp;get&nbsp;silently&nbsp;ignored.&nbsp;This&nbsp;is&nbsp;what&nbsp;is&nbsp;mostly&nbsp;wanted<br>
+for&nbsp;a&nbsp;logging&nbsp;system&nbsp;-&nbsp;most&nbsp;users&nbsp;will&nbsp;not&nbsp;care&nbsp;about&nbsp;errors&nbsp;in<br>
+the&nbsp;logging&nbsp;system,&nbsp;they&nbsp;are&nbsp;more&nbsp;interested&nbsp;in&nbsp;application&nbsp;errors.<br>
+You&nbsp;could,&nbsp;however,&nbsp;replace&nbsp;this&nbsp;with&nbsp;a&nbsp;custom&nbsp;handler&nbsp;if&nbsp;you&nbsp;wish.<br>
+The&nbsp;record&nbsp;which&nbsp;was&nbsp;being&nbsp;processed&nbsp;is&nbsp;passed&nbsp;in&nbsp;to&nbsp;this&nbsp;method.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-release"><strong>release</strong></a>(self)</dt><dd><tt>Release&nbsp;the&nbsp;I/O&nbsp;thread&nbsp;lock.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-setFormatter"><strong>setFormatter</strong></a>(self, fmt)</dt><dd><tt>Set&nbsp;the&nbsp;formatter&nbsp;for&nbsp;this&nbsp;handler.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-setLevel"><strong>setLevel</strong></a>(self, level)</dt><dd><tt>Set&nbsp;the&nbsp;logging&nbsp;level&nbsp;of&nbsp;this&nbsp;handler.&nbsp;&nbsp;level&nbsp;must&nbsp;be&nbsp;an&nbsp;int&nbsp;or&nbsp;a&nbsp;str.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-set_name"><strong>set_name</strong></a>(self, name)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="logging.html#Handler">logging.Handler</a>:<br>
+<dl><dt><strong>name</strong></dt>
+</dl>
+<hr>
+Methods inherited from <a href="logging.html#Filterer">logging.Filterer</a>:<br>
+<dl><dt><a name="EnsureFolderFileHandler-addFilter"><strong>addFilter</strong></a>(self, filter)</dt><dd><tt>Add&nbsp;the&nbsp;specified&nbsp;filter&nbsp;to&nbsp;this&nbsp;handler.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-filter"><strong>filter</strong></a>(self, record)</dt><dd><tt>Determine&nbsp;if&nbsp;a&nbsp;record&nbsp;is&nbsp;loggable&nbsp;by&nbsp;consulting&nbsp;all&nbsp;the&nbsp;filters.<br>
+&nbsp;<br>
+The&nbsp;default&nbsp;is&nbsp;to&nbsp;allow&nbsp;the&nbsp;record&nbsp;to&nbsp;be&nbsp;logged;&nbsp;any&nbsp;filter&nbsp;can&nbsp;veto<br>
+this&nbsp;and&nbsp;the&nbsp;record&nbsp;is&nbsp;then&nbsp;dropped.&nbsp;Returns&nbsp;a&nbsp;zero&nbsp;value&nbsp;if&nbsp;a&nbsp;record<br>
+is&nbsp;to&nbsp;be&nbsp;dropped,&nbsp;else&nbsp;non-zero.<br>
+&nbsp;<br>
+..&nbsp;versionchanged:&nbsp;3.2<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;Allow&nbsp;filters&nbsp;to&nbsp;be&nbsp;just&nbsp;callables.</tt></dd></dl>
+
+<dl><dt><a name="EnsureFolderFileHandler-removeFilter"><strong>removeFilter</strong></a>(self, filter)</dt><dd><tt>Remove&nbsp;the&nbsp;specified&nbsp;filter&nbsp;from&nbsp;this&nbsp;handler.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="logging.html#Filterer">logging.Filterer</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

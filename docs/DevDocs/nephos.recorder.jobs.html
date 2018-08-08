@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.recorder.jobs</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.<a href="nephos.recorder.html"><font color="#ffffff">recorder</font></a>.jobs</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/recorder/jobs.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/recorder/jobs.py</a></font></td></tr></table>
+    <p><tt>Stores&nbsp;all&nbsp;code&nbsp;related&nbsp;to&nbsp;recording&nbsp;jobs</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.recorder.jobs.html#JobHandler">JobHandler</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="JobHandler">class <strong>JobHandler</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Handles&nbsp;addition&nbsp;of&nbsp;jobs<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="JobHandler-__init__"><strong>__init__</strong></a>(self, scheduler)</dt><dd><tt>initiates&nbsp;the&nbsp;<a href="#JobHandler">JobHandler</a>&nbsp;with&nbsp;the&nbsp;Scheduler&nbsp;class<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+scheduler<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;Scheduler<br>
+&nbsp;&nbsp;&nbsp;&nbsp;currently&nbsp;active&nbsp;Scheduler&nbsp;class&nbsp;from&nbsp;scheduler&nbsp;module</tt></dd></dl>
+
+<dl><dt><a name="JobHandler-add_job"><strong>add_job</strong></a>(self)</dt><dd><tt>Provides&nbsp;CLI&nbsp;for&nbsp;a&nbsp;single&nbsp;job&nbsp;addition&nbsp;and&nbsp;then&nbsp;calls&nbsp;insert_jobs&nbsp;with&nbsp;the&nbsp;data<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="JobHandler-display_jobs"><strong>display_jobs</strong></a>(self)</dt><dd><tt>displays&nbsp;the&nbsp;list&nbsp;of&nbsp;scheduled&nbsp;jobs&nbsp;by&nbsp;calling&nbsp;appropriate<br>
+Scheduler&nbsp;method<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="JobHandler-insert_jobs"><strong>insert_jobs</strong></a>(self, db_cur, job_data)</dt><dd><tt>passes&nbsp;job&nbsp;data&nbsp;to&nbsp;add_recording_job&nbsp;method&nbsp;of&nbsp;Scheduler&nbsp;class.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+db_cur<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;sqlite&nbsp;database&nbsp;cursor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cursor&nbsp;to&nbsp;the&nbsp;database&nbsp;of&nbsp;channels<br>
+job_data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict&nbsp;containing&nbsp;channel&nbsp;with&nbsp;data&nbsp;as&nbsp;in&nbsp;the&nbsp;add_job&nbsp;function<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="JobHandler-load_jobs"><strong>load_jobs</strong></a>(self, data)</dt><dd><tt>loads&nbsp;data&nbsp;from&nbsp;a&nbsp;file&nbsp;which&nbsp;contains&nbsp;jobs<br>
+Segregates&nbsp;them&nbsp;based&nbsp;on&nbsp;the&nbsp;dictionary&nbsp;key&nbsp;and&nbsp;then&nbsp;passes&nbsp;the&nbsp;dictionary&nbsp;to<br>
+appropriate&nbsp;functions&nbsp;in&nbsp;<a href="#JobHandler">JobHandler</a>.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contains&nbsp;the&nbsp;list&nbsp;of&nbsp;new&nbsp;jobs&nbsp;to&nbsp;be&nbsp;added&nbsp;to&nbsp;database<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;bool<br>
+True&nbsp;if&nbsp;operations&nbsp;were&nbsp;successful,&nbsp;False&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="JobHandler-rm_jobs"><strong>rm_jobs</strong></a>(self, job_data)</dt><dd><tt>removes&nbsp;a&nbsp;job&nbsp;from&nbsp;the&nbsp;schedule<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+job_data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;jobs&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="JobHandler-to_weekday"><strong>to_weekday</strong></a>(entry)</dt><dd><tt>converts&nbsp;the&nbsp;integer&nbsp;group&nbsp;to&nbsp;weekday&nbsp;string<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+entry<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;from,&nbsp;eg.&nbsp;0001000&nbsp;for&nbsp;only&nbsp;wednesday<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;string&nbsp;containing&nbsp;short&nbsp;forms&nbsp;of&nbsp;weekdays</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>__recording_dir__</strong> = '/home/thealpha/Nephos/recordings'</td></tr></table>
+</body></html>

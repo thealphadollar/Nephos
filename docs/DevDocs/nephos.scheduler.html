@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.scheduler</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.scheduler</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/scheduler.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/scheduler.py</a></font></td></tr></table>
+    <p><tt>All&nbsp;scheduler&nbsp;tasks&nbsp;go&nbsp;here.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.scheduler.html#Scheduler">Scheduler</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Scheduler">class <strong>Scheduler</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;class&nbsp;to&nbsp;rule&nbsp;all&nbsp;the&nbsp;scheduling&nbsp;related&nbsp;tasks.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Scheduler-__init__"><strong>__init__</strong></a>(self, main)</dt><dd><tt>initialise&nbsp;<a href="#Scheduler">Scheduler</a>&nbsp;with&nbsp;basic&nbsp;configuration<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+main<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;whether&nbsp;the&nbsp;initiated&nbsp;scheduler&nbsp;is&nbsp;the&nbsp;nephos's&nbsp;scheduler&nbsp;or&nbsp;not</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-add_cron_necessary_job"><strong>add_cron_necessary_job</strong></a>(self, func, main_id, job_time, repetition='1111111', args=None)</dt><dd><tt>Parameters<br>
+----------<br>
+func<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;callable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maintenance&nbsp;function&nbsp;to&nbsp;be&nbsp;run&nbsp;at&nbsp;the&nbsp;execution&nbsp;of&nbsp;the&nbsp;job<br>
+main_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;unique&nbsp;id&nbsp;to&nbsp;be&nbsp;associated&nbsp;with&nbsp;the&nbsp;job<br>
+job_time<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;time&nbsp;at&nbsp;which&nbsp;job&nbsp;is&nbsp;to&nbsp;be&nbsp;executed,&nbsp;eg&nbsp;"15:45"<br>
+repetition<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;days&nbsp;of&nbsp;week&nbsp;on&nbsp;which&nbsp;uploading&nbsp;is&nbsp;to&nbsp;take&nbsp;place<br>
+args<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;of&nbsp;arguments&nbsp;for&nbsp;the&nbsp;function<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-add_necessary_job"><strong>add_necessary_job</strong></a>(self, func, main_id, interval, args=None)</dt><dd><tt>Add&nbsp;necessary&nbsp;jobs&nbsp;to&nbsp;the&nbsp;scheduler<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+func<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;callable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maintenance&nbsp;function&nbsp;to&nbsp;be&nbsp;run&nbsp;at&nbsp;the&nbsp;execution&nbsp;of&nbsp;the&nbsp;job<br>
+main_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;unique&nbsp;id&nbsp;to&nbsp;be&nbsp;associated&nbsp;with&nbsp;the&nbsp;job<br>
+interval<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;repetition&nbsp;interval&nbsp;in&nbsp;minutes<br>
+args<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;list&nbsp;or&nbsp;tuple<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;of&nbsp;positional&nbsp;arguments&nbsp;to&nbsp;call&nbsp;func&nbsp;with<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-add_recording_job"><strong>add_recording_job</strong></a>(self, ip_addr, out_path, duration, job_time, week_days, job_name)</dt><dd><tt>Add&nbsp;recording&nbsp;jobs&nbsp;to&nbsp;the&nbsp;scheduler<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+ip_addr<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;channel<br>
+out_path<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path,&nbsp;without&nbsp;".ts",&nbsp;where&nbsp;the&nbsp;file&nbsp;is&nbsp;to&nbsp;the&nbsp;saved<br>
+duration<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;duration&nbsp;in&nbsp;minutes&nbsp;for&nbsp;the&nbsp;job&nbsp;to&nbsp;run<br>
+job_time<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;HH:MM<br>
+&nbsp;&nbsp;&nbsp;&nbsp;time&nbsp;to&nbsp;begin&nbsp;the&nbsp;job<br>
+week_days<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contains&nbsp;the&nbsp;details&nbsp;for&nbsp;which&nbsp;week&nbsp;days&nbsp;the&nbsp;job&nbsp;is&nbsp;to&nbsp;run<br>
+job_name<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;of&nbsp;the&nbsp;job,&nbsp;unique<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-get_jobs"><strong>get_jobs</strong></a>(self)</dt><dd><tt>prints&nbsp;a&nbsp;formatted&nbsp;list&nbsp;of&nbsp;jobs,&nbsp;their&nbsp;triggers&nbsp;and&nbsp;next&nbsp;run&nbsp;times<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;list<br>
+list&nbsp;of&nbsp;jobs</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-rm_recording_job"><strong>rm_recording_job</strong></a>(self, job_id)</dt><dd><tt>delete&nbsp;a&nbsp;recording&nbsp;job&nbsp;from&nbsp;schedule<br>
+&nbsp;<br>
+Parameters<br>
+-------<br>
+job_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;of&nbsp;the&nbsp;job<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-shutdown"><strong>shutdown</strong></a>(self)</dt><dd><tt>shutdown&nbsp;scheduler&nbsp;after&nbsp;completing&nbsp;running&nbsp;jobs<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Scheduler-start"><strong>start</strong></a>(self)</dt><dd><tt>Starts&nbsp;the&nbsp;scheduler<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>MAX_CONCURRENT_JOBS</strong> = 20<br>
+<strong>PATH_JOB_DB</strong> = '/home/thealpha/Nephos/databases/jobs.db'<br>
+<strong>TMZ</strong> = &lt;DstTzInfo 'Asia/Kolkata' HMT+5:53:00 STD&gt;<br>
+<strong>__nephos_dir__</strong> = '/home/thealpha/Nephos'</td></tr></table>
+</body></html>

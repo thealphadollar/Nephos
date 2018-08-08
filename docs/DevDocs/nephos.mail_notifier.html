@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.mail_notifier</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.mail_notifier</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/mail_notifier.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/mail_notifier.py</a></font></td></tr></table>
+    <p><tt>Contains&nbsp;functions&nbsp;for&nbsp;sending&nbsp;reports&nbsp;and&nbsp;critical&nbsp;log&nbsp;entries&nbsp;to&nbsp;the&nbsp;system&nbsp;administrator</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-add_to_report"><strong>add_to_report</strong></a>(msg)</dt><dd><tt>Append&nbsp;string&nbsp;to&nbsp;the&nbsp;EOF&nbsp;of&nbsp;report&nbsp;file.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+msg<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;to&nbsp;be&nbsp;appended&nbsp;to&nbsp;the&nbsp;report's&nbsp;file.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+ <dl><dt><a name="-send_mail"><strong>send_mail</strong></a>(msg, msg_type)</dt><dd><tt>Sends&nbsp;mail&nbsp;to&nbsp;the&nbsp;email&nbsp;addresses&nbsp;present&nbsp;in&nbsp;CRITICAL_MAIL_ADDRS_PATH<br>
+&nbsp;<br>
+Parameters<br>
+-------<br>
+msg<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str&nbsp;to&nbsp;be&nbsp;send&nbsp;as&nbsp;message<br>
+msg_type<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;defines&nbsp;the&nbsp;type&nbsp;and&nbsp;decides&nbsp;the&nbsp;subject&nbsp;for&nbsp;the&nbsp;mail<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;bool<br>
+true&nbsp;if&nbsp;sending&nbsp;was&nbsp;successful,&nbsp;false&nbsp;otherwise</tt></dd></dl>
+ <dl><dt><a name="-send_report"><strong>send_report</strong></a>()</dt><dd><tt>Reads&nbsp;data&nbsp;from&nbsp;report&nbsp;file,&nbsp;converts&nbsp;it&nbsp;to&nbsp;str&nbsp;message&nbsp;and&nbsp;calls&nbsp;send&nbsp;mail&nbsp;on&nbsp;it.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>REPORT_FILE</strong> = '/home/thealpha/Nephos/.report'<br>
+<strong>__nephos_dir__</strong> = '/home/thealpha/Nephos'</td></tr></table>
+</body></html>

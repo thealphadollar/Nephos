@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.nephos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.nephos</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/nephos.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/nephos.py</a></font></td></tr></table>
+    <p><tt>The&nbsp;pipeline&nbsp;for&nbsp;the&nbsp;working&nbsp;of&nbsp;nephos</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.nephos.html#Nephos">Nephos</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Nephos">class <strong>Nephos</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;abstract&nbsp;base&nbsp;class&nbsp;from&nbsp;which&nbsp;new&nbsp;derived&nbsp;classes&nbsp;can&nbsp;be&nbsp;created&nbsp;to&nbsp;support&nbsp;varying<br>
+online&nbsp;storage&nbsp;platforms.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Nephos-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>initiates&nbsp;<a href="#Nephos">Nephos</a>&nbsp;with&nbsp;basic&nbsp;configuration,&nbsp;modules&nbsp;and&nbsp;makes&nbsp;it&nbsp;ready&nbsp;to&nbsp;be&nbsp;started.</tt></dd></dl>
+
+<dl><dt><a name="Nephos-load_channels_sharelist"><strong>load_channels_sharelist</strong></a>(self)</dt><dd><tt>loads&nbsp;data&nbsp;from&nbsp;a&nbsp;file&nbsp;which&nbsp;contains&nbsp;both&nbsp;channels&nbsp;and&nbsp;share&nbsp;entities<br>
+Segregates&nbsp;them&nbsp;based&nbsp;on&nbsp;the&nbsp;dictionary&nbsp;key&nbsp;and&nbsp;then&nbsp;passes&nbsp;the&nbsp;dictionary&nbsp;to<br>
+appropriate&nbsp;functions&nbsp;in&nbsp;recorder&nbsp;and&nbsp;uploader.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Nephos-start"><strong>start</strong></a>(self)</dt><dd><tt>Start&nbsp;nephos,&nbsp;with&nbsp;the&nbsp;background&nbsp;processes.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Nephos-first_time"><strong>first_time</strong></a>()</dt><dd><tt>Copies&nbsp;files&nbsp;from&nbsp;install&nbsp;directory&nbsp;to&nbsp;home&nbsp;nephos&nbsp;directory<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>__nephos_dir__</strong> = '/home/thealpha/Nephos'</td></tr></table>
+</body></html>

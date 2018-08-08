@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: package nephos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>nephos</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/__init__.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/__init__.py</a></font></td></tr></table>
+    <p><tt>File&nbsp;containing&nbsp;initialising&nbsp;functions&nbsp;for&nbsp;Nephos<br>
+&nbsp;<br>
+Used&nbsp;to&nbsp;store&nbsp;attributes&nbsp;which&nbsp;will&nbsp;be&nbsp;used&nbsp;throughout&nbsp;the&nbsp;program.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Package Contents</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="nephos.__main__.html">__main__</a><br>
+<a href="nephos.exceptions.html">exceptions</a><br>
+<a href="nephos.load_config.html">load_config</a><br>
+<a href="nephos.logger.html">logger</a><br>
+</td><td width="25%" valign=top><a href="nephos.mail_notifier.html">mail_notifier</a><br>
+<a href="nephos.maintenance.html"><strong>maintenance</strong>&nbsp;(package)</a><br>
+<a href="nephos.manage_db.html">manage_db</a><br>
+<a href="nephos.nephos.html">nephos</a><br>
+</td><td width="25%" valign=top><a href="nephos.preprocessor.html"><strong>preprocessor</strong>&nbsp;(package)</a><br>
+<a href="nephos.recorder.html"><strong>recorder</strong>&nbsp;(package)</a><br>
+<a href="nephos.scheduler.html">scheduler</a><br>
+<a href="nephos.uploader.html"><strong>uploader</strong>&nbsp;(package)</a><br>
+</td><td width="25%" valign=top><a href="nephos.ver_info.html">ver_info</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-first_time"><strong>first_time</strong></a>()</dt><dd><tt>If&nbsp;the&nbsp;program&nbsp;is&nbsp;being&nbsp;run&nbsp;first&nbsp;time,&nbsp;create&nbsp;the&nbsp;directory&nbsp;Nephos<br>
+and&nbsp;it's&nbsp;subdirectories&nbsp;in&nbsp;user's&nbsp;home&nbsp;directory<br>
+&nbsp;<br>
+-Nephos:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;config:&nbsp;contains&nbsp;user&nbsp;editable&nbsp;configuration&nbsp;files<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;logs:&nbsp;store&nbsp;log&nbsp;information&nbsp;in&nbsp;txt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;databases:&nbsp;stores&nbsp;the&nbsp;database&nbsp;for&nbsp;Nephos<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;recordings:&nbsp;stores&nbsp;the&nbsp;recorded&nbsp;streams<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;processed:&nbsp;stores&nbsp;processed&nbsp;mp4&nbsp;files&nbsp;to&nbsp;be&nbsp;uploaded<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;docs:&nbsp;stores&nbsp;the&nbsp;detailed&nbsp;documentation&nbsp;for&nbsp;Nephos<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+bool:&nbsp;True,&nbsp;when&nbsp;Nephos&nbsp;launched&nbsp;first&nbsp;time<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False,&nbsp;otherwise</tt></dd></dl>
+ <dl><dt><a name="-load_mail_list"><strong>load_mail_list</strong></a>()</dt><dd><tt>Checks&nbsp;and&nbsp;removes&nbsp;incorrect&nbsp;mail&nbsp;addresses&nbsp;from&nbsp;toaddr&nbsp;parameter<br>
+of&nbsp;logger's&nbsp;SMTP&nbsp;handler<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;list<br>
+updated&nbsp;list&nbsp;of&nbsp;emails</tt></dd></dl>
+ <dl><dt><a name="-validate_entries"><strong>validate_entries</strong></a>(data)</dt><dd><tt>Validates&nbsp;the&nbsp;data&nbsp;entry&nbsp;for&nbsp;the&nbsp;channels,&nbsp;jobs&nbsp;and&nbsp;sharelists<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contains&nbsp;multiple&nbsp;channels'&nbsp;data<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;dict<br>
+validated&nbsp;and&nbsp;rectified&nbsp;data</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>CRITICAL_MAIL_ADDRS_PATH</strong> = '/home/thealpha/Nephos/.critical_mail_addrs'<br>
+<strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>REGEX_CHECK</strong> = {'country_code': re.compile('[a-zA-Z ]+'), 'duration': re.compile('[^0]\\d*'), 'email': re.compile('[^@\\s][\\w\\d\\._\\+][^\\s]+@[\\w\\d\\.]+\\.[\\w\\d]*'), 'ip': re.compile('[^\\s]+:[\\d]+'), 'language': re.compile('[a-zA-Z ]+'), 'repetition': re.compile('[01]{7}'), 'start_time': re.compile('\\d{2}:\\d{2}'), 'timezone': re.compile('[a-zA-Z ]+')}<br>
+<strong>__config_dir__</strong> = '/home/thealpha/Nephos/config'<br>
+<strong>__db_dir__</strong> = '/home/thealpha/Nephos/databases'<br>
+<strong>__default_config_dir__</strong> = '/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/default_config'<br>
+<strong>__default_db_dir__</strong> = '/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/databases'<br>
+<strong>__default_docs_dir__</strong> = '/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/../docs'<br>
+<strong>__docs_dir__</strong> = '/home/thealpha/Nephos/docs'<br>
+<strong>__home_dir__</strong> = '/home/thealpha'<br>
+<strong>__log_dir__</strong> = '/home/thealpha/Nephos/logs'<br>
+<strong>__nephos_dir__</strong> = '/home/thealpha/Nephos'<br>
+<strong>__package_dir__</strong> = '/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos'<br>
+<strong>__recording_dir__</strong> = '/home/thealpha/Nephos/recordings'<br>
+<strong>__upload_dir__</strong> = '/home/thealpha/Nephos/processed'</td></tr></table>
+</body></html>

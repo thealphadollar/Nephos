@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.recorder.channels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.<a href="nephos.recorder.html"><font color="#ffffff">recorder</font></a>.channels</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/recorder/channels.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/recorder/channels.py</a></font></td></tr></table>
+    <p><tt>Manages&nbsp;all&nbsp;operations&nbsp;related&nbsp;to&nbsp;channels,&nbsp;including&nbsp;adding,&nbsp;deleting&nbsp;and&nbsp;updating&nbsp;channel&nbsp;data</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.recorder.channels.html#ChannelHandler">ChannelHandler</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ChannelHandler">class <strong>ChannelHandler</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;unifying&nbsp;all&nbsp;channel&nbsp;concerned&nbsp;methods<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ChannelHandler-add_channel"><strong>add_channel</strong></a>(self)</dt><dd><tt>Provides&nbsp;CLI&nbsp;to&nbsp;add&nbsp;a&nbsp;single&nbsp;channel<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+channel_id<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;unique&nbsp;id&nbsp;for&nbsp;the&nbsp;channel</tt></dd></dl>
+
+<dl><dt><a name="ChannelHandler-display_channel"><strong>display_channel</strong></a>(self)</dt><dd><tt>Displays&nbsp;list&nbsp;of&nbsp;channels&nbsp;currently&nbsp;stored&nbsp;in&nbsp;the&nbsp;database<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="ChannelHandler-delete_channel"><strong>delete_channel</strong></a>()</dt><dd><tt>Deletes&nbsp;channel&nbsp;from&nbsp;the&nbsp;database<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="ChannelHandler-grab_ch_list"><strong>grab_ch_list</strong></a>()</dt><dd><tt>Extracts&nbsp;the&nbsp;table&nbsp;of&nbsp;currently&nbsp;stored&nbsp;channels<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;tuple<br>
+tuple&nbsp;containing&nbsp;column&nbsp;values&nbsp;for&nbsp;all&nbsp;the&nbsp;channels</tt></dd></dl>
+
+<dl><dt><a name="ChannelHandler-insert_channels"><strong>insert_channels</strong></a>(ch_data)</dt><dd><tt>Adds&nbsp;channels&nbsp;to&nbsp;the&nbsp;database<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+ch_data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict&nbsp;of&nbsp;channels'&nbsp;data&nbsp;to&nbsp;be&nbsp;appended&nbsp;to&nbsp;the&nbsp;channel&nbsp;table<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="ChannelHandler-record_stream"><strong>record_stream</strong></a>(ip_addr, addr, duration_secs, test=False)</dt><dd><tt>Function&nbsp;to&nbsp;record&nbsp;stream&nbsp;from&nbsp;the&nbsp;ip&nbsp;address&nbsp;for&nbsp;the&nbsp;given&nbsp;duration,<br>
+and&nbsp;in&nbsp;the&nbsp;given&nbsp;addr.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+ip_addr<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;stream,&nbsp;format&nbsp;"host:port"<br>
+addr<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;absolute&nbsp;file&nbsp;path,&nbsp;without&nbsp;".ts",&nbsp;to&nbsp;save&nbsp;the&nbsp;recording<br>
+duration_secs<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;duration&nbsp;to&nbsp;record&nbsp;the&nbsp;show&nbsp;in&nbsp;seconds<br>
+test<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;bool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;if&nbsp;run&nbsp;by&nbsp;channel&nbsp;online&nbsp;check&nbsp;test,&nbsp;False&nbsp;otherwise<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+type:&nbsp;bool<br>
+True&nbsp;if&nbsp;successful,&nbsp;False&nbsp;otherwise</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>CH_STAT_INDEX</strong> = 6<br>
+<strong>CMD_GET_CHANNELS</strong> = 'SELECT * FROM channels'<br>
+<strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>MIN_BYTES</strong> = 1024<br>
+<strong>__recording_dir__</strong> = '/home/thealpha/Nephos/recordings'</td></tr></table>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.preprocessor.methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.<a href="nephos.preprocessor.html"><font color="#ffffff">preprocessor</font></a>.methods</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/preprocessor/methods.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/preprocessor/methods.py</a></font></td></tr></table>
+    <p><tt>Contains&nbsp;all&nbsp;the&nbsp;methods&nbsp;applied&nbsp;in&nbsp;preprocessing</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="subprocess.html">subprocess</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.preprocessor.methods.html#ApplyProcessMethods">ApplyProcessMethods</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ApplyProcessMethods">class <strong>ApplyProcessMethods</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Handles&nbsp;application&nbsp;of&nbsp;pipeline&nbsp;of&nbsp;processing&nbsp;the&nbsp;recording&nbsp;and<br>
+eventually&nbsp;updating&nbsp;the&nbsp;database.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ApplyProcessMethods-__init__"><strong>__init__</strong></a>(self, path_to_file, store_path)</dt><dd><tt>Loads&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;processed,&nbsp;modifies&nbsp;status&nbsp;to&nbsp;"processing"&nbsp;and&nbsp;calls<br>
+apply_methods&nbsp;on&nbsp;it.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+path_to_file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;to&nbsp;file&nbsp;to&nbsp;be&nbsp;processed<br>
+store_path<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;to&nbsp;directory&nbsp;to&nbsp;store&nbsp;the&nbsp;files,&nbsp;post-processing</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="ApplyProcessMethods-get_lang"><strong>get_lang</strong></a>(path_to_file)</dt><dd><tt>Uses&nbsp;ffprobe&nbsp;to&nbsp;gather&nbsp;information&nbsp;about&nbsp;languages&nbsp;present&nbsp;in&nbsp;the&nbsp;stream.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+path_to_file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;to&nbsp;file&nbsp;to&nbsp;be&nbsp;processed<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+aud_lang<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;audio&nbsp;languages<br>
+sub_lang<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;subtitle&nbsp;languages</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>CH_COUN_INDEX</strong> = 3<br>
+<strong>CH_LANG_INDEX</strong> = 4<br>
+<strong>CH_TMZ_INDEX</strong> = 5<br>
+<strong>GET_CH_INFO</strong> = 'SELECT *<font color="#c040c0">\n</font>                FROM channels<font color="#c040c0">\n</font>                WHERE name = ?'<br>
+<strong>GET_TASK_INFO</strong> = 'SELECT *<font color="#c040c0">\n</font>                FROM tasks<font color="#c040c0">\n</font>                WHERE orig_path = ?'<br>
+<strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>MIN_BYTES</strong> = 1024<br>
+<strong>PATH_TO_PROCESSING_SCRIPT</strong> = '/home/thealpha/Nephos/config/processing.sh'<br>
+<strong>SET_PROCESSED_COMMAND</strong> = 'UPDATE tasks<font color="#c040c0">\n</font>                    SET status = "processed"<font color="#c040c0">\n</font>                    WHERE orig_path = ?'<br>
+<strong>SET_PROCESSING_COMMAND</strong> = 'UPDATE tasks<font color="#c040c0">\n</font>                    SET status = "processing"<font color="#c040c0">\n</font>                    WHERE orig_path = ?'<br>
+<strong>SET_SHARE_COMMAND</strong> = 'UPDATE tasks<font color="#c040c0">\n</font>                    SET share_with = ?<font color="#c040c0">\n</font>                    WHERE orig_path = ?'<br>
+<strong>SL_MAIL_INDEX</strong> = 1<br>
+<strong>SL_TAG_INDEX</strong> = 2<br>
+<strong>TSK_CHNAME_INDEX</strong> = 3<br>
+<strong>TSK_LANG_INDEX</strong> = 4<br>
+<strong>TSK_SUBLANG_INDEX</strong> = 5<br>
+<strong>__config_dir__</strong> = '/home/thealpha/Nephos/config'</td></tr></table>
+</body></html>

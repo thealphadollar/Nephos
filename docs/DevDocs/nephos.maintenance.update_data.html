@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.maintenance.update_data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.<a href="nephos.maintenance.html"><font color="#ffffff">maintenance</font></a>.update_data</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/maintenance/update_data.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/maintenance/update_data.py</a></font></td></tr></table>
+    <p><tt>Checks&nbsp;the&nbsp;NephosConfig&nbsp;(github.com/thealphadollar/NephosConfig)&nbsp;repository&nbsp;for&nbsp;change<br>
+in&nbsp;data&nbsp;and&nbsp;updates&nbsp;accordingly.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="nephos.maintenance.checker.html#Checker">nephos.maintenance.checker.Checker</a>(<a href="abc.html#ABC">abc.ABC</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.maintenance.update_data.html#UpdateData">UpdateData</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UpdateData">class <strong>UpdateData</strong></a>(<a href="nephos.maintenance.checker.html#Checker">nephos.maintenance.checker.Checker</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Syncs&nbsp;the&nbsp;current&nbsp;data&nbsp;with&nbsp;the&nbsp;aforementioned&nbsp;repositories&nbsp;data<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="nephos.maintenance.update_data.html#UpdateData">UpdateData</a></dd>
+<dd><a href="nephos.maintenance.checker.html#Checker">nephos.maintenance.checker.Checker</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="UpdateData-__init__"><strong>__init__</strong></a>(self, config_maintain)</dt><dd><tt>Initiates&nbsp;<a href="#UpdateData">UpdateData</a><br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+config_maintain<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dict<br>
+&nbsp;&nbsp;&nbsp;&nbsp;contains&nbsp;the&nbsp;essential&nbsp;configuration&nbsp;required&nbsp;to&nbsp;run</tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset([])</dl>
+
+<hr>
+Methods inherited from <a href="nephos.maintenance.checker.html#Checker">nephos.maintenance.checker.Checker</a>:<br>
+<dl><dt><a name="UpdateData-to_run"><strong>to_run</strong></a>(self, kind)</dt><dd><tt>Checks&nbsp;from&nbsp;config&nbsp;file&nbsp;if&nbsp;the&nbsp;maintenance&nbsp;job&nbsp;is&nbsp;to&nbsp;be&nbsp;executed<br>
+&nbsp;<br>
+Parameters<br>
+-------<br>
+kind<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;kind&nbsp;of&nbsp;the&nbsp;job&nbsp;to&nbsp;be&nbsp;executed<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+executes&nbsp;self._executed()&nbsp;if&nbsp;to&nbsp;be&nbsp;executed<br>
+displays&nbsp;warning&nbsp;log&nbsp;otherwise</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="abc.html#ABC">abc.ABC</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>CURRENT_DATA</strong> = '/home/thealpha/Nephos/config/add_data.yaml'<br>
+<strong>CURRENT_JOBS</strong> = '/home/thealpha/Nephos/config/add_jobs.yaml'<br>
+<strong>LOG</strong> = &lt;logging.Logger object&gt;<br>
+<strong>NEW_DATA</strong> = '/home/thealpha/Nephos/add_data.yaml'<br>
+<strong>NEW_JOBS</strong> = '/home/thealpha/Nephos/add_jobs.yaml'<br>
+<strong>__config_dir__</strong> = '/home/thealpha/Nephos/config'<br>
+<strong>__nephos_dir__</strong> = '/home/thealpha/Nephos'</td></tr></table>
+</body></html>

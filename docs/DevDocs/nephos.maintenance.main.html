@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module nephos.maintenance.main</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="nephos.html"><font color="#ffffff">nephos</font></a>.<a href="nephos.maintenance.html"><font color="#ffffff">maintenance</font></a>.main</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/maintenance/main.py">/media/hdd/Essentials/Chapter_Kgp_WOrk/GSoC/projectnephos_gsoc18/GSoC18Nephos/nephos/maintenance/main.py</a></font></td></tr></table>
+    <p><tt>Defines&nbsp;maintenance&nbsp;class&nbsp;and&nbsp;it's&nbsp;functioning</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pydash.html">pydash</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="nephos.maintenance.main.html#Maintenance">Maintenance</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Maintenance">class <strong>Maintenance</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Manages&nbsp;all&nbsp;the&nbsp;maintenance&nbsp;tasks&nbsp;in&nbsp;a&nbsp;nut&nbsp;shell.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Maintenance-__init__"><strong>__init__</strong></a>(self, maintenance_config)</dt><dd><tt>Initiate&nbsp;the&nbsp;<a href="#Maintenance">Maintenance</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;it's&nbsp;configuration.<br>
+All&nbsp;jobs&nbsp;have&nbsp;different&nbsp;call&nbsp;methods&nbsp;for&nbsp;ease&nbsp;of&nbsp;scheduling.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+maintenance_config<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;dictionary<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maintenance&nbsp;configuration&nbsp;from&nbsp;"maintenance.yaml"</tt></dd></dl>
+
+<dl><dt><a name="Maintenance-add_maintenance_to_scheduler"><strong>add_maintenance_to_scheduler</strong></a>(self, scheduler)</dt><dd><tt>adds&nbsp;all&nbsp;maintenance&nbsp;jobs&nbsp;to&nbsp;scheduler<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+scheduler<br>
+&nbsp;&nbsp;&nbsp;&nbsp;type:&nbsp;Scheduler&nbsp;class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;add&nbsp;maintenance&nbsp;jobs&nbsp;into<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Maintenance-call_channel_online_check"><strong>call_channel_online_check</strong></a>()</dt><dd><tt>Calls&nbsp;channel&nbsp;online&nbsp;check&nbsp;job&nbsp;passing&nbsp;the&nbsp;kind.<br>
+It&nbsp;may&nbsp;or&nbsp;may&nbsp;not&nbsp;execute&nbsp;depending&nbsp;on&nbsp;the&nbsp;setting.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Maintenance-call_disk_space_check"><strong>call_disk_space_check</strong></a>()</dt><dd><tt>Calls&nbsp;disk&nbsp;space&nbsp;check&nbsp;job&nbsp;passing&nbsp;the&nbsp;kind.<br>
+It&nbsp;may&nbsp;or&nbsp;may&nbsp;not&nbsp;execute&nbsp;depending&nbsp;on&nbsp;the&nbsp;setting.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<dl><dt><a name="Maintenance-call_update_data"><strong>call_update_data</strong></a>()</dt><dd><tt>Calls&nbsp;update&nbsp;data&nbsp;job&nbsp;passing&nbsp;the&nbsp;kind.<br>
+It&nbsp;may&nbsp;or&nbsp;may&nbsp;not&nbsp;execute&nbsp;depending&nbsp;on&nbsp;the&nbsp;setting.<br>
+&nbsp;<br>
+Returns<br>
+-------</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>LOG</strong> = &lt;logging.Logger object&gt;</td></tr></table>
+</body></html>
