@@ -51,6 +51,10 @@ later:
 ## To Add Channels And Jobs
 Please go to [Nephos Config](https://github.com/thealphadollar/NephosConfig) repository to modify the channels, jobs and share lists that Nephos works on.
 
+## Developer Documentation
+Developers can view the documentation that is present for users since it is detailed and one needs to read it in order to understand how Nephos functions. Along with that, docstrings have been placed in HTML format in
+`docs/DevDocs` and can be accessed in a systematic manner by opening `docs/DevDocs/nephos.html` in a browser.
+
 ## More Info
 For more information regarding using Nephos and how it works, [visit the wiki](https://www.github.com/thealphadollar/Nephos/wiki)
 
