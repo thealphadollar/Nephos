@@ -76,7 +76,8 @@ class UpdateData(Checker):
         except UpdateDataFailure:
             msg_type = "update_failed"
             msg = "Updating configuration failed. Please check if you have " \
-                  "followed the right format.\nCheck logs and report if the issue persists."
+                  "followed the right format and internet connection is there." \
+                  "\nCheck logs and report if the issue persists."
             self._handle(True, msg_type, msg)
 
     def _download_files(self):
