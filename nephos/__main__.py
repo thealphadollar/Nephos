@@ -131,8 +131,8 @@ def start():
         ("list channels", "lsch"): client.channel_handler.display_channel,
         ("add share", "adsh"): client.share_handler.add_share_entity,
         ("list share", "lssh"): client.share_handler.display_shr_entities,
-        ("list tasks", "lstk"): client.preprocessor.display_tasks,
-        ("remove task", "rmtk"): client.preprocessor.rm_task
+        ("list tasks", "lstk"): client.preprocessor.display_tasks
+        # ("remove task", "rmtk"): client.preprocessor.rm_task
         # ("adtk", "add task"): client.preprocessor.add_task
     }
 
