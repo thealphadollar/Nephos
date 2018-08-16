@@ -55,6 +55,8 @@ Please go to [Nephos Config](https://github.com/thealphadollar/NephosConfig) rep
 Developers can view the documentation that is present for users since it is detailed and one needs to read it in order to understand how Nephos functions. Along with that, docstrings have been placed in HTML format in
 `docs/DevDocs` and can be accessed in a systematic manner by opening `docs/DevDocs/nephos.html` in a browser.
 
+You can also go [here](https://thealphadollar.github.io/NephosDevDocs/) to access it online.
+
 ## More Info
 For more information regarding using Nephos and how it works, [visit the wiki](https://www.github.com/thealphadollar/Nephos/wiki)
 
