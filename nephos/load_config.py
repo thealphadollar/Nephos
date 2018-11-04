@@ -1,5 +1,5 @@
 """
-Contains class which facilitates loading configurations files and implementing them
+Contains class which facilitates loading configurations files and implements them
 """
 
 import os
@@ -47,12 +47,12 @@ class Config:
 
     def initialise(self):
         """
-        Initialises logger, database etc. with loaded configuration
+        Initializes logger, database etc. with loaded configuration
         Returns
         -------
 
         """
-        # Initialise logger
+        # Initialize logger
         logging.config.dictConfig(self.logging_config)
         LOG.info("** LOGGER CONFIGURED")
 
@@ -124,6 +124,7 @@ class Config:
     def _correct_log_file_path(self, handler_name):
         """
         Appends relative file path specified for the handler's file in filename to __nephos_dir__
+        
         Parameters
         ----------
         handler_name

@@ -122,7 +122,7 @@ def validate_entries(data):
 def first_time():
     """
     If the program is being run first time, create the directory Nephos
-    and it's subdirectories in user's home directory
+    and its subdirectories in user's home directory
 
     -Nephos:
         - config: contains user editable configuration files
