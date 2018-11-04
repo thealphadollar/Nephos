@@ -21,7 +21,8 @@ from .uploader.gdrive import GDrive
 LOG = getLogger(__name__)
 
 
-# Creates a PID file and locks on to it so only one running instance of Nephos is possible at a time.
+# Creates a PID file and locks on to it so 
+# only one running instance of Nephos is possible at a time.
 # https://stackoverflow.com/a/1265445
 try:
     _ = SingleInstance()

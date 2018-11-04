@@ -12,7 +12,8 @@ from .nephos import Nephos
 from .ver_info import VER_INFO
 
 
-# Here logger is defined manually since this is the first time the file launched and has __name__ = "__main__"
+# Here logger is defined manually since this is the first time the file launched 
+# and has __name__ = "__main__"
 LOG = logging.getLogger('nephos')
 
 
