@@ -69,13 +69,13 @@ def send_mail(msg, msg_type):
 
 def add_to_report(msg):
     """
-    Append string to the EOF of report files.
+    Append string to the EOF of the report file.
 
     Parameters
     ----------
     msg
         type: str
-        message to be appended to the report files.
+        message to be appended to the report file.
 
     Returns
     -------
