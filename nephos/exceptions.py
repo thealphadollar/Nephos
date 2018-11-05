@@ -42,7 +42,7 @@ class SingleInstanceException(BaseException):
 
 class ProcessFailedException(Exception):
     """
-    Handles exceptions concerned with a failure of preprocessing
+    Handles exceptions concerned with failures of preprocessing
     """
     def __init__(self, path_to_file, store_path, db_cur, error):
         """
