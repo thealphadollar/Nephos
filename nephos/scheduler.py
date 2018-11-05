@@ -96,7 +96,7 @@ class Scheduler:
             time to begin the job
         week_days
             type: str
-            contains the week days the job is to run
+            Contains the days of the week to run the job
         job_name
             type: str
             name of the job, unique
