@@ -31,13 +31,13 @@ class Scheduler:
     """
     def __init__(self, main):
         """
-        initialise Scheduler with basic configuration
+        initialize Scheduler with basic configuration
 
         Parameters
         ----------
         main
             type: bool
-            whether the initiated scheduler is the nephos's scheduler or not
+            whether the initiated scheduler is the nephos' scheduler or not
         """
         self.main = main
         job_stores = {
@@ -96,7 +96,7 @@ class Scheduler:
             time to begin the job
         week_days
             type: str
-            contains the details for which week days the job is to run
+            Contains the days of the week to run the job
         job_name
             type: str
             name of the job, unique
@@ -164,7 +164,7 @@ class Scheduler:
             time at which job is to be executed, eg "15:45"
         repetition
             type: str
-            days of week on which uploading is to take place
+            days of the week on which uploading is to take place
         args
             type: list
             list of arguments for the function
