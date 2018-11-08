@@ -12,13 +12,14 @@ from .nephos import Nephos
 from .ver_info import VER_INFO
 
 
-# Here logger defined manually since this is the first file launched and has __name__ = "__main__"
+# Here logger is defined manually since this is the first time the file launched 
+# and has __name__ = "__main__"
 LOG = logging.getLogger('nephos')
 
 
 def multi_key_dict_get(multi_key_dict, key):
     """
-    finds the value of a single key in dictionary with tuple keys
+    finds the value of a single key in a dictionary with tuple keys
 
     Parameters
     ----------
@@ -100,7 +101,7 @@ def main():
 @main.command("init", help="initialise nephos home directory and config files")
 def initialise():
     """
-    initialise nephos home directory and config files
+    initializes nephos home directory and config files
 
     Returns
     -------
@@ -112,7 +113,7 @@ def initialise():
 @main.command("start", help="run nephos in the terminal")
 def start():
     """
-    run nephos in the terminal
+    runs nephos in the terminal
 
     """
     if not os.path.exists(__nephos_dir__):

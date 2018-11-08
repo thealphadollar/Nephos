@@ -21,7 +21,8 @@ from .uploader.gdrive import GDrive
 LOG = getLogger(__name__)
 
 
-# Creates a PID file and locks on to it so only one running instance of Nephos possible at a time.
+# Creates a PID file and locks on to it so 
+# only one running instance of Nephos is possible at a time.
 # https://stackoverflow.com/a/1265445
 try:
     _ = SingleInstance()
@@ -32,7 +33,7 @@ except SingleInstanceException as err:
 
 class Nephos:
     """
-    The abstract base class from which new derived classes can be created to support varying
+    The abstract base class from which new derived classes can be created to support various
     online storage platforms.
 
     """
