@@ -16,5 +16,3 @@ omit =
     tests/*
     docs/*
     setup.py
-    *.svg
-    *.png
