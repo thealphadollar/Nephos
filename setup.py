@@ -107,7 +107,9 @@ setup(
         'PyYAML',
         'click',
         'apscheduler',
-        'sqlalchemy'
+        'sqlalchemy',
+        'oauth2client',
+        'google-api-python-client'
     ],
     setup_requires=[
 	'pytest-runner'
