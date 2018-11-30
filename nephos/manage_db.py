@@ -38,7 +38,7 @@ SL_TAG_INDEX = 2
 
 class DBHandler:
     """
-    Handles operations related to database; insertion, updating and deletion.
+    Handles operations related to database; insertion, update and deletion.
     """
 
     def first_time(self):

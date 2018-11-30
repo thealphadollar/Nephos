@@ -42,7 +42,7 @@ class SingleInstanceException(BaseException):
 
 class ProcessFailedException(Exception):
     """
-    Handles exceptions concerned with failure of preprocessing
+    Handles exceptions concerned with failures of preprocessing
     """
     def __init__(self, path_to_file, store_path, db_cur, error):
         """
@@ -71,7 +71,7 @@ class ProcessFailedException(Exception):
     def _clear(self):
         """
         Clears the directory of any left over files if preprocessing fails at any step
-        And modifies "status" for file to "not processed" in database
+        And modifies "status" of file to "not processed" in database
 
         Returns
         -------

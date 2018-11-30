@@ -21,7 +21,7 @@ def send_mail(msg, msg_type):
     -------
     msg
         type: str
-        str to be send as message
+        string to be send as message
     msg_type
         type: str
         defines the type and decides the subject for the mail
@@ -29,7 +29,7 @@ def send_mail(msg, msg_type):
     Returns
     -------
     type: bool
-    true if sending was successful, false otherwise
+    true if mail was send, false otherwise
     """
     emails = load_mail_list()
 
@@ -69,13 +69,13 @@ def send_mail(msg, msg_type):
 
 def add_to_report(msg):
     """
-    Append string to the EOF of report file.
+    Append string to the EOF of the report file.
 
     Parameters
     ----------
     msg
         type: str
-        message to be appended to the report's file.
+        message to be appended to the report file.
 
     Returns
     -------
