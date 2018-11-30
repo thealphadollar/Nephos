@@ -3,9 +3,10 @@ used to create pypi package to make the nephos module pip installable
 """
 
 from os import path
-from setuptools import setup
 import subprocess
 import platform
+from setuptools import setup
+
 
 # =============================================
 # version information
@@ -92,10 +93,10 @@ def read(file_name):
 # update version information before launching setup
 update_version()
 
-distro = platform.linux_distribution()[0]
-if distro == "CentOS":
+DISTRO = platform.dist()[0]
+if DISTRO == "CentOS":
     subprocess.run("sudo ./install.sh")
-elif distro in ['debian', 'ubuntu']:
+elif DISTRO in ['debian', 'ubuntu']:
     subprocess.run("sudo ./debian_install.sh")
 else:
     print('I cannot run installation script!')
