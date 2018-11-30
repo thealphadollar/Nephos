@@ -5,6 +5,7 @@ used to create pypi package to make the nephos module pip installable
 from os import path
 import subprocess
 import platform
+import sys
 from setuptools import setup
 
 
@@ -100,6 +101,7 @@ elif DISTRO in ['debian', 'ubuntu']:
     subprocess.run("sudo ./debian_install.sh")
 else:
     print('I cannot run installation script!')
+    sys.exit(1)
 
 setup(
     name=__title__,
