@@ -90,6 +90,14 @@ def read(file_name):
 # update version information before launching setup
 update_version()
 
+distro = platform.linux_distribution()[0]
+if distro == "CentOS":
+    subprocess.run("sudo ./install.sh")
+elif distro in ['debian', 'ubuntu']:
+    subprocess.run("sudo ./debian_install.sh")
+else:
+    print('I cannot run installation script!')
+
 setup(
     name=__title__,
     version=__version__,
