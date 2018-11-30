@@ -46,7 +46,7 @@ wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/fra.traineddata
 wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/eng.traineddata
 wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/spa.traineddata
 wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/rus.traineddata
-mv *.traineddata /usr/local/share/tessdata
+$('mv *.traineddata /usr/local/share/tessdata')
 
 # install FFMPEG and FFPROBE (https://trac.ffmpeg.org/attachment/wiki/CompilationGuide/Centos/ffmpeg_centos7.sh)
 cd $HOME
