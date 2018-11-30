@@ -2,7 +2,7 @@
 
 NEPHOS_DIR=$(pwd)
 
-if [ $(`id -u`) -ne 0 ]
+if [ $(id -u) -ne 0 ]
     then echo "Error: please launch the script as sudo!"
     exit 1
 fi
@@ -71,7 +71,7 @@ git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git
 wget http://ffmpeg.org/releases/ffmpeg-4.0.tar.gz
 
 # Unpack files
-for file in $(`ls ~/ffmpeg_sources/*.tar.*`); do
+for file in $('ls ~/ffmpeg_sources/*.tar.*'); do
 tar -xvf ${file}
 done
 
