@@ -94,6 +94,7 @@ def read(file_name):
 # update version information before launching setup
 update_version()
 
+# Determine Distrubution to pick which installation script to use
 DISTRO = platform.dist()[0]
 if DISTRO == "CentOS":
     subprocess.run("sudo ./install.sh")
