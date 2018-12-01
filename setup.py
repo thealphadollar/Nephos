@@ -5,6 +5,7 @@ used to create pypi package to make the nephos module pip installable
 import subprocess
 import platform
 import sys
+from os import path
 from setuptools import setup
 
 
