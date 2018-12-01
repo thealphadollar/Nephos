@@ -2,7 +2,6 @@
 used to create pypi package to make the nephos module pip installable
 """
 
-from os import path
 import subprocess
 import platform
 import sys
@@ -97,7 +96,7 @@ update_version()
 DISTRO = platform.dist()[0]
 if DISTRO == "CentOS":
     subprocess.run("sudo ./install.sh")
-elif DISTRO in ['debian', 'ubuntu']:
+elif DISTRO in ['debian', 'Ubuntu']:
     subprocess.run("sudo ./debian_install.sh")
 else:
     print('I cannot run installation script!')
@@ -121,6 +120,8 @@ setup(
         'click',
         'apscheduler',
         'sqlalchemy',
+        'pytz',
+        'tzlocal',
         'oauth2client',
         'google-api-python-client'
     ],
