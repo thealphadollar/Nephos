@@ -2,8 +2,12 @@
 used to create pypi package to make the nephos module pip installable
 """
 
+import subprocess
+import platform
+import sys
 from os import path
 from setuptools import setup
+
 
 # =============================================
 # version information
@@ -90,6 +94,16 @@ def read(file_name):
 # update version information before launching setup
 update_version()
 
+# Determine Distrubution to pick which installation script to use
+DISTRO = platform.dist()[0]
+if DISTRO == "CentOS":
+    subprocess.run("sudo ./install.sh")
+elif DISTRO in ['debian', 'Ubuntu']:
+    subprocess.run("sudo ./debian_install.sh")
+else:
+    print('I cannot run installation script!')
+    sys.exit(1)
+
 setup(
     name=__title__,
     version=__version__,
@@ -107,7 +121,11 @@ setup(
         'PyYAML',
         'click',
         'apscheduler',
-        'sqlalchemy'
+        'sqlalchemy',
+        'pytz',
+        'tzlocal',
+        'oauth2client',
+        'google-api-python-client'
     ],
     setup_requires=[
 	'pytest-runner'

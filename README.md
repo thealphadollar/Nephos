@@ -1,7 +1,9 @@
+<img src="resources/static/nephos_logo.svg" width="250px" alt="logo"/>
+
 # Project Nephos [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.github.com/thealphadollar/nephos/blob/master/LICENSE)
 Google Summer Of Code 2018 ([![Open Source Love png3](https://badges.frapsoft.com/os/v3/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)) Project under CCExtractor; Project Nephos
 
-# [![CodeFactor](https://www.codefactor.io/repository/github/thealphadollar/Nephos/badge)](https://www.codefactor.io/repository/github/thealphadollar/gsoc18nephos) [![Requirements Status](https://requires.io/github/thealphadollar/Nephos/requirements.svg?branch=master)](https://requires.io/github/thealphadollar/Nephos/requirements/?branch=master) [![Build Status](https://travis-ci.org/thealphadollar/Nephos.svg?branch=master)](https://travis-ci.org/thealphadollar/Nephos) [![codecov](https://codecov.io/gh/thealphadollar/nephos/branch/master/graph/badge.svg)](https://codecov.io/gh/thealphadollar/nephos)
+# [![CodeFactor](https://www.codefactor.io/repository/github/thealphadollar/Nephos/badge)](https://www.codefactor.io/repository/github/thealphadollar/Nephos) [![Requirements Status](https://requires.io/github/thealphadollar/Nephos/requirements.svg?branch=master)](https://requires.io/github/thealphadollar/Nephos/requirements/?branch=master) [![Build Status](https://travis-ci.org/thealphadollar/Nephos.svg?branch=master)](https://travis-ci.org/thealphadollar/Nephos) [![codecov](https://codecov.io/gh/thealphadollar/nephos/branch/master/graph/badge.svg)](https://codecov.io/gh/thealphadollar/nephos)
 
 ## Abstract
 Project Nephos aims at simplifying the process of moving samples from local storage to cloud for Universities by automating, almost, all the steps involved. It consists of three independent modules; recording module, processing module, and uploading module.
@@ -42,6 +44,7 @@ later:
 ### Install Using Git Clone
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/nephos.git && cd nephos`<br/>
    2) On **centOS 6** run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
+   NOTE: Running `pip3 install .` Will automatically determine your distribution and install the dependencies for you
 5. 1) Observe and modify configurations available in `$HOME/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
         - Update path to various libraries, in the config file, being used; **fatal error might error** in case where the path to binaries (soft links work) is not appropriate.
    2) Add `nephos_start.sh` as [a cron job to be executed at startup](https://www.cyberciti.biz/faq/linux-execute-cron-job-after-system-reboot/) in `root` crontab.<br/>
