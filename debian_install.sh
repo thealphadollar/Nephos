@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+sudo apt-get install figlet
+
+echo "Nephos" | figlet
+
 NEPHOS_DIR=$(pwd)
 
 if [ $(id -u) -ne 0 ]
@@ -9,7 +13,7 @@ fi
 
 # install python3
 add-apt-repository ppa:deadsnakes/ppa -y
-apt-get update -y 
+apt-get update -y
 apt-get install python3.4
 easy_install-3.4 pip
 echo "python-pip installed"

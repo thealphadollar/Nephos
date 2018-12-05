@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-sudo apt-get install figlet
-
-echo "Nephos" | figlet
-
 DISTRO=$(lsb_release -is) # Finding Linux distribution
 echo "The Linux distribution is $DISTRO"
 DISTRO="${DISTRO,,}" # converting to lower case
