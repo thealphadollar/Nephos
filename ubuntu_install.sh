@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-sudo apt-get install figlet
-
-echo "Nephos" | figlet
-
 NEPHOS_DIR=$(pwd)
 
 if [ $(id -u) -ne 0 ]
