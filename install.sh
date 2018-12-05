@@ -11,13 +11,14 @@ elif [[ $DISTRO == "debian" ]]
 then
   sudo ./debian_install.sh
   exit
+fi
 
-  NEPHOS_DIR=$(pwd)
+NEPHOS_DIR=$(pwd)
 
-  if [ `id -u` -ne 0 ]
-      then echo "Error: please launch the script as sudo!"
-      exit 1
-  fi
+if [ `id -u` -ne 0 ]
+    then echo "Error: please launch the script as sudo!"
+    exit 1
+fi
 
 # install python3
 add-apt-repository ppa:deadsnakes/ppa -y
