@@ -96,8 +96,10 @@ update_version()
 
 # Determine Distrubution to pick which installation script to use
 DISTRO = platform.dist()[0]
-if DISTRO.lower() in ["centos", "ubuntu", "debian"]:
+if DISTRO == "CentOS":
     subprocess.run("sudo ./install.sh")
+elif DISTRO in ['debian', 'Ubuntu']:
+    subprocess.run("sudo ./debian_install.sh")
 else:
     print('I cannot run installation script!')
     sys.exit(1)

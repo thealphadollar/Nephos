@@ -9,7 +9,7 @@ fi
 
 # install python3
 add-apt-repository ppa:deadsnakes/ppa -y
-apt-get update -y
+apt-get update -y 
 apt-get install python3.4
 easy_install-3.4 pip
 echo "python-pip installed"
