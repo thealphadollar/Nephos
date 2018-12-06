@@ -43,7 +43,7 @@ later:
 
 ### Install Using Git Clone
 4. 1) Clone the repository, `git clone https://github.com/thealphadollar/nephos.git && cd nephos`<br/>
-   2) Run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
+   2) On **centOS 6** run the script, `sudo ./install.sh`<br/> The script will install all the aforementioned system dependencies and python libraries for Nephos.<br/>
    NOTE: Running `pip3 install .` Will automatically determine your distribution and install the dependencies for you
 5. 1) Observe and modify configurations available in `$HOME/Nephos/config` (**especially maintenance and module configurations, and processing script**)<br/>
         - Update path to various libraries, in the config file, being used; **fatal error might error** in case where the path to binaries (soft links work) is not appropriate.
