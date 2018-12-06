@@ -11,18 +11,18 @@ fi
 add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update -y
 apt-get install python3.4
-easy_install-3.4 pip
-echo "python-pip installed"
+apt install python3-pip
+echo "python3-pip installed"
 # install pipenv
-pip3 install pipenv
+python3.4 -m pip install pipenv
 export PYTHON_BIN_PATH="$(python3 -m site --user-base)/bin"
 export PATH="$PATH:$PYTHON_BIN_PATH"
 echo "pipenv installed"
 
-apt-get install -y mailx screen
+apt-get install screen -y
 echo "mail tools installed"
 
-apt-get install -y autoconf automake bzip2 cmake libfreetype6-dev gcc gcc-c++ git libtool make mercurial pkg-config zlib1g-dev libx264-dev libx254-devel libcairo2-dev libpango1.0-dev libicu-dev
+apt-get install -y autoconf automake bzip2 cmake libfreetype6-dev git libtool make mercurial pkg-config zlib1g-dev libx264-dev libcairo2-dev libpango1.0-dev libicu-dev
 echo "dependencies for building libraries installed"
 
 
@@ -38,8 +38,8 @@ make && make install
 echo "multicat installed"
 
 # install tesseract
-apt-get install -y leptonica-devel
-apt-get install -y tesseract-devel
+apt install tesseract-ocr
+apt install libtesseract-dev
 
 # install basic tesseract language data
 wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/fra.traineddata
