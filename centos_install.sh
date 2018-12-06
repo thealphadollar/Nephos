@@ -2,7 +2,7 @@
 
 NEPHOS_DIR=$(pwd)
 
-if [ `id -u` -ne 0 ]
+if [ $(id -u) -ne 0 ]
     then echo "Error: please launch the script as sudo!"
     exit 1
 fi
