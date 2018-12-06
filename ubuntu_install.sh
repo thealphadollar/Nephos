@@ -50,7 +50,6 @@ $('mv *.traineddata /usr/local/share/tessdata')
 
 # install FFMPEG and FFPROBE (https://trac.ffmpeg.org/attachment/wiki/CompilationGuide/Centos/ffmpeg_centos7.sh)
 cd $HOME
-# Install yasm from repos
 
 # Create a temporary directory for sources.
 SOURCES=$(mkdir ~/ffmpeg_sources)

@@ -9,7 +9,7 @@ fi
 
 # install python3
 add-apt-repository ppa:deadsnakes/ppa -y
-apt-get update -y 
+apt-get update -y
 apt-get install python3.4
 easy_install-3.4 pip
 echo "python-pip installed"
@@ -50,7 +50,6 @@ $('mv *.traineddata /usr/local/share/tessdata')
 
 # install FFMPEG and FFPROBE (https://trac.ffmpeg.org/attachment/wiki/CompilationGuide/Centos/ffmpeg_centos7.sh)
 cd $HOME
-# Install yasm from repos
 
 # Create a temporary directory for sources.
 SOURCES=$(mkdir ~/ffmpeg_sources)
