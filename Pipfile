@@ -11,6 +11,7 @@ codecov = "*"
 click = "*"
 scandir = "*"
 "pathlib2" = "*"
+"Flask-Testing" = "*"
 
 [packages]
 pydash = "*"
@@ -23,6 +24,8 @@ pytz = "*"
 tzlocal = "*"
 google-api-python-client = "*"
 "oauth2client" = "*"
+"flask" = "*"
+"Flask-SQLAlchemy" = "*"
 
 [requires]
 python_version = "3.4"
