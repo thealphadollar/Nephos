@@ -10,10 +10,7 @@ echo "The Linux distribution is $DISTRO"
 DISTRO="${DISTRO,,}" # converting to lower case
 if [[ $DISTRO == "ubuntu" ]]
 then
-  sudo ./ubuntu_install.sh
-elif [[ $DISTRO == "debian" ]]
-then
-  sudo ./debian_install.sh
+  sudo ./debian_install.sh $DISTRO
 elif [[ $DISTRO == "centos" ]]
 then
   sudo ./centos_install.sh

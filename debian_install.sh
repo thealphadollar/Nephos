@@ -7,22 +7,53 @@ if [ $(id -u) -ne 0 ]
     exit 1
 fi
 
+if [ -z "$0" ]
+   then echo "Error: Please Specify either ubuntu or debian"
+   exit 1
+fi
+
 # install python3
 add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update -y
 apt-get install python3.4
-easy_install-3.4 pip
+
+if [[ $0 == "ubuntu" ]]
+then
+    apt-get install python3-pip
+else
+    # Debian
+    easy_install-3.4 pip
+fi
+
 echo "python-pip installed"
+
 # install pipenv
-pip3 install pipenv
+if [[ $0 == "ubuntu" ]]
+then 
+    python3.4 -m pip install pipenv
+else
+    # Debian
+    pip3 install pipenv
+fi
+
 export PYTHON_BIN_PATH="$(python3 -m site --user-base)/bin"
 export PATH="$PATH:$PYTHON_BIN_PATH"
 echo "pipenv installed"
 
-apt-get install -y mailx screen
+apt-get install -y screen
+
+if [[ $0 == "debian" ]]
+then
+    apt-get install -y mailx
+fi
 echo "mail tools installed"
 
-apt-get install -y autoconf automake bzip2 cmake libfreetype6-dev gcc gcc-c++ git libtool make mercurial pkg-config zlib1g-dev libx264-dev libx254-devel libcairo2-dev libpango1.0-dev libicu-dev
+if [[ $0 == "debian" ]]
+then
+   apt-get installl -y gcc gcc-c++ libx254-devel
+fi
+
+apt-get install -y autoconf automake bzip2 cmake libfreetype6-dev git libtool make mercurial pkg-config zlib1g-dev libx264-dev libcairo2-dev libpango1.0-dev libicu-dev
 echo "dependencies for building libraries installed"
 
 
@@ -38,8 +69,11 @@ make && make install
 echo "multicat installed"
 
 # install tesseract
-apt-get install -y leptonica-devel
-apt-get install -y tesseract-devel
+if [[ $0 == "debian" ]]
+    then apt-get install -y leptonica-devel tesseract-devel
+else
+    then apt-get install -y libtesseract-dev tesseract-ocr
+fi
 
 # install basic tesseract language data
 wget https://github.com/tesseract-ocr/tessdata/raw/3.04.00/fra.traineddata
