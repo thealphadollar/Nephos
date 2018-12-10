@@ -14,6 +14,10 @@ APP.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 APP.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
+APP.config['SQLALCHEMY_BINDS'] = {
+	'jobs': 'sqlite:///' + os.path.join(BASEDIR, '../../databases/jobs.db')
+}
+
 APP.config['SECRET_KEY'] = 'nesho'
 
 DB = SQLAlchemy(APP)

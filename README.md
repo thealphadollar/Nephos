@@ -57,6 +57,8 @@ Please go to [Nephos Config](https://github.com/thealphadollar/NephosConfig) rep
 ## Running the Web Interface
 Nephos has a Web Interface that you can see how everything works. To get started set the enviorment `FLASK_APP` to the path where webServer.py is and run it with `flask run` and you can see the database entries in an instant!
 
+Currently the web app offers for you to see which channels are jobs in the database and can be accessed by visiting the url flask provides with the following paths: `/channels` and `/jobs`
+
 ## Developer Documentation
 Developers can view the documentation that is present for users since it is detailed and one needs to read it in order to understand how Nephos functions. Along with that, docstrings have been placed in HTML format in
 `docs/DevDocs` and can be accessed in a systematic manner by opening `docs/DevDocs/nephos.html` in a browser.
@@ -71,4 +73,5 @@ For more information regarding using Nephos and how it works, [visit the wiki](h
 
 ## Reporting Bugs
 Bugs should be reported in the [issue tracker](https://github.com/thealphadollar/Nephos/issues). Security issues must be reported at shivam.cs.iit.kgp+nephos@gmail.com to avoid exploitation.
+
 

@@ -24,14 +24,23 @@ class test_Controllers(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assert_template_used('channels.html')
 
-    def test_channels_api(self):
+    def test_jobs_api(self):
         """
-        Test if Channel works properly
+        Test if Jobs API works properly
         """
-        response = self.app.test_client().get('/channels')
+        response = self.app.test_client().get('/api/channels')
         self.assertEqual(response.status_code, 200)
         self.assertIn("bloomberg_europe", str(response.data))
         self.assertIn("EU", str(response.data))
         self.assertIn("239.255.20.19:1234", str(response.data))
         self.assertIn("spa", str(response.data))
         self.assertIn("up", str(response.data))
+
+    def test_jobs(self):
+        """
+        Test if Jobs works properly
+        """
+        response = self.app.test_client().get('/jobs')
+        self.assertEqual(response.status_code, 200)
+        self.assert_template_used('jobs.html')
+        
