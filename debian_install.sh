@@ -72,7 +72,7 @@ echo "multicat installed"
 if [[ $0 == "debian" ]]
     then apt-get install -y leptonica-devel tesseract-devel
 else
-    then apt-get install -y libtesseract-dev tesseract-ocr
+        apt-get install -y libtesseract-dev tesseract-ocr
 fi
 
 # install basic tesseract language data
